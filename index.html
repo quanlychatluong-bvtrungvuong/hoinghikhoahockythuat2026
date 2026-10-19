@@ -4,185 +4,197 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Hội nghị KHKT thường niên Bệnh viện Trưng Vương 2026</title>
-  <meta name="description" content="Trang thông tin Hội nghị Khoa học Kỹ thuật thường niên Bệnh viện Trưng Vương năm 2026: chương trình, báo cáo viên, đăng ký, điểm danh và CME.">
+  <meta name="description" content="Hội nghị Khoa học Kỹ thuật thường niên Bệnh viện Trưng Vương năm 2026 – ngày 30/10/2026: chương trình, báo cáo viên, đăng ký, điểm danh và CME.">
   <meta property="og:title" content="Hội nghị KHKT thường niên Bệnh viện Trưng Vương 2026">
-  <meta property="og:description" content="Chương trình, báo cáo viên, đăng ký tham dự, điểm danh và nhận CME.">
+  <meta property="og:description" content="Ngày 30/10/2026 · Chương trình, báo cáo viên, đăng ký tham dự, điểm danh và nhận CME.">
+  <meta name="theme-color" content="#13233a">
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=Noto+Serif:wght@600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
   <a class="skip" href="#main">Bỏ qua điều hướng</a>
 
-  <header class="topbar">
-    <div class="wrap topbar-row">
+  <header class="site-head">
+    <div class="wrap head-row">
       <a class="brand" href="#top">
-        <span class="brand-logo" id="brandLogo"></span>
+        <span class="brand-mark" id="brandLogo"></span>
         <span class="brand-text">
           <strong id="brandTitle"></strong>
           <small id="brandSub"></small>
         </span>
       </a>
-      <div class="dday" title="Số ngày còn lại đến khai mạc">
-        <span class="dday-num" id="dday">D-0</span>
-        <span class="dday-today" id="today"></span>
-      </div>
-      <button class="menu-btn" id="menuBtn" aria-label="Mở menu" aria-expanded="false">
-        <span></span><span></span><span></span>
-      </button>
-    </div>
-    <nav class="nav" id="nav">
-      <div class="wrap nav-row">
-        <a href="#top">Trang chủ</a>
-        <a href="#gioi-thieu">Giới thiệu</a>
+      <nav class="nav" id="nav" aria-label="Điều hướng chính">
         <a href="#chuong-trinh">Chương trình</a>
         <a href="#bao-cao-vien">Báo cáo viên</a>
         <a href="#dang-ky">Đăng ký</a>
-        <a href="#diem-danh">Điểm danh &amp; CME</a>
+        <a href="#diem-danh">Tại hội nghị</a>
         <a href="#nha-tai-tro" id="navSponsors">Nhà tài trợ</a>
         <a href="#dia-diem">Địa điểm</a>
-        <a href="#lien-he" id="navContact">Liên hệ</a>
-      </div>
-    </nav>
+      </nav>
+      <a class="btn btn-coral head-cta" href="#dang-ky">Đăng ký</a>
+      <button class="menu-btn" id="menuBtn" aria-label="Mở menu" aria-expanded="false" aria-controls="nav">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
   </header>
 
   <main id="main">
-    <!-- HERO -->
+    <!-- MỞ ĐẦU -->
     <section class="hero" id="top">
-      <div class="hero-bg" aria-hidden="true"></div>
-      <div class="wrap hero-inner" id="heroInner">
-        <p class="hero-kicker" id="heroKicker"></p>
-        <h1 id="heroTitle"></h1>
-        <p class="hero-theme" id="heroTheme"></p>
-        <div class="hero-meta">
-          <span class="pill pill-date" id="heroDate"></span>
-          <span class="pill" id="heroVenue"></span>
-        </div>
-        <div class="countdown" id="countdown" aria-live="polite"></div>
-      </div>
       <img class="hero-banner" id="heroBanner" alt="" hidden>
-    </section>
-
-    <!-- 4 Ô CHỨC NĂNG -->
-    <section class="wrap quick" aria-label="Truy cập nhanh">
-      <a class="quick-card q1" href="#dang-ky"><span>Đăng ký</span><i>✎</i></a>
-      <a class="quick-card q2" href="#chuong-trinh"><span>Chương trình</span><i>▦</i></a>
-      <a class="quick-card q3" href="#bao-cao-vien"><span>Báo cáo viên</span><i>✦</i></a>
-      <a class="quick-card q4" href="#diem-danh"><span>Điểm danh &amp; CME</span><i>✓</i></a>
-    </section>
-
-    <!-- MỐC THỜI GIAN + TIN TỨC -->
-    <section class="wrap two-col">
-      <div class="panel">
-        <h2 class="panel-title">Mốc thời gian quan trọng</h2>
-        <ol class="timeline" id="milestones"></ol>
+      <div class="wrap hero-grid">
+        <div class="hero-copy">
+          <p class="eyebrow" id="heroKicker"></p>
+          <h1 id="heroTitle"></h1>
+          <p class="hero-theme" id="heroTheme"></p>
+          <div class="hero-facts">
+            <div class="date-tile" id="dateTile"></div>
+            <div class="fact">
+              <span>Địa điểm</span>
+              <b id="heroVenue"></b>
+              <small id="heroAddr"></small>
+            </div>
+            <div class="fact">
+              <span id="countLabel">Khai mạc sau</span>
+              <b id="countdown"></b>
+            </div>
+          </div>
+          <div class="hero-cta">
+            <a class="btn btn-coral" href="#dang-ky">Đăng ký tham dự</a>
+            <a class="btn btn-line" href="#chuong-trinh">Xem chương trình</a>
+            <a class="btn btn-line" data-link="onlineLink" data-hide-empty href="#">Tham dự trực tuyến</a>
+          </div>
+        </div>
+        <aside class="day-card" aria-labelledby="dayCardTitle">
+          <h2 id="dayCardTitle">Một ngày hội nghị</h2>
+          <p class="day-date" id="dayDate"></p>
+          <div class="day-plan" id="dayPlan"></div>
+          <p class="day-hint">Chọn một phiên để xem chi tiết</p>
+        </aside>
       </div>
-      <div class="panel">
-        <h2 class="panel-title green">Tin tức &amp; Thông báo</h2>
-        <ul class="news" id="news"></ul>
-      </div>
     </section>
 
-    <!-- GIỚI THIỆU -->
+    <!-- DẢI THÔNG BÁO -->
+    <div class="notice" aria-label="Thông báo">
+      <div class="wrap notice-row" id="notice"></div>
+    </div>
+
+    <!-- LỜI NGỎ -->
     <section class="section" id="gioi-thieu">
-      <div class="wrap">
-        <h2 class="section-title">Thư chào mừng</h2>
-        <div class="welcome">
-          <div class="welcome-text" id="welcome"></div>
-          <aside class="committee">
-            <h3 id="committeeTitle">Ban Tổ chức</h3>
-            <dl id="committee"></dl>
-          </aside>
-        </div>
+      <div class="wrap letter-grid">
+        <article class="letter">
+          <h2 class="letter-title">Lời ngỏ</h2>
+          <div id="welcome"></div>
+        </article>
+        <aside class="board">
+          <h3 id="committeeTitle">Ban Tổ chức</h3>
+          <ul id="committee"></ul>
+        </aside>
       </div>
     </section>
 
-    <!-- CHƯƠNG TRÌNH -->
-    <section class="section alt" id="chuong-trinh">
+    <!-- 01 CHƯƠNG TRÌNH -->
+    <section class="section sand" id="chuong-trinh">
       <div class="wrap">
-        <div class="section-head">
-          <h2 class="section-title">Chương trình Hội nghị</h2>
-          <a class="link-more" id="programPdf" data-link="programPdf" href="#">Tải chương trình (PDF) →</a>
-        </div>
-        <div class="tabs" role="tablist" id="dayTabs"></div>
-        <p class="tab-time" id="tabTime"></p>
+        <header class="sec-head">
+          <span class="sec-num">01</span>
+          <h2>Chương trình</h2>
+          <a class="sec-link" data-link="programPdf" href="#">Tải bản PDF</a>
+        </header>
+        <div class="seg" role="tablist" id="dayTabs" aria-label="Các phiên"></div>
+        <div class="session-meta" id="sessionMeta"></div>
         <div class="chairs" id="chairs"></div>
-        <div id="programBody"></div>
+        <ol class="agenda" id="programBody"></ol>
       </div>
     </section>
 
-    <!-- BÁO CÁO VIÊN -->
+    <!-- 02 BÁO CÁO VIÊN -->
     <section class="section" id="bao-cao-vien">
       <div class="wrap">
-        <h2 class="section-title">Chủ tọa &amp; Báo cáo viên</h2>
-        <div class="speakers" id="speakers"></div>
+        <header class="sec-head">
+          <span class="sec-num">02</span>
+          <h2>Chủ tọa &amp; Báo cáo viên</h2>
+        </header>
+        <div class="dir-tools">
+          <label class="search">
+            <span class="sr">Tìm theo tên hoặc khoa</span>
+            <input type="search" id="peopleSearch" placeholder="Tìm theo tên, khoa, đơn vị…" autocomplete="off">
+          </label>
+          <div class="chips" id="peopleChips" role="group" aria-label="Lọc theo nhóm"></div>
+        </div>
+        <p class="dir-count" id="peopleCount" aria-live="polite"></p>
+        <ul class="directory" id="speakers"></ul>
       </div>
     </section>
 
-    <!-- ĐĂNG KÝ -->
-    <section class="section alt" id="dang-ky">
+    <!-- 03 ĐĂNG KÝ -->
+    <section class="section sand" id="dang-ky">
       <div class="wrap">
-        <h2 class="section-title">Đăng ký tham dự</h2>
-        <div class="reg">
-          <div class="reg-card">
-            <h3>Đối tượng tham dự</h3>
-            <p id="audience"></p>
+        <header class="sec-head">
+          <span class="sec-num">03</span>
+          <h2>Đăng ký tham dự</h2>
+        </header>
+        <div class="reg-grid">
+          <div class="price-card">
             <h3>Phí tham dự</h3>
-            <table class="fees"><tbody id="fees"></tbody></table>
-            <p class="note" id="cmeNote"></p>
+            <ul class="price-list" id="fees"></ul>
+            <p class="cme" id="cmeNote"></p>
+            <h3>Đối tượng</h3>
+            <p id="audience"></p>
+            <div class="doc-links">
+              <a data-link="programPdf" data-hide-empty href="#">Chương trình (PDF)</a>
+              <a data-link="invitation" data-hide-empty href="#">Thư mời</a>
+              <a data-link="documents" data-hide-empty href="#">Tài liệu tham khảo</a>
+              <a data-link="abstract" data-hide-empty href="#">Nộp bài tóm tắt</a>
+            </div>
           </div>
-          <div class="reg-card reg-actions">
-            <h3>Thực hiện trực tuyến</h3>
-            <a class="btn btn-primary" data-link="register" href="#">Đăng ký tham dự</a>
-            <a class="btn btn-outline" data-link="programPdf" href="#">Tải chương trình (PDF)</a>
-            <a class="btn btn-outline" data-link="abstract" data-hide-empty href="#">Nộp bài tóm tắt</a>
-            <a class="btn btn-outline" data-link="invitation" data-hide-empty href="#">Thư mời Hội nghị</a>
-            <a class="btn btn-outline" data-link="documents" data-hide-empty href="#">Tài liệu tham khảo</a>
-            <div class="pay" id="payment"></div>
-          </div>
+          <ol class="steps" id="steps"></ol>
         </div>
       </div>
     </section>
 
-    <!-- ĐIỂM DANH & CME -->
-    <section class="section checkin-sec" id="diem-danh">
+    <!-- 04 TẠI HỘI NGHỊ -->
+    <section class="section dark" id="diem-danh">
       <div class="wrap">
-        <h2 class="section-title light">Điểm danh – Nhận CME – Đặt câu hỏi</h2>
-        <p class="lead light">Dành cho đại biểu trong ngày diễn ra Hội nghị. Quét mã QR tại hội trường hoặc bấm nút bên dưới.</p>
-        <div class="checkin">
-          <a class="ck" data-link="checkinInternal" href="#"><b>Điểm danh</b><span>Nội viện</span></a>
-          <a class="ck" data-link="checkinExternal" href="#"><b>Điểm danh</b><span>Ngoại viện</span></a>
-          <a class="ck" data-link="checkoutCME" href="#"><b>Check-out</b><span>Đăng ký nhận CME</span></a>
-          <a class="ck" data-link="question" href="#"><b>Đặt câu hỏi</b><span>Cho báo cáo viên</span></a>
-        </div>
-        <div class="qr-box">
-          <div id="qr" class="qr"></div>
-          <p>Mã QR của trang này — in ra để đặt tại bàn đón tiếp.</p>
+        <header class="sec-head">
+          <span class="sec-num">04</span>
+          <h2>Tại hội nghị</h2>
+        </header>
+        <div class="onsite">
+          <ul class="onsite-list">
+            <li><a data-link="checkinInternal" href="#"><span class="ok">Điểm danh</span><span class="ot">Nhân viên nội viện</span></a></li>
+            <li><a data-link="checkinExternal" href="#"><span class="ok">Điểm danh</span><span class="ot">Đại biểu ngoại viện</span></a></li>
+            <li><a data-link="checkoutCME" href="#"><span class="ok">Check-out</span><span class="ot">Đăng ký nhận chứng nhận CME</span></a></li>
+            <li><a data-link="question" href="#"><span class="ok">Đặt câu hỏi</span><span class="ot">Gửi câu hỏi cho chủ tọa, báo cáo viên</span></a></li>
+          </ul>
+          <div class="qr-card">
+            <div id="qr" class="qr"></div>
+            <p>Quét mã để mở trang hội nghị trên điện thoại</p>
+          </div>
         </div>
       </div>
     </section>
 
-    <!-- NHÀ TÀI TRỢ -->
+    <!-- NHÀ TÀI TRỢ (tự ẩn khi chưa có) -->
     <section class="section" id="nha-tai-tro">
       <div class="wrap">
-        <h2 class="section-title">Nhà tài trợ</h2>
+        <header class="sec-head"><h2>Nhà tài trợ</h2></header>
         <div id="sponsors"></div>
       </div>
     </section>
 
-    <!-- ĐỊA ĐIỂM + LIÊN HỆ -->
-    <section class="section alt" id="dia-diem">
-      <div class="wrap two-col">
-        <div>
-          <h2 class="section-title">Địa điểm</h2>
-          <p class="venue-name" id="venueName"></p>
-          <p id="venueAddress"></p>
-          <div class="map"><iframe id="map" title="Bản đồ địa điểm" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe></div>
-        </div>
-        <div id="lien-he">
-          <h2 class="section-title">Liên hệ</h2>
+    <!-- 05 ĐỊA ĐIỂM -->
+    <section class="section" id="dia-diem">
+      <div class="wrap">
+        <header class="sec-head">
+          <span class="sec-num">05</span>
+          <h2>Địa điểm &amp; Liên hệ</h2>
+        </header>
+        <div class="venue-grid">
+          <div class="map"><iframe id="map" title="Bản đồ địa điểm hội nghị" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe></div>
           <ul class="contact" id="contact"></ul>
         </div>
       </div>
@@ -195,7 +207,7 @@
         <strong id="footTitle"></strong>
         <p id="footAddr"></p>
       </div>
-      <p class="copy" id="copy"></p>
+      <p class="foot-copy" id="copy"></p>
     </div>
   </footer>
 

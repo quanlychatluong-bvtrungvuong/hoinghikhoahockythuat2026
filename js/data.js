@@ -34,6 +34,7 @@ window.CONF = {
     checkinExternal: "", // Điểm danh ngoại viện
     checkoutCME: "",     // Check-out & đăng ký nhận CME
     question: "",        // Đặt câu hỏi cho báo cáo viên
+    onlineLink: "",      // Link tham dự trực tuyến (Zoom / Google Meet)
     invitation: "",      // Thư mời (PDF)
     programPdf: "assets/chuong-trinh-hoi-nghi-2026.pdf", // Chương trình in (PDF)
     documents: ""        // Thư mục tài liệu tham khảo
@@ -84,6 +85,7 @@ window.CONF = {
     {
       label: "Phiên sáng – Khai mạc",
       time: "07:00 – 08:15 · Hội nghị Khoa học Kỹ thuật",
+      room: "",                     // Hội trường / phòng (VD: "Hội trường A, lầu 5")
       chairs: [],
       sessions: [
         { time: "07:00 – 07:30", title: "Đón tiếp đại biểu, khách mời" },
@@ -95,6 +97,7 @@ window.CONF = {
     {
       label: "Phiên Nội khoa",
       time: "08:15 – 11:30 · Song song với Phiên Ngoại khoa",
+      room: "",                     // Hội trường / phòng (VD: "Hội trường A, lầu 5")
       chairs: [
         { name: "BS.CKII. Huỳnh Ngọc Hớn", title: "Giám đốc, BV Trưng Vương" },
         { name: "BS.CKII. Nguyễn Trí Dũng", title: "Phó Giám đốc, BV Trưng Vương" },
@@ -120,6 +123,7 @@ window.CONF = {
     {
       label: "Phiên Ngoại khoa",
       time: "08:15 – 11:30 · Song song với Phiên Nội khoa",
+      room: "",                     // Hội trường / phòng (VD: "Hội trường A, lầu 5")
       chairs: [
         { name: "TS.BS. Lê Nguyễn Quyền", title: "Phó Giám đốc, BV Trưng Vương" },
         { name: "GS.TS.BS. Nguyễn Công Minh", title: "Trường ĐH Y khoa Phạm Ngọc Thạch" },
@@ -144,6 +148,7 @@ window.CONF = {
     {
       label: "Phiên chiều – Điều dưỡng",
       time: "13:15 – 16:30 · Hội nghị Khoa học Điều dưỡng",
+      room: "",                     // Hội trường / phòng (VD: "Hội trường A, lầu 5")
       chairs: [
         { name: "BS.CKII. Nguyễn Trí Dũng", title: "Phó Giám đốc, BV Trưng Vương" },
         { name: "ĐD.CKI. Đào Thị Bích Trâm", title: "Trưởng phòng Điều dưỡng, BV Trưng Vương" },
