@@ -1,0 +1,202 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Hội nghị KHKT thường niên Bệnh viện Trưng Vương 2026</title>
+  <meta name="description" content="Trang thông tin Hội nghị Khoa học Kỹ thuật thường niên Bệnh viện Trưng Vương năm 2026: chương trình, báo cáo viên, đăng ký, điểm danh và CME.">
+  <meta property="og:title" content="Hội nghị KHKT thường niên Bệnh viện Trưng Vương 2026">
+  <meta property="og:description" content="Chương trình, báo cáo viên, đăng ký tham dự, điểm danh và nhận CME.">
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <a class="skip" href="#main">Bỏ qua điều hướng</a>
+
+  <header class="topbar">
+    <div class="wrap topbar-row">
+      <a class="brand" href="#top">
+        <span class="brand-logo" id="brandLogo"></span>
+        <span class="brand-text">
+          <strong id="brandTitle"></strong>
+          <small id="brandSub"></small>
+        </span>
+      </a>
+      <div class="dday" title="Số ngày còn lại đến khai mạc">
+        <span class="dday-num" id="dday">D-0</span>
+        <span class="dday-today" id="today"></span>
+      </div>
+      <button class="menu-btn" id="menuBtn" aria-label="Mở menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+    <nav class="nav" id="nav">
+      <div class="wrap nav-row">
+        <a href="#top">Trang chủ</a>
+        <a href="#gioi-thieu">Giới thiệu</a>
+        <a href="#chuong-trinh">Chương trình</a>
+        <a href="#bao-cao-vien">Báo cáo viên</a>
+        <a href="#dang-ky">Đăng ký</a>
+        <a href="#diem-danh">Điểm danh &amp; CME</a>
+        <a href="#nha-tai-tro">Nhà tài trợ</a>
+        <a href="#dia-diem">Địa điểm</a>
+        <a href="#lien-he">Liên hệ</a>
+      </div>
+    </nav>
+  </header>
+
+  <main id="main">
+    <!-- HERO -->
+    <section class="hero" id="top">
+      <div class="hero-bg" aria-hidden="true"></div>
+      <div class="wrap hero-inner" id="heroInner">
+        <p class="hero-kicker" id="heroKicker"></p>
+        <h1 id="heroTitle"></h1>
+        <p class="hero-theme" id="heroTheme"></p>
+        <div class="hero-meta">
+          <span class="pill pill-date" id="heroDate"></span>
+          <span class="pill" id="heroVenue"></span>
+        </div>
+        <div class="countdown" id="countdown" aria-live="polite"></div>
+      </div>
+      <img class="hero-banner" id="heroBanner" alt="" hidden>
+    </section>
+
+    <!-- 4 Ô CHỨC NĂNG -->
+    <section class="wrap quick" aria-label="Truy cập nhanh">
+      <a class="quick-card q1" href="#dang-ky"><span>Đăng ký</span><i>✎</i></a>
+      <a class="quick-card q2" href="#dang-ky" data-link="abstract"><span>Nộp bài tóm tắt</span><i>▤</i></a>
+      <a class="quick-card q3" href="#chuong-trinh"><span>Chương trình</span><i>▦</i></a>
+      <a class="quick-card q4" href="#bao-cao-vien"><span>Báo cáo viên</span><i>✦</i></a>
+    </section>
+
+    <!-- MỐC THỜI GIAN + TIN TỨC -->
+    <section class="wrap two-col">
+      <div class="panel">
+        <h2 class="panel-title">Mốc thời gian quan trọng</h2>
+        <ol class="timeline" id="milestones"></ol>
+      </div>
+      <div class="panel">
+        <h2 class="panel-title green">Tin tức &amp; Thông báo</h2>
+        <ul class="news" id="news"></ul>
+      </div>
+    </section>
+
+    <!-- GIỚI THIỆU -->
+    <section class="section" id="gioi-thieu">
+      <div class="wrap">
+        <h2 class="section-title">Thư chào mừng</h2>
+        <div class="welcome">
+          <div class="welcome-text" id="welcome"></div>
+          <aside class="committee">
+            <h3>Ban Tổ chức</h3>
+            <dl id="committee"></dl>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <!-- CHƯƠNG TRÌNH -->
+    <section class="section alt" id="chuong-trinh">
+      <div class="wrap">
+        <div class="section-head">
+          <h2 class="section-title">Chương trình Hội nghị</h2>
+          <a class="link-more" id="programPdf" data-link="programPdf" href="#">Tải chương trình (PDF) →</a>
+        </div>
+        <div class="tabs" role="tablist" id="dayTabs"></div>
+        <div id="programBody"></div>
+      </div>
+    </section>
+
+    <!-- BÁO CÁO VIÊN -->
+    <section class="section" id="bao-cao-vien">
+      <div class="wrap">
+        <h2 class="section-title">Chủ tọa &amp; Báo cáo viên</h2>
+        <div class="speakers" id="speakers"></div>
+      </div>
+    </section>
+
+    <!-- ĐĂNG KÝ -->
+    <section class="section alt" id="dang-ky">
+      <div class="wrap">
+        <h2 class="section-title">Đăng ký tham dự &amp; Nộp bài</h2>
+        <div class="reg">
+          <div class="reg-card">
+            <h3>Phí tham dự</h3>
+            <table class="fees"><tbody id="fees"></tbody></table>
+            <p class="note" id="cmeNote"></p>
+          </div>
+          <div class="reg-card reg-actions">
+            <h3>Thực hiện trực tuyến</h3>
+            <a class="btn btn-primary" data-link="register" href="#">Đăng ký tham dự</a>
+            <a class="btn btn-outline" data-link="abstract" href="#">Nộp bài tóm tắt</a>
+            <a class="btn btn-outline" data-link="invitation" href="#">Thư mời Hội nghị</a>
+            <a class="btn btn-outline" data-link="documents" href="#">Tài liệu tham khảo</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ĐIỂM DANH & CME -->
+    <section class="section checkin-sec" id="diem-danh">
+      <div class="wrap">
+        <h2 class="section-title light">Điểm danh – Nhận CME – Đặt câu hỏi</h2>
+        <p class="lead light">Dành cho đại biểu trong ngày diễn ra Hội nghị. Quét mã QR tại hội trường hoặc bấm nút bên dưới.</p>
+        <div class="checkin">
+          <a class="ck" data-link="checkinInternal" href="#"><b>Điểm danh</b><span>Nội viện</span></a>
+          <a class="ck" data-link="checkinExternal" href="#"><b>Điểm danh</b><span>Ngoại viện</span></a>
+          <a class="ck" data-link="checkoutCME" href="#"><b>Check-out</b><span>Đăng ký nhận CME</span></a>
+          <a class="ck" data-link="question" href="#"><b>Đặt câu hỏi</b><span>Cho báo cáo viên</span></a>
+        </div>
+        <div class="qr-box">
+          <div id="qr" class="qr"></div>
+          <p>Mã QR của trang này — in ra để đặt tại bàn đón tiếp.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- NHÀ TÀI TRỢ -->
+    <section class="section" id="nha-tai-tro">
+      <div class="wrap">
+        <h2 class="section-title">Nhà tài trợ</h2>
+        <div id="sponsors"></div>
+      </div>
+    </section>
+
+    <!-- ĐỊA ĐIỂM + LIÊN HỆ -->
+    <section class="section alt" id="dia-diem">
+      <div class="wrap two-col">
+        <div>
+          <h2 class="section-title">Địa điểm</h2>
+          <p class="venue-name" id="venueName"></p>
+          <p id="venueAddress"></p>
+          <div class="map"><iframe id="map" title="Bản đồ địa điểm" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe></div>
+        </div>
+        <div id="lien-he">
+          <h2 class="section-title">Liên hệ</h2>
+          <ul class="contact" id="contact"></ul>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="wrap footer-row">
+      <div>
+        <strong id="footTitle"></strong>
+        <p id="footAddr"></p>
+      </div>
+      <p class="copy" id="copy"></p>
+    </div>
+  </footer>
+
+  <a class="to-top" href="#top" aria-label="Lên đầu trang">↑</a>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>

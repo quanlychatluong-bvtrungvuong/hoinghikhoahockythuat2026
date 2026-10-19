@@ -1,0 +1,5 @@
+.vercel
+.netlify
+node_modules
+Thumbs.db
+desktop.ini
