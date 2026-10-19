@@ -41,9 +41,9 @@
         <a href="#bao-cao-vien">Báo cáo viên</a>
         <a href="#dang-ky">Đăng ký</a>
         <a href="#diem-danh">Điểm danh &amp; CME</a>
-        <a href="#nha-tai-tro">Nhà tài trợ</a>
+        <a href="#nha-tai-tro" id="navSponsors">Nhà tài trợ</a>
         <a href="#dia-diem">Địa điểm</a>
-        <a href="#lien-he">Liên hệ</a>
+        <a href="#lien-he" id="navContact">Liên hệ</a>
       </div>
     </nav>
   </header>
@@ -68,9 +68,9 @@
     <!-- 4 Ô CHỨC NĂNG -->
     <section class="wrap quick" aria-label="Truy cập nhanh">
       <a class="quick-card q1" href="#dang-ky"><span>Đăng ký</span><i>✎</i></a>
-      <a class="quick-card q2" href="#dang-ky" data-link="abstract"><span>Nộp bài tóm tắt</span><i>▤</i></a>
-      <a class="quick-card q3" href="#chuong-trinh"><span>Chương trình</span><i>▦</i></a>
-      <a class="quick-card q4" href="#bao-cao-vien"><span>Báo cáo viên</span><i>✦</i></a>
+      <a class="quick-card q2" href="#chuong-trinh"><span>Chương trình</span><i>▦</i></a>
+      <a class="quick-card q3" href="#bao-cao-vien"><span>Báo cáo viên</span><i>✦</i></a>
+      <a class="quick-card q4" href="#diem-danh"><span>Điểm danh &amp; CME</span><i>✓</i></a>
     </section>
 
     <!-- MỐC THỜI GIAN + TIN TỨC -->
@@ -92,7 +92,7 @@
         <div class="welcome">
           <div class="welcome-text" id="welcome"></div>
           <aside class="committee">
-            <h3>Ban Tổ chức</h3>
+            <h3 id="committeeTitle">Ban Tổ chức</h3>
             <dl id="committee"></dl>
           </aside>
         </div>
@@ -107,6 +107,8 @@
           <a class="link-more" id="programPdf" data-link="programPdf" href="#">Tải chương trình (PDF) →</a>
         </div>
         <div class="tabs" role="tablist" id="dayTabs"></div>
+        <p class="tab-time" id="tabTime"></p>
+        <div class="chairs" id="chairs"></div>
         <div id="programBody"></div>
       </div>
     </section>
@@ -122,9 +124,11 @@
     <!-- ĐĂNG KÝ -->
     <section class="section alt" id="dang-ky">
       <div class="wrap">
-        <h2 class="section-title">Đăng ký tham dự &amp; Nộp bài</h2>
+        <h2 class="section-title">Đăng ký tham dự</h2>
         <div class="reg">
           <div class="reg-card">
+            <h3>Đối tượng tham dự</h3>
+            <p id="audience"></p>
             <h3>Phí tham dự</h3>
             <table class="fees"><tbody id="fees"></tbody></table>
             <p class="note" id="cmeNote"></p>
@@ -132,9 +136,11 @@
           <div class="reg-card reg-actions">
             <h3>Thực hiện trực tuyến</h3>
             <a class="btn btn-primary" data-link="register" href="#">Đăng ký tham dự</a>
-            <a class="btn btn-outline" data-link="abstract" href="#">Nộp bài tóm tắt</a>
-            <a class="btn btn-outline" data-link="invitation" href="#">Thư mời Hội nghị</a>
-            <a class="btn btn-outline" data-link="documents" href="#">Tài liệu tham khảo</a>
+            <a class="btn btn-outline" data-link="programPdf" href="#">Tải chương trình (PDF)</a>
+            <a class="btn btn-outline" data-link="abstract" data-hide-empty href="#">Nộp bài tóm tắt</a>
+            <a class="btn btn-outline" data-link="invitation" data-hide-empty href="#">Thư mời Hội nghị</a>
+            <a class="btn btn-outline" data-link="documents" data-hide-empty href="#">Tài liệu tham khảo</a>
+            <div class="pay" id="payment"></div>
           </div>
         </div>
       </div>

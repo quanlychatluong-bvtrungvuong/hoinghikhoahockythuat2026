@@ -2,9 +2,10 @@
    FILE NỘI DUNG HỘI NGHỊ — CHỈ CẦN SỬA FILE NÀY
    ---------------------------------------------------------------------
    - Giữ nguyên dấu ngoặc kép "..." , dấu phẩy , và ngoặc { } [ ].
-   - Liên kết để "" (rỗng) thì nút sẽ hiện "Sắp mở" và không bấm được.
+   - Liên kết để "" (rỗng) thì nút sẽ hiện "Sắp mở" (hoặc được ẩn đi).
+   - Mục để trống "" hoặc danh sách rỗng [] sẽ tự ẩn khỏi trang.
    - Ngày giờ viết theo dạng "YYYY-MM-DDTHH:MM:SS+07:00".
-   - Nội dung hiện tại là DỮ LIỆU MẪU, cần thay bằng thông tin chính thức.
+   - Nguồn: Chương trình Hội nghị KHKT thường niên BV Trưng Vương 2026 (ngày 30/10/2026).
    ===================================================================== */
 
 window.CONF = {
@@ -15,118 +16,225 @@ window.CONF = {
   bannerImage: "",                // VD: "assets/banner.jpg" — nếu có banner thiết kế sẵn
   title: "Hội nghị Khoa học Kỹ thuật thường niên",
   year: "2026",
-  theme: "Đổi mới – Chính xác – Lấy người bệnh làm trung tâm",
-  startDate: "2026-11-27T07:30:00+07:00",
-  endDate: "2026-11-28T17:00:00+07:00",
-  dateText: "27 – 28/11/2026",
-  venueName: "Hội trường Bệnh viện Trưng Vương",
+  theme: "Phiên sáng: Hội nghị Khoa học Kỹ thuật · Phiên chiều: Hội nghị Khoa học Điều dưỡng",
+  startDate: "2026-10-30T07:00:00+07:00",
+  endDate: "2026-10-30T16:30:00+07:00",
+  dateText: "Thứ Sáu, 30/10/2026",
+  venueName: "Bệnh viện Trưng Vương",
   venueAddress: "266 Lý Thường Kiệt, Phường Diên Hồng, TP. Hồ Chí Minh",
   mapQuery: "Bệnh viện Trưng Vương, 266 Lý Thường Kiệt, TP. Hồ Chí Minh",
-  cme: "Cấp Giấy chứng nhận đào tạo liên tục (CME) cho người tham dự đủ thời gian",
+  audience: "Bác sĩ, điều dưỡng và nhân viên y tế. Tham dự trực tiếp hoặc trực tuyến.",
+  cme: "Cấp chứng nhận CME khi tham dự từ 80% thời lượng của chương trình.",
 
   /* ---------- Các liên kết (dán link Google Form / Google Drive) ---------- */
   links: {
-    register: "",        // Form đăng ký tham dự
-    abstract: "",        // Form nộp bài tóm tắt
+    register: "https://forms.gle/CkFVbxHfDMbb6w4z6", // Form đăng ký tham dự
+    abstract: "",        // Form nộp bài tóm tắt (để trống: nút được ẩn)
     checkinInternal: "", // Điểm danh nội viện
     checkinExternal: "", // Điểm danh ngoại viện
     checkoutCME: "",     // Check-out & đăng ký nhận CME
     question: "",        // Đặt câu hỏi cho báo cáo viên
     invitation: "",      // Thư mời (PDF)
-    programPdf: "",      // Chương trình in (PDF)
+    programPdf: "assets/chuong-trinh-hoi-nghi-2026.pdf", // Chương trình in (PDF)
     documents: ""        // Thư mục tài liệu tham khảo
+  },
+
+  /* ---------- Thanh toán phí CME ---------- */
+  payment: {
+    deadline: "Chuyển khoản trước ngày 27/10/2026",
+    holder: "Bệnh viện Trưng Vương",
+    account: "1603201043487",
+    bank: "Ngân hàng Nông nghiệp và Phát triển Nông thôn (Agribank), chi nhánh Lý Thường Kiệt",
+    content: "BVTV-HNKH26-Ho Ten-SDT-Don vi cong tac",
+    note: "Vui lòng chụp màn hình chuyển khoản và gửi đính kèm trong link đăng ký tham dự."
   },
 
   /* ---------- Thư chào mừng ---------- */
   welcome: {
-    author: "Ban Giám đốc Bệnh viện Trưng Vương",
-    role: "Trưởng Ban Tổ chức",
+    author: "Ban Tổ chức Hội nghị",
+    role: "Bệnh viện Trưng Vương",
     paragraphs: [
       "Kính gửi Quý đại biểu, Quý đồng nghiệp,",
-      "Hội nghị Khoa học Kỹ thuật thường niên Bệnh viện Trưng Vương năm 2026 là diễn đàn để các bác sĩ, điều dưỡng, kỹ thuật viên và dược sĩ chia sẻ kết quả nghiên cứu, kinh nghiệm thực hành lâm sàng và những tiến bộ kỹ thuật mới.",
-      "Ban Tổ chức trân trọng kính mời Quý đại biểu đến tham dự, đóng góp báo cáo và cùng thảo luận để nâng cao chất lượng khám chữa bệnh, hướng tới sự hài lòng của người bệnh."
+      "Hội nghị Khoa học Kỹ thuật thường niên Bệnh viện Trưng Vương năm 2026 diễn ra ngày 30/10/2026, gồm phiên toàn thể, hai phiên chuyên đề Nội khoa và Ngoại khoa diễn ra song song, cùng Hội nghị Khoa học Điều dưỡng vào buổi chiều.",
+      "Ban Tổ chức trân trọng kính mời Quý đại biểu đến tham dự, chia sẻ kinh nghiệm và cùng thảo luận để nâng cao chất lượng khám chữa bệnh, hướng tới sự hài lòng của người bệnh."
     ]
   },
 
-  /* ---------- Ban tổ chức ---------- */
+  /* ---------- Ban Giám đốc / Ban tổ chức ---------- */
+  committeeTitle: "Ban Giám đốc Bệnh viện",
   committee: [
-    { role: "Trưởng ban", name: "(Họ tên) – Giám đốc Bệnh viện" },
-    { role: "Phó trưởng ban", name: "(Họ tên) – Phó Giám đốc Bệnh viện" },
-    { role: "Thường trực", name: "Phòng Chỉ đạo tuyến – Đào tạo – NCKH" },
-    { role: "Ban Khoa học", name: "Hội đồng Khoa học Công nghệ Bệnh viện" },
-    { role: "Ban Hậu cần", name: "Phòng Hành chính Quản trị" }
+    { role: "Giám đốc", name: "BS.CKII. Huỳnh Ngọc Hớn" },
+    { role: "Phó Giám đốc", name: "BS.CKII. Nguyễn Trí Dũng" },
+    { role: "Phó Giám đốc", name: "TS.BS. Lê Nguyễn Quyền" }
   ],
 
   /* ---------- Mốc thời gian quan trọng ---------- */
   milestones: [
-    { date: "2026-10-01", label: "Mở cổng đăng ký & nhận bài tóm tắt" },
-    { date: "2026-11-05", label: "Hạn chót nộp bài tóm tắt" },
-    { date: "2026-11-15", label: "Thông báo kết quả duyệt bài" },
-    { date: "2026-11-25", label: "Hạn chót đăng ký tham dự" },
-    { date: "2026-11-27", label: "Khai mạc Hội nghị" }
+    { date: "2026-10-27", label: "Hạn chót chuyển khoản phí tham dự có cấp CME" },
+    { date: "2026-10-30", label: "Khai mạc Hội nghị (07:30) – Phiên chiều Điều dưỡng (13:15)" }
   ],
 
   /* ---------- Tin tức & thông báo ---------- */
   news: [
-    { date: "2026-10-01", title: "Thông báo số 1: Mời viết bài và tham dự Hội nghị", link: "" },
-    { date: "2026-10-15", title: "Hướng dẫn trình bày bài tóm tắt và báo cáo poster", link: "" }
+    { date: "2026-10-19", title: "Công bố chương trình chính thức Hội nghị ngày 30/10/2026", link: "assets/chuong-trinh-hoi-nghi-2026.pdf" }
   ],
 
-  /* ---------- Chương trình ---------- */
+  /* ---------- Chương trình: mỗi phiên là một tab ---------- */
   program: [
     {
-      day: "Ngày 1 – Thứ Sáu, 27/11/2026",
+      label: "Phiên sáng – Khai mạc",
+      time: "07:00 – 08:15 · Hội nghị Khoa học Kỹ thuật",
+      chairs: [],
       sessions: [
-        { time: "07:30 – 08:00", title: "Đón tiếp đại biểu – Điểm danh", speaker: "", room: "Sảnh chính" },
-        { time: "08:00 – 08:30", title: "Khai mạc Hội nghị – Phát biểu chào mừng", speaker: "Ban Giám đốc", room: "Hội trường A" },
-        { time: "08:30 – 09:00", title: "Báo cáo toàn thể: Định hướng phát triển chuyên môn kỹ thuật 2026 – 2030", speaker: "TS.BS. Nguyễn Văn A", room: "Hội trường A" },
-        { time: "09:00 – 09:30", title: "Cập nhật điều trị suy tim theo khuyến cáo mới", speaker: "BS.CKII. Trần Thị B", room: "Hội trường A" },
-        { time: "09:30 – 09:45", title: "Giải lao – Tham quan gian hàng", speaker: "", room: "Sảnh chính" },
-        { time: "09:45 – 11:30", title: "Phiên Nội khoa: Tim mạch – Hô hấp – Nội tiết", speaker: "Chủ tọa: TS.BS. Nguyễn Văn A", room: "Hội trường A" },
-        { time: "13:30 – 16:30", title: "Phiên Ngoại khoa – Gây mê hồi sức", speaker: "Chủ tọa: ThS.BS. Lê Văn C", room: "Hội trường B" }
+        { time: "07:00 – 07:30", title: "Đón tiếp đại biểu, khách mời" },
+        { time: "07:30 – 07:45", title: "Khai mạc Hội nghị" },
+        { time: "07:45 – 08:00", title: "Xuất toán bảo hiểm y tế năm 2024 – 2025: Hiệu quả và các biện pháp khắc phục", speaker: "BS.CKII. Phan Thanh Hằng", role: "Trưởng phòng Kế hoạch tổng hợp" },
+        { time: "08:00 – 08:15", title: "Sử dụng AI trong bệnh viện an toàn, hiệu quả và trách nhiệm", speaker: "ThS. Đặng Thanh Hùng", role: "Trưởng phòng Công nghệ thông tin, Bệnh viện Nhi đồng 1" }
       ]
     },
     {
-      day: "Ngày 2 – Thứ Bảy, 28/11/2026",
+      label: "Phiên Nội khoa",
+      time: "08:15 – 11:30 · Song song với Phiên Ngoại khoa",
+      chairs: [
+        { name: "BS.CKII. Huỳnh Ngọc Hớn", title: "Giám đốc, BV Trưng Vương" },
+        { name: "BS.CKII. Nguyễn Trí Dũng", title: "Phó Giám đốc, BV Trưng Vương" },
+        { name: "TS.BS. Phạm Ngọc Huy Tuấn", title: "Trưởng khoa Tiêu hóa – Tiết niệu, BV Trưng Vương" },
+        { name: "TS.BS. Lê Cao Phương Duy", title: "Phó Giám đốc, BV Nguyễn Tri Phương" }
+      ],
       sessions: [
-        { time: "08:00 – 10:00", title: "Phiên Sản – Nhi", speaker: "Chủ tọa: BS.CKII. Phạm Thị D", room: "Hội trường A" },
-        { time: "08:00 – 10:00", title: "Phiên Điều dưỡng – Kiểm soát nhiễm khuẩn", speaker: "Chủ tọa: CN.ĐD. Hoàng Thị E", room: "Hội trường B" },
-        { time: "10:15 – 11:30", title: "Phiên Dược lâm sàng – Cận lâm sàng", speaker: "Chủ tọa: DS.CKII. Võ Văn F", room: "Hội trường A" },
-        { time: "13:30 – 15:30", title: "Phiên báo cáo Poster & Báo cáo viên trẻ", speaker: "Hội đồng chấm giải", room: "Khu Poster" },
-        { time: "15:30 – 16:30", title: "Trao giải – Tổng kết – Bế mạc", speaker: "Ban Tổ chức", room: "Hội trường A" }
+        { time: "08:15 – 08:30", title: "Vai trò của sự tuân thủ trong điều trị loãng xương", speaker: "BS.CKII. Huỳnh Đặng Bảo Cương", role: "Trưởng khoa Điều trị đau – Vật lý trị liệu – Y học cổ truyền" },
+        { time: "08:30 – 08:45", title: "Tỷ lệ, một số yếu tố liên quan và đánh giá kết quả điều trị rối loạn chức năng cầu nối thông động – tĩnh mạch ở bệnh nhân bệnh thận mạn giai đoạn cuối lọc máu chu kỳ tại khoa Thận – Thận nhân tạo, Bệnh viện Trưng Vương", speaker: "BS.CKII. Võ Ngọc Tình", role: "Phó Trưởng khoa, Phụ trách khoa Thận – Thận nhân tạo" },
+        { time: "08:45 – 09:00", title: "Khảo sát tình trạng tăng huyết áp lúc lọc máu ở bệnh nhân bệnh thận mạn giai đoạn cuối lọc máu chu kỳ tại khoa Thận – Thận nhân tạo, Bệnh viện Trưng Vương", speaker: "BS.CKI. Trần Thị Anh Thư", role: "Khoa Thận – Thận nhân tạo" },
+        { time: "09:00 – 09:15", title: "Quản lý bệnh phổi tắc nghẽn mạn tính toàn diện theo Hướng dẫn của Bộ Y tế 2026", speaker: "BS.CKII. Lê Như Thụy Khanh", role: "Phó Trưởng khoa, Phụ trách khoa Hô hấp" },
+        { time: "09:15 – 09:30", title: "Giải lao" },
+        { time: "09:30 – 09:45", title: "Vượt qua rào cản tăng kali máu: Tối ưu hóa điều trị cho bệnh nhân suy tim kèm bệnh thận mạn qua case lâm sàng", speaker: "ThS.BS. Nguyễn Trường Duy", role: "Bộ môn Nội – Đại học Y Dược TP.HCM; Trung tâm Tim mạch – BV Chợ Rẫy; Trưởng Phòng khám Tim mạch – BV Đại học Y Dược CS2" },
+        { time: "09:45 – 10:00", title: "Khi nào nên khởi trị thuốc hạ huyết áp?", speaker: "BS.CKII. Nguyễn Thiên Hào", role: "Trưởng khoa Tim mạch" },
+        { time: "10:00 – 10:15", title: "Lợi tiểu và những lo ngại về rối loạn điện giải trên bệnh nhân đồng mắc đái tháo đường và tăng huyết áp", speaker: "TS.BS. Bùi Thị Thanh Hiền", role: "Trưởng khoa Nội tiết – Tổng hợp" },
+        { time: "10:15 – 10:30", title: "Bất tương hợp huyết động và chuyển dịch mô hình hồi sức sốc nhiễm trùng", speaker: "BS.CKII. Nguyễn Thiên Bình", role: "Trưởng khoa Hồi sức tích cực – Chống độc" },
+        { time: "10:30 – 10:45", title: "Giá trị giảm tiểu cầu trong dự đoán tử vong nội viện ở bệnh nhân sốc nhiễm khuẩn", speaker: "BS.CKII. Nguyễn Hoàng Huy", role: "Khoa Hồi sức tích cực – Chống độc" },
+        { time: "10:45 – 11:00", title: "Thực tế tình hình điều trị suy tim theo hướng dẫn của Bộ Y tế tại Bệnh viện Trưng Vương", speaker: "BS.CKII. Trần Thanh Tuấn", role: "Phó Trưởng khoa Tim mạch" },
+        { time: "11:00 – 11:15", title: "Cập nhật tầm soát và quản lý bệnh nhân có tổn thương tiền ung thư dạ dày", speaker: "BS.CKII. Trần Phạm Phương Thư · TS.BS. Phạm Ngọc Huy Tuấn", role: "Trường ĐHYK Phạm Ngọc Thạch; Trưởng khoa Tiêu hóa – Tiết niệu" },
+        { time: "11:15 – 11:30", title: "Phần thảo luận · Tổng kết – Bế mạc phiên Nội khoa" }
+      ]
+    },
+    {
+      label: "Phiên Ngoại khoa",
+      time: "08:15 – 11:30 · Song song với Phiên Nội khoa",
+      chairs: [
+        { name: "TS.BS. Lê Nguyễn Quyền", title: "Phó Giám đốc, BV Trưng Vương" },
+        { name: "GS.TS.BS. Nguyễn Công Minh", title: "Trường ĐH Y khoa Phạm Ngọc Thạch" },
+        { name: "PGS.TS.BS. Phạm Trịnh Quốc Khanh", title: "Trường ĐH Y Dược Cần Thơ" },
+        { name: "TS.BS. Lê Nguyên Khôi", title: "Trường ĐH Y khoa Phạm Ngọc Thạch" }
+      ],
+      sessions: [
+        { time: "08:15 – 08:30", title: "Đánh giá sự tuân thủ quy trình vệ sinh tay ngoại khoa của phẫu thuật viên và một số yếu tố ảnh hưởng tại Bệnh viện Đa khoa Tâm Anh TP.HCM năm 2025", speaker: "BS.CKII. Huỳnh Thị Thanh Trang", role: "Phó Trưởng khoa Kiểm soát nhiễm khuẩn – BV Đa khoa Tâm Anh TP.HCM" },
+        { time: "08:30 – 08:45", title: "Ca lâm sàng: Loét tỳ đè", speaker: "ThS.BS. Nguyễn Xuân Thiện", role: "Khoa Bỏng – Tạo hình thẩm mỹ" },
+        { time: "08:45 – 09:00", title: "Biến chứng nặng sau tiêm chất làm đầy: Nhân các trường hợp lâm sàng", speaker: "BS.CKI. Võ Kế Đạt", role: "Khoa Bỏng – Tạo hình thẩm mỹ" },
+        { time: "09:00 – 09:15", title: "Ứng dụng vạt đùi trước ngoài tự do trong phẫu thuật tái tạo di chứng sẹo bỏng vùng cổ bàn chân", speaker: "ThS.BS.CKI. Lê Văn Minh Tuệ", role: "Khoa Bỏng – Tạo hình thẩm mỹ" },
+        { time: "09:15 – 09:30", title: "Giải lao" },
+        { time: "09:30 – 09:45", title: "Tán sỏi thận qua da đường hầm nhỏ (mini PCNL) trên bệnh nhân có hệ thống đài bể thận đôi: Báo cáo một trường hợp", speaker: "BS. Nguyễn Hoàng Vĩ", role: "Khoa Ngoại thận – Tiết niệu" },
+        { time: "09:45 – 10:00", title: "Quan điểm hiện nay về điều trị bảo tồn trong viêm ruột thừa không biến chứng", speaker: "ThS.BS. Nguyễn Tuấn Ngọc", role: "Khoa Ngoại Tổng hợp" },
+        { time: "10:00 – 10:15", title: "Nhận xét về đáp ứng lâm sàng của u đại trực tràng sau hóa trị tân bổ trợ dưới góc nhìn ngoại khoa", speaker: "BS. Đỗ Khôi Nguyên", role: "Khoa Ngoại Tổng hợp" },
+        { time: "10:15 – 10:30", title: "Điều trị phẫu thuật biến dạng cột sống thắt lưng có chèn ép rễ thần kinh ở bệnh nhân cao tuổi thoái hóa cột sống thắt lưng nhiều tầng tại Đơn vị Cột sống, Bệnh viện Trưng Vương", speaker: "BS.CKII. Hồ Nhựt Tâm · BS. Nguyễn Thành Đạt", role: "Đơn vị Cột sống – Khoa Chấn thương chỉnh hình" },
+        { time: "10:30 – 10:45", title: "Nội soi cột sống qua lỗ liên hợp – kỹ thuật", speaker: "BS.CKI. Phan Thanh Trọng", role: "Đơn vị Cột sống – Khoa Chấn thương chỉnh hình" },
+        { time: "10:45 – 11:00", title: "Nghiên cứu và ứng dụng điều trị tổn thương tủy sống theo Trung tâm Chấn thương Tủy sống Hokkaido tại Bệnh viện Trưng Vương", speaker: "BS. Huỳnh Minh Tâm", role: "Đơn vị Cột sống – Khoa Chấn thương chỉnh hình" },
+        { time: "11:00 – 11:30", title: "Phần thảo luận · Tổng kết – Bế mạc phiên Ngoại khoa" }
+      ]
+    },
+    {
+      label: "Phiên chiều – Điều dưỡng",
+      time: "13:15 – 16:30 · Hội nghị Khoa học Điều dưỡng",
+      chairs: [
+        { name: "BS.CKII. Nguyễn Trí Dũng", title: "Phó Giám đốc, BV Trưng Vương" },
+        { name: "ĐD.CKI. Đào Thị Bích Trâm", title: "Trưởng phòng Điều dưỡng, BV Trưng Vương" },
+        { name: "TS.ĐD. Lữ Mộng Thùy Linh", title: "Phó Trưởng phòng Nghiệp vụ Y, Sở Y tế TP.HCM" }
+      ],
+      sessions: [
+        { time: "13:15 – 14:00", title: "Đón tiếp đại biểu, khách mời · Khai mạc Hội nghị" },
+        { time: "14:00 – 14:15", title: "Văn hóa sức khỏe và hành vi tìm kiếm thông tin y học của người bệnh tại Bệnh viện Trưng Vương năm 2026", speaker: "ThS. Nguyễn Mạnh Tuân", role: "Trưởng phòng Quản lý chất lượng" },
+        { time: "14:15 – 14:30", title: "Khảo sát kiến thức, nhu cầu giáo dục sức khỏe của người chăm sóc chính người bệnh đột quỵ tại Đơn vị Đột quỵ, khoa Thần kinh, Bệnh viện Trưng Vương năm 2025", speaker: "ThS.ĐD. Nguyễn Thị Kim Huệ", role: "Điều dưỡng trưởng khoa Thần kinh" },
+        { time: "14:30 – 14:45", title: "Thực trạng chất lượng tài liệu truyền thông giáo dục sức khỏe theo PEMAT tại Bệnh viện Trưng Vương giai đoạn 2019 – 2024", speaker: "ĐD.CKI. Hứa Thị Trinh", role: "Phó Trưởng phòng Điều dưỡng" },
+        { time: "14:45 – 15:00", title: "Giải lao" },
+        { time: "15:00 – 15:15", title: "Khuynh hướng và các yếu tố ảnh hưởng đến cách giải quyết mâu thuẫn của điều dưỡng quản lý tại Bệnh viện Trưng Vương năm 2026", speaker: "ĐD.CKI. Đào Thị Bích Trâm", role: "Trưởng phòng Điều dưỡng" },
+        { time: "15:15 – 15:30", title: "Vết thương mạn tính: Từ đánh giá toàn diện đến chăm sóc hiệu quả", speaker: "BS.CKII. Đinh Phương Đông", role: "Trưởng khoa Bỏng – Tạo hình thẩm mỹ" },
+        { time: "15:30 – 15:45", title: "Nâng cao chất lượng chăm sóc toàn diện người bệnh đái tháo đường", speaker: "CN.ĐD. Võ Thị Cẩm Loan", role: "Phụ trách điều dưỡng khoa Nội tiết – Tổng hợp" },
+        { time: "15:45 – 16:00", title: "Cải tiến vận hành đơn vị tiệt khuẩn trung tâm: Từ những thay đổi nhỏ đến những giá trị lớn", speaker: "CN. Ngô Phương Trinh", role: "Khoa Kiểm soát nhiễm khuẩn" },
+        { time: "16:00 – 16:20", title: "Phần thảo luận" },
+        { time: "16:20 – 16:30", title: "Tổng kết – Bế mạc Hội nghị" }
       ]
     }
   ],
 
-  /* ---------- Báo cáo viên / chủ tọa ---------- */
+  /* ---------- Chủ tọa & báo cáo viên (theo nhóm) ---------- */
   speakers: [
-    { name: "TS.BS. Nguyễn Văn A", title: "Khoa Nội Tim mạch", photo: "" },
-    { name: "BS.CKII. Trần Thị B", title: "Khoa Hồi sức tích cực", photo: "" },
-    { name: "ThS.BS. Lê Văn C", title: "Khoa Ngoại Tổng quát", photo: "" },
-    { name: "BS.CKII. Phạm Thị D", title: "Khoa Sản", photo: "" },
-    { name: "CN.ĐD. Hoàng Thị E", title: "Phòng Điều dưỡng", photo: "" },
-    { name: "DS.CKII. Võ Văn F", title: "Khoa Dược", photo: "" }
+    {
+      group: "Chủ tọa đoàn",
+      items: [
+        { name: "BS.CKII. Huỳnh Ngọc Hớn", title: "Giám đốc, BV Trưng Vương", photo: "" },
+        { name: "BS.CKII. Nguyễn Trí Dũng", title: "Phó Giám đốc, BV Trưng Vương", photo: "" },
+        { name: "TS.BS. Lê Nguyễn Quyền", title: "Phó Giám đốc, BV Trưng Vương", photo: "" },
+        { name: "TS.BS. Phạm Ngọc Huy Tuấn", title: "Trưởng khoa Tiêu hóa – Tiết niệu, BV Trưng Vương", photo: "" },
+        { name: "TS.BS. Lê Cao Phương Duy", title: "Phó Giám đốc, BV Nguyễn Tri Phương", photo: "" },
+        { name: "GS.TS.BS. Nguyễn Công Minh", title: "Trường ĐH Y khoa Phạm Ngọc Thạch", photo: "" },
+        { name: "PGS.TS.BS. Phạm Trịnh Quốc Khanh", title: "Trường ĐH Y Dược Cần Thơ", photo: "" },
+        { name: "TS.BS. Lê Nguyên Khôi", title: "Trường ĐH Y khoa Phạm Ngọc Thạch", photo: "" },
+        { name: "ĐD.CKI. Đào Thị Bích Trâm", title: "Trưởng phòng Điều dưỡng, BV Trưng Vương", photo: "" },
+        { name: "TS.ĐD. Lữ Mộng Thùy Linh", title: "Phó Trưởng phòng Nghiệp vụ Y, Sở Y tế TP.HCM", photo: "" }
+      ]
+    },
+    {
+      group: "Báo cáo viên",
+      items: [
+        { name: "BS.CKII. Phan Thanh Hằng", title: "Trưởng phòng Kế hoạch tổng hợp", photo: "" },
+        { name: "ThS. Đặng Thanh Hùng", title: "Trưởng phòng CNTT, Bệnh viện Nhi đồng 1", photo: "" },
+        { name: "BS.CKII. Huỳnh Đặng Bảo Cương", title: "Trưởng khoa Điều trị đau – VLTL – YHCT", photo: "" },
+        { name: "BS.CKII. Võ Ngọc Tình", title: "Phụ trách khoa Thận – Thận nhân tạo", photo: "" },
+        { name: "BS.CKI. Trần Thị Anh Thư", title: "Khoa Thận – Thận nhân tạo", photo: "" },
+        { name: "BS.CKII. Lê Như Thụy Khanh", title: "Phụ trách khoa Hô hấp", photo: "" },
+        { name: "ThS.BS. Nguyễn Trường Duy", title: "Bộ môn Nội – ĐH Y Dược TP.HCM; BV Chợ Rẫy", photo: "" },
+        { name: "BS.CKII. Nguyễn Thiên Hào", title: "Trưởng khoa Tim mạch", photo: "" },
+        { name: "TS.BS. Bùi Thị Thanh Hiền", title: "Trưởng khoa Nội tiết – Tổng hợp", photo: "" },
+        { name: "BS.CKII. Nguyễn Thiên Bình", title: "Trưởng khoa Hồi sức tích cực – Chống độc", photo: "" },
+        { name: "BS.CKII. Nguyễn Hoàng Huy", title: "Khoa Hồi sức tích cực – Chống độc", photo: "" },
+        { name: "BS.CKII. Trần Thanh Tuấn", title: "Phó Trưởng khoa Tim mạch", photo: "" },
+        { name: "BS.CKII. Trần Phạm Phương Thư", title: "Trường ĐHYK Phạm Ngọc Thạch", photo: "" },
+        { name: "BS.CKII. Huỳnh Thị Thanh Trang", title: "Phó Trưởng khoa KSNK – BV Đa khoa Tâm Anh TP.HCM", photo: "" },
+        { name: "ThS.BS. Nguyễn Xuân Thiện", title: "Khoa Bỏng – Tạo hình thẩm mỹ", photo: "" },
+        { name: "BS.CKI. Võ Kế Đạt", title: "Khoa Bỏng – Tạo hình thẩm mỹ", photo: "" },
+        { name: "ThS.BS.CKI. Lê Văn Minh Tuệ", title: "Khoa Bỏng – Tạo hình thẩm mỹ", photo: "" },
+        { name: "BS. Nguyễn Hoàng Vĩ", title: "Khoa Ngoại thận – Tiết niệu", photo: "" },
+        { name: "ThS.BS. Nguyễn Tuấn Ngọc", title: "Khoa Ngoại Tổng hợp", photo: "" },
+        { name: "BS. Đỗ Khôi Nguyên", title: "Khoa Ngoại Tổng hợp", photo: "" },
+        { name: "BS.CKII. Hồ Nhựt Tâm", title: "Đơn vị Cột sống – Khoa CTCH", photo: "" },
+        { name: "BS. Nguyễn Thành Đạt", title: "Đơn vị Cột sống – Khoa CTCH", photo: "" },
+        { name: "BS.CKI. Phan Thanh Trọng", title: "Đơn vị Cột sống – Khoa CTCH", photo: "" },
+        { name: "BS. Huỳnh Minh Tâm", title: "Đơn vị Cột sống – Khoa CTCH", photo: "" },
+        { name: "ThS. Nguyễn Mạnh Tuân", title: "Trưởng phòng Quản lý chất lượng", photo: "" },
+        { name: "ThS.ĐD. Nguyễn Thị Kim Huệ", title: "Điều dưỡng trưởng khoa Thần kinh", photo: "" },
+        { name: "ĐD.CKI. Hứa Thị Trinh", title: "Phó Trưởng phòng Điều dưỡng", photo: "" },
+        { name: "BS.CKII. Đinh Phương Đông", title: "Trưởng khoa Bỏng – Tạo hình thẩm mỹ", photo: "" },
+        { name: "CN.ĐD. Võ Thị Cẩm Loan", title: "Phụ trách điều dưỡng khoa Nội tiết – Tổng hợp", photo: "" },
+        { name: "CN. Ngô Phương Trinh", title: "Khoa Kiểm soát nhiễm khuẩn", photo: "" }
+      ]
+    }
   ],
 
   /* ---------- Phí tham dự ---------- */
   fees: [
-    { type: "Nhân viên Bệnh viện Trưng Vương", price: "Miễn phí" },
-    { type: "Đại biểu ngoại viện", price: "Liên hệ Ban Tổ chức" },
-    { type: "Sinh viên, học viên", price: "Miễn phí (có thẻ SV)" }
+    { type: "Nhân viên y tế Bệnh viện Trưng Vương và đại biểu theo thư mời", price: "Miễn phí, có cấp CME" },
+    { type: "Đại biểu tham dự không cấp CME", price: "Miễn phí" },
+    { type: "Đại biểu dự trực tiếp hoặc trực tuyến có cấp CME", price: "300.000 VNĐ/buổi" }
   ],
 
-  /* ---------- Nhà tài trợ (logo đặt trong thư mục assets) ---------- */
-  sponsors: [
-    { tier: "Nhà tài trợ Kim cương", items: [{ name: "Nhà tài trợ 1", logo: "" }, { name: "Nhà tài trợ 2", logo: "" }] },
-    { tier: "Nhà tài trợ Vàng", items: [{ name: "Nhà tài trợ 3", logo: "" }, { name: "Nhà tài trợ 4", logo: "" }, { name: "Nhà tài trợ 5", logo: "" }] }
-  ],
+  /* ---------- Nhà tài trợ (để [] sẽ ẩn mục này) ---------- */
+  sponsors: [],
 
-  /* ---------- Liên hệ ---------- */
+  /* ---------- Liên hệ (mục để trống sẽ được ẩn) ---------- */
   contact: {
-    unit: "Phòng Chỉ đạo tuyến – Đào tạo – NCKH, Bệnh viện Trưng Vương",
-    person: "(Họ tên người phụ trách)",
-    phone: "(028) xxxx xxxx",
-    email: "hoinghi@example.com",
+    unit: "",
+    person: "",
+    phone: "",
+    email: "",
     fanpage: ""
   }
 };
