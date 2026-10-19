@@ -102,7 +102,7 @@
   }).concat(C.news.slice(-1).map(function (n) {
     var t = n.link ? '<a href="' + esc(n.link) + '" target="_blank" rel="noopener">' + esc(n.title) + "</a>" : esc(n.title);
     return '<div class="notice-item"><time>Mới</time><span>' + t + "</span></div>";
-  })).join("");
+  })).concat(!C.links.onlineLink && C.onlineNote ? ['<div class="notice-item"><time>Trực tuyến</time><span>' + esc(C.onlineNote) + "</span></div>"] : []).join("");
 
   /* ---------- Lời ngỏ ---------- */
   $("welcome").innerHTML = C.welcome.paragraphs.map(function (p) { return "<p>" + esc(p) + "</p>"; }).join("") +

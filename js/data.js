@@ -12,7 +12,7 @@ window.CONF = {
   /* ---------- Thông tin chung ---------- */
   hospital: "Bệnh viện Trưng Vương",
   hospitalShort: "BVTV",
-  logo: "",                       // VD: "assets/logo.png" (để "" sẽ dùng logo chữ)
+  logo: "assets/logo-bvtv.jpg",   // Logo bệnh viện (để "" sẽ dùng logo chữ)
   bannerImage: "",                // VD: "assets/banner.jpg" — nếu có banner thiết kế sẵn
   title: "Hội nghị Khoa học Kỹ thuật thường niên",
   year: "2026",
@@ -23,6 +23,7 @@ window.CONF = {
   venueName: "Bệnh viện Trưng Vương",
   venueAddress: "266 Lý Thường Kiệt, Phường Diên Hồng, TP. Hồ Chí Minh",
   mapQuery: "Bệnh viện Trưng Vương, 266 Lý Thường Kiệt, TP. Hồ Chí Minh",
+  onlineNote: "Link tham dự trực tuyến sẽ được cập nhật trước ngày Hội nghị.", // hiện khi onlineLink còn trống
   audience: "Bác sĩ, điều dưỡng và nhân viên y tế. Tham dự trực tiếp hoặc trực tuyến.",
   cme: "Cấp chứng nhận CME khi tham dự từ 80% thời lượng của chương trình.",
 
@@ -97,7 +98,7 @@ window.CONF = {
     {
       label: "Phiên Nội khoa",
       time: "08:15 – 11:30 · Song song với Phiên Ngoại khoa",
-      room: "",                     // Hội trường / phòng (VD: "Hội trường A, lầu 5")
+      room: "Hội trường số 3",                     // Hội trường / phòng (VD: "Hội trường A, lầu 5")
       chairs: [
         { name: "BS.CKII. Huỳnh Ngọc Hớn", title: "Giám đốc, BV Trưng Vương" },
         { name: "BS.CKII. Nguyễn Trí Dũng", title: "Phó Giám đốc, BV Trưng Vương" },
@@ -123,7 +124,7 @@ window.CONF = {
     {
       label: "Phiên Ngoại khoa",
       time: "08:15 – 11:30 · Song song với Phiên Nội khoa",
-      room: "",                     // Hội trường / phòng (VD: "Hội trường A, lầu 5")
+      room: "Hội trường Bệnh viện",                     // Hội trường / phòng (VD: "Hội trường A, lầu 5")
       chairs: [
         { name: "TS.BS. Lê Nguyễn Quyền", title: "Phó Giám đốc, BV Trưng Vương" },
         { name: "GS.TS.BS. Nguyễn Công Minh", title: "Trường ĐH Y khoa Phạm Ngọc Thạch" },
@@ -148,7 +149,7 @@ window.CONF = {
     {
       label: "Phiên chiều – Điều dưỡng",
       time: "13:15 – 16:30 · Hội nghị Khoa học Điều dưỡng",
-      room: "",                     // Hội trường / phòng (VD: "Hội trường A, lầu 5")
+      room: "Hội trường Bệnh viện",                     // Hội trường / phòng (VD: "Hội trường A, lầu 5")
       chairs: [
         { name: "BS.CKII. Nguyễn Trí Dũng", title: "Phó Giám đốc, BV Trưng Vương" },
         { name: "ĐD.CKI. Đào Thị Bích Trâm", title: "Trưởng phòng Điều dưỡng, BV Trưng Vương" },
@@ -236,9 +237,9 @@ window.CONF = {
 
   /* ---------- Liên hệ (mục để trống sẽ được ẩn) ---------- */
   contact: {
-    unit: "",
-    person: "",
-    phone: "",
+    unit: "Phòng Quản lý chất lượng, Bệnh viện Trưng Vương",
+    person: "ThS. Nguyễn Mạnh Tuân",
+    phone: "0969 019 051",
     email: "",
     fanpage: ""
   }
