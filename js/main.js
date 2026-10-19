@@ -11,10 +11,6 @@
   var toDate = function (iso) { return new Date(iso.length === 10 ? iso + "T00:00:00+07:00" : iso); };
   var dm = function (iso) { var p = iso.slice(0, 10).split("-"); return p[2] + "/" + p[1]; };
   var plain = function (s) { return String(s).normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/đ/gi, "d").toLowerCase(); };
-  var initials = function (name) {
-    var parts = name.replace(/\(.*?\)/g, "").split(/\s+/).filter(function (p) { return p && !/\./.test(p); });
-    return parts.slice(-2).map(function (p) { return p[0]; }).join("").toUpperCase();
-  };
   var fullTitle = C.title + " " + C.hospital + " năm " + C.year;
   var start = toDate(C.startDate), end = toDate(C.endDate);
 
@@ -152,17 +148,6 @@
 
   /* ---------- 02 Danh bạ chủ tọa & báo cáo viên ---------- */
   var groups = C.speakers.length && C.speakers[0].items ? C.speakers : [{ group: "Báo cáo viên", items: C.speakers }];
-  // Tìm các phiên mà mỗi người chủ tọa / báo cáo, để hiện nhãn bên dưới tên
-  var roleOf = function (name) {
-    var tags = [];
-    C.program.forEach(function (p) {
-      if ((p.chairs || []).some(function (c) { return c.name === name; })) tags.push("Chủ tọa · " + p.label);
-      p.sessions.forEach(function (s) {
-        if (s.speaker && s.speaker.indexOf(name) > -1) tags.push(p.label + " · " + s.time.split(/\s*[–-]\s*/)[0]);
-      });
-    });
-    return tags;
-  };
   var people = [];
   groups.forEach(function (g, gi) {
     g.items.forEach(function (s) { people.push({ s: s, g: g.group, gi: gi, key: plain(s.name + " " + s.title) }); });
@@ -172,11 +157,12 @@
     var q = plain($("peopleSearch").value.trim());
     var list = people.filter(function (p) { return (filterGroup < 0 || p.gi === filterGroup) && (!q || p.key.indexOf(q) > -1); });
     $("peopleCount").textContent = list.length + " / " + people.length + " người";
+    // Danh sách gọn: chỉ tên và chức danh — giờ, phiên báo cáo đã có ở phần Chương trình
     $("speakers").innerHTML = list.length ? list.map(function (p) {
       var s = p.s;
-      var av = s.photo ? '<img src="' + esc(s.photo) + '" alt="">' : esc(initials(s.name));
-      return '<li class="person' + (/chủ tọa/i.test(p.g) ? " chair" : "") + '"><span class="mono">' + av + "</span><div><b>" + esc(s.name) + "</b><small>" + esc(s.title) + "</small>" +
-        roleOf(s.name).map(function (t) { return "<em>" + esc(t) + "</em>"; }).join("") + "</div></li>";
+      return '<li class="person' + (/chủ tọa/i.test(p.g) ? " chair" : "") + (s.photo ? " has-photo" : "") + '">' +
+        (s.photo ? '<img class="mono" src="' + esc(s.photo) + '" alt="">' : "") +
+        "<div><b>" + esc(s.name) + "</b><small>" + esc(s.title) + "</small></div></li>";
     }).join("") : '<li class="empty">Không tìm thấy người phù hợp.</li>';
   }
   $("peopleChips").innerHTML = ['<button type="button" data-g="-1" aria-pressed="true">Tất cả</button>'].concat(groups.map(function (g, i) {

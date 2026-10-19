@@ -33,6 +33,7 @@ window.CONF = {
     abstract: "",        // Form nộp bài tóm tắt (để trống: nút được ẩn)
     checkinInternal: "https://forms.gle/BrBJobRjttwwrqU27", // Điểm danh nội viện
     checkinExternal: "https://forms.gle/3kgsHSp24hAN1Vx66", // Điểm danh ngoại viện
+    postTest: "",        // Link bài post-test (để trống: nút hiện "Sắp mở")
     checkoutCME: "https://forms.gle/vo9gY3qZYCkUaPyL6",     // Check-out & đăng ký nhận CME
     question: "https://forms.gle/oVgCAYYbm66811K1A",        // Đặt câu hỏi cho báo cáo viên
     onlineLink: "",      // Link tham dự trực tuyến (Zoom / Google Meet)
