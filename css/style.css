@@ -50,6 +50,7 @@ h1, h2, h3 { font-family: var(--serif); color: var(--ink); line-height: 1.25; }
 .nav a { color: var(--ink); text-decoration: none; font-size: 14px; font-weight: 500; padding: 8px 12px; border-radius: 6px; white-space: nowrap; }
 .nav a:hover { background: var(--sand); }
 .head-cta { padding: 9px 18px; font-size: 14px; }
+.nav .nav-reg { display: none; }  /* trên máy tính đã có nút "Đăng ký" màu cam */
 .menu-btn { display: none; background: none; border: 0; padding: 8px; cursor: pointer; margin-left: auto; }
 .menu-btn span { display: block; width: 22px; height: 2px; background: var(--ink); margin: 5px 0; transition: transform .2s; }
 
@@ -241,6 +242,7 @@ h1, h2, h3 { font-family: var(--serif); color: var(--ink); line-height: 1.25; }
   .menu-btn { display: block; }
   .nav { display: none; position: absolute; left: 0; right: 0; top: 68px; flex-direction: column; background: var(--paper); border-bottom: 1px solid var(--line); padding: 8px 16px 14px; }
   .nav.open { display: flex; }
+  .nav .nav-reg { display: block; }  /* điện thoại: nút cam bị ẩn nên hiện lại trong menu */
   .nav a { font-size: 15px; padding: 12px 8px; border-bottom: 1px solid var(--line); }
   .menu-btn[aria-expanded="true"] span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
   .menu-btn[aria-expanded="true"] span:nth-child(2) { opacity: 0; }
