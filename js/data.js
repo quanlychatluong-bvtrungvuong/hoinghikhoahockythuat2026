@@ -42,14 +42,6 @@ window.CONF = {
     documents: ""        // Thư mục tài liệu tham khảo
   },
 
-  /* ---------- Phí CME ----------
-     Không ghi số tài khoản trên website (gói Vercel miễn phí không cho phép yêu cầu thanh toán).
-     Thông tin chuyển khoản nằm trong file chương trình PDF (Google Drive) và form đăng ký. */
-  payment: {
-    deadline: "Hạn chót chuyển khoản: 27/10/2026",
-    note: "Thông tin chuyển khoản có trong file chương trình (PDF). Vui lòng đính kèm ảnh chụp màn hình chuyển khoản khi điền form đăng ký."
-  },
-
   /* ---------- Thư chào mừng ---------- */
   welcome: {
     author: "Ban Tổ chức Hội nghị",
@@ -71,7 +63,6 @@ window.CONF = {
 
   /* ---------- Mốc thời gian quan trọng ---------- */
   milestones: [
-    { date: "2026-10-27", label: "Hạn chót chuyển khoản phí tham dự có cấp CME" },
     { date: "2026-10-30", label: "Khai mạc Hội nghị (07:30) – Phiên chiều Điều dưỡng (13:15)" }
   ],
 
@@ -169,13 +160,6 @@ window.CONF = {
         { time: "16:20 – 16:30", title: "Tổng kết – Bế mạc Hội nghị" }
       ]
     }
-  ],
-
-  /* ---------- Phí tham dự ---------- */
-  fees: [
-    { type: "Nhân viên y tế Bệnh viện Trưng Vương và đại biểu theo thư mời", price: "Miễn phí, có cấp CME" },
-    { type: "Đại biểu tham dự không cấp CME", price: "Miễn phí" },
-    { type: "Đại biểu dự trực tiếp hoặc trực tuyến có cấp CME", price: "300.000 VNĐ/buổi" }
   ],
 
   /* ---------- Nhà tài trợ (để [] sẽ ẩn mục này) ---------- */
