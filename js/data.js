@@ -25,7 +25,7 @@ window.CONF = {
   mapQuery: "Bệnh viện Trưng Vương, 266 Lý Thường Kiệt, TP. Hồ Chí Minh",
   onlineNote: "Link tham dự trực tuyến sẽ được cập nhật trước ngày Hội nghị.", // hiện khi onlineLink còn trống
   audience: "Bác sĩ, điều dưỡng và nhân viên y tế. Tham dự trực tiếp hoặc trực tuyến.",
-  cme: "Cấp chứng nhận CME khi tham dự từ 80% thời lượng của chương trình.",
+  cme: "Cấp chứng nhận CME khi tham dự từ 80% thời lượng của chương trình và hoàn tất chính xác từ đủ 70% bài kiểm tra cuối chương trình.",
 
   /* ---------- Các liên kết (dán link Google Form / Google Drive) ---------- */
   links: {
@@ -79,7 +79,8 @@ window.CONF = {
 
   /* ---------- Tin tức & thông báo ---------- */
   news: [
-    { date: "2026-10-19", title: "Công bố chương trình chính thức Hội nghị ngày 30/10/2026", link: "assets/chuong-trinh-hoi-nghi-2026.pdf" }
+    { date: "2026-10-19", title: "Công bố chương trình chính thức Hội nghị ngày 30/10/2026", link: "assets/chuong-trinh-hoi-nghi-2026.pdf" },
+    { date: "2026-10-22", title: "Cập nhật chương trình và quy định cấp CME (thêm bài kiểm tra cuối chương trình)", link: "assets/chuong-trinh-hoi-nghi-2026.pdf" }
   ],
 
   /* ---------- Chương trình: mỗi phiên là một tab ---------- */
@@ -110,7 +111,7 @@ window.CONF = {
         { time: "08:15 – 08:30", title: "Vai trò của sự tuân thủ trong điều trị loãng xương", speaker: "BS.CKII. Huỳnh Đặng Bảo Cương", role: "Trưởng khoa Điều trị đau – Vật lý trị liệu – Y học cổ truyền" },
         { time: "08:30 – 08:45", title: "Tỷ lệ, một số yếu tố liên quan và đánh giá kết quả điều trị rối loạn chức năng cầu nối thông động – tĩnh mạch ở bệnh nhân bệnh thận mạn giai đoạn cuối lọc máu chu kỳ tại khoa Thận – Thận nhân tạo, Bệnh viện Trưng Vương", speaker: "BS.CKII. Võ Ngọc Tình", role: "Phó Trưởng khoa, Phụ trách khoa Thận – Thận nhân tạo" },
         { time: "08:45 – 09:00", title: "Khảo sát tình trạng tăng huyết áp lúc lọc máu ở bệnh nhân bệnh thận mạn giai đoạn cuối lọc máu chu kỳ tại khoa Thận – Thận nhân tạo, Bệnh viện Trưng Vương", speaker: "BS.CKI. Trần Thị Anh Thư", role: "Khoa Thận – Thận nhân tạo" },
-        { time: "09:00 – 09:15", title: "Quản lý bệnh phổi tắc nghẽn mạn tính toàn diện theo Hướng dẫn của Bộ Y tế 2026", speaker: "BS.CKII. Lê Như Thụy Khanh", role: "Phó Trưởng khoa, Phụ trách khoa Hô hấp" },
+        { time: "09:00 – 09:15", title: "Quản lý bệnh phổi tắc nghẽn mạn tính toàn diện theo Hướng dẫn của Bộ Y tế năm 2026", speaker: "BS.CKII. Lê Như Thụy Khanh", role: "Phó Trưởng khoa, Phụ trách khoa Hô hấp" },
         { time: "09:15 – 09:30", title: "Giải lao" },
         { time: "09:30 – 09:45", title: "Vượt qua rào cản tăng kali máu: Tối ưu hóa điều trị cho bệnh nhân suy tim kèm bệnh thận mạn qua case lâm sàng", speaker: "ThS.BS. Nguyễn Trường Duy", role: "Bộ môn Nội – Đại học Y Dược TP.HCM; Trung tâm Tim mạch – BV Chợ Rẫy; Trưởng Phòng khám Tim mạch – BV Đại học Y Dược CS2" },
         { time: "09:45 – 10:00", title: "Khi nào nên khởi trị thuốc hạ huyết áp?", speaker: "BS.CKII. Nguyễn Thiên Hào", role: "Trưởng khoa Tim mạch" },
@@ -136,7 +137,7 @@ window.CONF = {
         { time: "08:15 – 08:30", title: "Đánh giá sự tuân thủ quy trình vệ sinh tay ngoại khoa của phẫu thuật viên và một số yếu tố ảnh hưởng tại Bệnh viện Đa khoa Tâm Anh TP.HCM năm 2025", speaker: "BS.CKII. Huỳnh Thị Thanh Trang", role: "Phó Trưởng khoa Kiểm soát nhiễm khuẩn – BV Đa khoa Tâm Anh TP.HCM" },
         { time: "08:30 – 08:45", title: "Ca lâm sàng: Loét tỳ đè", speaker: "ThS.BS. Nguyễn Xuân Thiện", role: "Khoa Bỏng – Tạo hình thẩm mỹ" },
         { time: "08:45 – 09:00", title: "Biến chứng nặng sau tiêm chất làm đầy: Nhân các trường hợp lâm sàng", speaker: "BS.CKI. Võ Kế Đạt", role: "Khoa Bỏng – Tạo hình thẩm mỹ" },
-        { time: "09:00 – 09:15", title: "Ứng dụng vạt đùi trước ngoài tự do trong phẫu thuật tái tạo di chứng sẹo bỏng vùng cổ bàn chân", speaker: "ThS.BS.CKI. Lê Văn Minh Tuệ", role: "Khoa Bỏng – Tạo hình thẩm mỹ" },
+        { time: "09:00 – 09:15", title: "Ứng dụng vạt đùi trước ngoài tự do trong phẫu thuật tái tạo di chứng sẹo bỏng vùng cổ bàn chân", speaker: "BS.CKI. Lê Văn Minh Tuệ", role: "Khoa Bỏng – Tạo hình thẩm mỹ" },
         { time: "09:15 – 09:30", title: "Giải lao" },
         { time: "09:30 – 09:45", title: "Tán sỏi thận qua da đường hầm nhỏ (mini PCNL) trên bệnh nhân có hệ thống đài bể thận đôi: Báo cáo một trường hợp", speaker: "BS. Nguyễn Hoàng Vĩ", role: "Khoa Ngoại thận – Tiết niệu" },
         { time: "09:45 – 10:00", title: "Quan điểm hiện nay về điều trị bảo tồn trong viêm ruột thừa không biến chứng", speaker: "ThS.BS. Nguyễn Tuấn Ngọc", role: "Khoa Ngoại Tổng hợp" },
@@ -164,7 +165,7 @@ window.CONF = {
         { time: "14:45 – 15:00", title: "Giải lao" },
         { time: "15:00 – 15:15", title: "Khuynh hướng và các yếu tố ảnh hưởng đến cách giải quyết mâu thuẫn của điều dưỡng quản lý tại Bệnh viện Trưng Vương năm 2026", speaker: "ĐD.CKI. Đào Thị Bích Trâm", role: "Trưởng phòng Điều dưỡng" },
         { time: "15:15 – 15:30", title: "Vết thương mạn tính: Từ đánh giá toàn diện đến chăm sóc hiệu quả", speaker: "BS.CKII. Đinh Phương Đông", role: "Trưởng khoa Bỏng – Tạo hình thẩm mỹ" },
-        { time: "15:30 – 15:45", title: "Nâng cao chất lượng chăm sóc toàn diện người bệnh đái tháo đường", speaker: "CN.ĐD. Võ Thị Cẩm Loan", role: "Phụ trách điều dưỡng khoa Nội tiết – Tổng hợp" },
+        { time: "15:30 – 15:45", title: "Nâng cao chất lượng chăm sóc toàn diện người bệnh đái tháo đường", speaker: "CN.ĐD. Võ Thị Cẩm Loan", role: "Phụ trách điều dưỡng, khoa Nội tiết – Tổng hợp" },
         { time: "15:45 – 16:00", title: "Cải tiến vận hành đơn vị tiệt khuẩn trung tâm: Từ những thay đổi nhỏ đến những giá trị lớn", speaker: "CN. Ngô Phương Trinh", role: "Khoa Kiểm soát nhiễm khuẩn" },
         { time: "16:00 – 16:20", title: "Phần thảo luận" },
         { time: "16:20 – 16:30", title: "Tổng kết – Bế mạc Hội nghị" }
