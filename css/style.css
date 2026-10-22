@@ -180,12 +180,6 @@ h1, h2, h3 { font-family: var(--serif); color: var(--ink); line-height: 1.25; }
 .steps p { margin: 0 0 10px; }
 .step-note { font-size: 13px; color: var(--muted); }
 .deadline { font-weight: 700; color: var(--coral); }
-.bank { margin: 0; display: grid; grid-template-columns: 110px 1fr; gap: 6px 12px; background: var(--card); border: 1px solid var(--line); border-radius: var(--r); padding: 14px 16px; font-size: 14px; }
-.bank dt { color: var(--muted); }
-.bank dd { margin: 0; overflow-wrap: anywhere; }
-.bank .acc { font-size: 18px; letter-spacing: .5px; color: var(--ink); }
-.bank code { background: var(--sand); padding: 2px 6px; border-radius: 5px; font-size: 13px; }
-.copy { font: inherit; font-size: 12px; border: 1px solid var(--teal); color: var(--teal); background: #fff; border-radius: 5px; padding: 1px 8px; cursor: pointer; margin-left: 4px; }
 
 /* 03 Tại hội nghị */
 .onsite { max-width: 860px; }
@@ -259,8 +253,6 @@ h1, h2, h3 { font-family: var(--serif); color: var(--ink); line-height: 1.25; }
   .slot-body::before { top: -22px; }
   .slot-card { grid-template-columns: 1fr; gap: 8px; }
   .slot-who { border-top: 1px solid var(--line); padding-top: 8px; }
-  .bank { grid-template-columns: 1fr; gap: 0; }
-  .bank dd { margin-bottom: 8px; }
   .onsite-list a { grid-template-columns: 1fr auto; gap: 2px 12px; }
   .onsite-list .ot { grid-column: 1; font-size: 14px; }
   .onsite-list a::after, .onsite-list .soon { grid-row: 1 / span 2; grid-column: 2; }

@@ -154,28 +154,20 @@
   if (C.audience) $("audience").textContent = C.audience;
   else { $("audience").hidden = true; $("audience").previousElementSibling.hidden = true; }
 
+  // Không hiện số tài khoản trên website: chỉ nhắc hạn chót và chỉ tới file PDF / form đăng ký
   var pay = C.payment, steps = [];
-  if (pay && pay.account) {
-    steps.push('<h4>Chuyển khoản phí (nếu đăng ký nhận CME)</h4>' +
+  if (pay && (pay.deadline || pay.note)) {
+    steps.push("<h4>Đăng ký có cấp CME (có phí)</h4>" +
       (pay.deadline ? '<p class="deadline">' + esc(pay.deadline) + "</p>" : "") +
-      '<dl class="bank"><dt>Tên tài khoản</dt><dd>' + esc(pay.holder) + "</dd>" +
-      '<dt>Số tài khoản</dt><dd><b class="acc">' + esc(pay.account) + '</b><button type="button" class="copy" data-copy="' + esc(pay.account) + '">Sao chép</button></dd>' +
-      "<dt>Ngân hàng</dt><dd>" + esc(pay.bank) + "</dd>" +
-      '<dt>Nội dung</dt><dd><code>' + esc(pay.content) + '</code><button type="button" class="copy" data-copy="' + esc(pay.content) + '">Sao chép</button></dd></dl>' +
-      '<p class="step-note">Đại biểu được miễn phí bỏ qua bước 1 và 2.</p>');
-    steps.push("<h4>Chụp màn hình giao dịch</h4><p>" + esc(pay.note || "Lưu lại ảnh chụp màn hình để đính kèm khi đăng ký.") + "</p>");
+      (pay.note ? "<p>" + esc(pay.note) + "</p>" : "") +
+      (C.links.programPdf ? '<a href="' + esc(C.links.programPdf) + '" target="_blank" rel="noopener">Xem file chương trình (PDF) →</a>' : "") +
+      '<p class="step-note">Đại biểu được miễn phí bỏ qua bước này.</p>');
   }
-  steps.push("<h4>Điền form đăng ký</h4><p>Điền thông tin cá nhân" + (pay && pay.account ? " và đính kèm ảnh chuyển khoản (nếu có)" : "") + ".</p>" +
+  steps.push("<h4>Điền form đăng ký</h4><p>Điền thông tin cá nhân" + (pay ? " và đính kèm ảnh chuyển khoản (nếu có)" : "") + ".</p>" +
     (C.links.register ? '<a class="btn btn-coral" href="' + esc(C.links.register) + '" target="_blank" rel="noopener">Mở form đăng ký</a>' : '<em class="soon">Sắp mở</em>'));
   $("steps").innerHTML = steps.map(function (s, i) {
     return '<li><span class="step-n">' + (i + 1) + "</span><div>" + s + "</div></li>";
   }).join("");
-  $("steps").addEventListener("click", function (e) {
-    var b = e.target.closest(".copy"); if (!b || !navigator.clipboard) return;
-    navigator.clipboard.writeText(b.dataset.copy).then(function () {
-      b.textContent = "Đã chép ✓"; setTimeout(function () { b.textContent = "Sao chép"; }, 1500);
-    }, function () {});
-  });
 
   /* ---------- Nhà tài trợ ---------- */
   if (!C.sponsors.length) { $("nha-tai-tro").hidden = true; $("navSponsors").hidden = true; }

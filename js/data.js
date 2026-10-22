@@ -38,18 +38,16 @@ window.CONF = {
     question: "https://forms.gle/oVgCAYYbm66811K1A",        // Đặt câu hỏi cho báo cáo viên
     onlineLink: "",      // Link tham dự trực tuyến (Zoom / Google Meet)
     invitation: "",      // Thư mời (PDF)
-    programPdf: "assets/chuong-trinh-hoi-nghi-2026.pdf", // Chương trình in (PDF)
+    programPdf: "https://drive.google.com/file/d/11DHsOp2zAq5QatKaUzIZDLgZx3Xc3zGg/view", // Chương trình in (PDF) – lưu trên Google Drive của quanlychatluong
     documents: ""        // Thư mục tài liệu tham khảo
   },
 
-  /* ---------- Thanh toán phí CME ---------- */
+  /* ---------- Phí CME ----------
+     Không ghi số tài khoản trên website (gói Vercel miễn phí không cho phép yêu cầu thanh toán).
+     Thông tin chuyển khoản nằm trong file chương trình PDF (Google Drive) và form đăng ký. */
   payment: {
-    deadline: "Chuyển khoản trước ngày 27/10/2026",
-    holder: "Bệnh viện Trưng Vương",
-    account: "1603201043487",
-    bank: "Ngân hàng Nông nghiệp và Phát triển Nông thôn (Agribank), chi nhánh Lý Thường Kiệt",
-    content: "BVTV-HNKH26-Ho Ten-SDT-Don vi cong tac",
-    note: "Vui lòng chụp màn hình chuyển khoản và gửi đính kèm trong link đăng ký tham dự."
+    deadline: "Hạn chót chuyển khoản: 27/10/2026",
+    note: "Thông tin chuyển khoản có trong file chương trình (PDF). Vui lòng đính kèm ảnh chụp màn hình chuyển khoản khi điền form đăng ký."
   },
 
   /* ---------- Thư chào mừng ---------- */
@@ -79,8 +77,8 @@ window.CONF = {
 
   /* ---------- Tin tức & thông báo ---------- */
   news: [
-    { date: "2026-10-19", title: "Công bố chương trình chính thức Hội nghị ngày 30/10/2026", link: "assets/chuong-trinh-hoi-nghi-2026.pdf" },
-    { date: "2026-10-22", title: "Cập nhật chương trình và quy định cấp CME (thêm bài kiểm tra cuối chương trình)", link: "assets/chuong-trinh-hoi-nghi-2026.pdf" }
+    { date: "2026-10-19", title: "Công bố chương trình chính thức Hội nghị ngày 30/10/2026", link: "https://drive.google.com/file/d/11DHsOp2zAq5QatKaUzIZDLgZx3Xc3zGg/view" },
+    { date: "2026-10-22", title: "Cập nhật chương trình và quy định cấp CME (thêm bài kiểm tra cuối chương trình)", link: "https://drive.google.com/file/d/11DHsOp2zAq5QatKaUzIZDLgZx3Xc3zGg/view" }
   ],
 
   /* ---------- Chương trình: mỗi phiên là một tab ---------- */
