@@ -204,11 +204,6 @@
   $("footAddr").textContent = C.hospital + " – " + C.venueAddress;
   $("copy").textContent = "© " + C.year + " " + C.hospital;
 
-  /* ---------- Mã QR của trang ---------- */
-  if (window.QRCode) {
-    new QRCode($("qr"), { text: location.href.split("#")[0], width: 180, height: 180, colorDark: "#13233a", colorLight: "#ffffff" });
-  }
-
   /* ---------- Menu điện thoại ---------- */
   var btn = $("menuBtn"), nav = $("nav");
   btn.addEventListener("click", function () {

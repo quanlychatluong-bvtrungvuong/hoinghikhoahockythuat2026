@@ -188,7 +188,7 @@ h1, h2, h3 { font-family: var(--serif); color: var(--ink); line-height: 1.25; }
 .copy { font: inherit; font-size: 12px; border: 1px solid var(--teal); color: var(--teal); background: #fff; border-radius: 5px; padding: 1px 8px; cursor: pointer; margin-left: 4px; }
 
 /* 03 Tại hội nghị */
-.onsite { display: grid; grid-template-columns: 1fr 260px; gap: 36px; align-items: start; }
+.onsite { max-width: 860px; }
 .onsite-list { list-style: none; margin: 0; padding: 0; border-top: 1px solid rgba(255,255,255,.15); }
 .onsite-list a { display: grid; grid-template-columns: 170px 1fr auto; align-items: center; gap: 16px; padding: 20px 6px; border-bottom: 1px solid rgba(255,255,255,.15); color: #fff; text-decoration: none; transition: background .15s, padding .15s; }
 .onsite-list a::after { content: "→"; font-size: 20px; color: #ffb38a; }
@@ -199,10 +199,6 @@ h1, h2, h3 { font-family: var(--serif); color: var(--ink); line-height: 1.25; }
 .onsite-list a.disabled::after { content: none; }
 .onsite-list a.disabled .ok { opacity: .55; }
 .soon { font-style: normal; font-size: 11px; font-weight: 700; letter-spacing: .5px; text-transform: uppercase; color: var(--ink); background: #ffc9a8; padding: 3px 9px; border-radius: 4px; }
-.qr-card { background: #fff; color: var(--ink); border-radius: 14px; padding: 20px; text-align: center; }
-.qr { display: inline-block; }
-.qr:empty { display: none; }
-.qr-card p { margin: 12px 0 0; font-size: 13px; color: var(--muted); }
 .disabled { pointer-events: none; }
 
 /* Nhà tài trợ */
@@ -233,8 +229,6 @@ h1, h2, h3 { font-family: var(--serif); color: var(--ink); line-height: 1.25; }
   .nav a { padding: 8px 8px; font-size: 13px; }
   .hero-grid, .letter-grid, .reg-grid, .venue-grid { grid-template-columns: 1fr; }
   .hero-grid { gap: 32px; }
-  .onsite { grid-template-columns: 1fr; }
-  .qr-card { max-width: 280px; }
 }
 /* ===== Điện thoại ===== */
 @media (max-width: 820px) {
