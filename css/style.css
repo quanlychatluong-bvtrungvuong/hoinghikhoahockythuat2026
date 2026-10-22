@@ -157,24 +157,7 @@ h1, h2, h3 { font-family: var(--serif); color: var(--ink); line-height: 1.25; }
 .slot.break .slot-card { background: transparent; border: 0; padding: 6px 0; font-style: italic; color: var(--muted); font-weight: 500; }
 .slot.break .slot-body::before { background: var(--line); border-color: var(--line); }
 
-/* 02 Danh bạ báo cáo viên */
-.dir-tools { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; margin-bottom: 10px; }
-.search { flex: 1 1 280px; }
-.search input { width: 100%; font: inherit; padding: 12px 16px; border: 1.5px solid var(--line); border-radius: 999px; background: var(--card); color: var(--text); }
-.search input:focus { border-color: var(--teal); outline: none; }
-.chips { display: flex; flex-wrap: wrap; gap: 6px; }
-.chips button { font: inherit; font-size: 14px; border: 1.5px solid var(--line); background: var(--card); color: var(--ink); border-radius: 999px; padding: 8px 14px; cursor: pointer; }
-.chips button[aria-pressed="true"] { background: var(--ink); border-color: var(--ink); color: #fff; }
-.dir-count { margin: 0 0 14px; font-size: 13px; color: var(--muted); }
-.directory { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 0 24px; }
-.person { display: flex; gap: 10px; align-items: center; padding: 8px 0 8px 12px; border-bottom: 1px solid var(--line); border-left: 3px solid var(--line); }
-.person.chair { border-left-color: var(--coral); }
-.mono { width: 36px; height: 36px; border-radius: 50%; object-fit: cover; flex: none; }
-.person b { display: block; color: var(--ink); font-size: 14.5px; line-height: 1.35; }
-.person small { display: block; color: var(--muted); font-size: 12.5px; line-height: 1.35; }
-.directory .empty { grid-column: 1 / -1; color: var(--muted); padding: 20px 0; }
-
-/* 03 Đăng ký */
+/* 02 Đăng ký */
 .reg-grid { display: grid; grid-template-columns: 1fr 1.1fr; gap: 32px; align-items: start; }
 .price-card { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 26px; }
 .price-card h3 { margin: 0 0 12px; font-size: 20px; }
@@ -203,7 +186,7 @@ h1, h2, h3 { font-family: var(--serif); color: var(--ink); line-height: 1.25; }
 .bank code { background: var(--sand); padding: 2px 6px; border-radius: 5px; font-size: 13px; }
 .copy { font: inherit; font-size: 12px; border: 1px solid var(--teal); color: var(--teal); background: #fff; border-radius: 5px; padding: 1px 8px; cursor: pointer; margin-left: 4px; }
 
-/* 04 Tại hội nghị */
+/* 03 Tại hội nghị */
 .onsite { display: grid; grid-template-columns: 1fr 260px; gap: 36px; align-items: start; }
 .onsite-list { list-style: none; margin: 0; padding: 0; border-top: 1px solid rgba(255,255,255,.15); }
 .onsite-list a { display: grid; grid-template-columns: 170px 1fr auto; align-items: center; gap: 16px; padding: 20px 6px; border-bottom: 1px solid rgba(255,255,255,.15); color: #fff; text-decoration: none; transition: background .15s, padding .15s; }
@@ -228,7 +211,7 @@ h1, h2, h3 { font-family: var(--serif); color: var(--ink); line-height: 1.25; }
 .sp { width: 200px; height: 100px; border: 1px solid var(--line); border-radius: var(--r); display: grid; place-items: center; padding: 14px; background: #fff; color: var(--muted); font-weight: 600; }
 .sp img { max-height: 100%; object-fit: contain; }
 
-/* 05 Địa điểm */
+/* 04 Địa điểm */
 .venue-grid { display: grid; grid-template-columns: 1.4fr 1fr; gap: 32px; }
 .map { border-radius: 14px; overflow: hidden; border: 1px solid var(--line); aspect-ratio: 16 / 10; background: var(--sand); }
 .map iframe { width: 100%; height: 100%; border: 0; }
@@ -280,7 +263,6 @@ h1, h2, h3 { font-family: var(--serif); color: var(--ink); line-height: 1.25; }
   .slot-body::before { top: -22px; }
   .slot-card { grid-template-columns: 1fr; gap: 8px; }
   .slot-who { border-top: 1px solid var(--line); padding-top: 8px; }
-  .directory { grid-template-columns: 1fr; }
   .bank { grid-template-columns: 1fr; gap: 0; }
   .bank dd { margin-bottom: 8px; }
   .onsite-list a { grid-template-columns: 1fr auto; gap: 2px 12px; }

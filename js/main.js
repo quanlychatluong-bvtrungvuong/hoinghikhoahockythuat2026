@@ -146,39 +146,7 @@
   });
   showSession(0);
 
-  /* ---------- 02 Danh bạ chủ tọa & báo cáo viên ---------- */
-  var groups = C.speakers.length && C.speakers[0].items ? C.speakers : [{ group: "Báo cáo viên", items: C.speakers }];
-  var people = [];
-  groups.forEach(function (g, gi) {
-    g.items.forEach(function (s) { people.push({ s: s, g: g.group, gi: gi, key: plain(s.name + " " + s.title) }); });
-  });
-  var filterGroup = -1;
-  function renderPeople() {
-    var q = plain($("peopleSearch").value.trim());
-    var list = people.filter(function (p) { return (filterGroup < 0 || p.gi === filterGroup) && (!q || p.key.indexOf(q) > -1); });
-    $("peopleCount").textContent = list.length + " / " + people.length + " người";
-    // Danh sách gọn: chỉ tên và chức danh — giờ, phiên báo cáo đã có ở phần Chương trình
-    $("speakers").innerHTML = list.length ? list.map(function (p) {
-      var s = p.s;
-      return '<li class="person' + (/chủ tọa/i.test(p.g) ? " chair" : "") + (s.photo ? " has-photo" : "") + '">' +
-        (s.photo ? '<img class="mono" src="' + esc(s.photo) + '" alt="">' : "") +
-        "<div><b>" + esc(s.name) + "</b><small>" + esc(s.title) + "</small></div></li>";
-    }).join("") : '<li class="empty">Không tìm thấy người phù hợp.</li>';
-  }
-  $("peopleChips").innerHTML = ['<button type="button" data-g="-1" aria-pressed="true">Tất cả</button>'].concat(groups.map(function (g, i) {
-    return '<button type="button" data-g="' + i + '" aria-pressed="false">' + esc(g.group) + " (" + g.items.length + ")</button>";
-  })).join("");
-  $("peopleChips").addEventListener("click", function (e) {
-    var b = e.target.closest("button"); if (!b) return;
-    filterGroup = +b.dataset.g;
-    this.querySelectorAll("button").forEach(function (x) { x.setAttribute("aria-pressed", x === b); });
-    renderPeople();
-  });
-  $("peopleSearch").addEventListener("input", renderPeople);
-  if (groups.length < 2) $("peopleChips").hidden = true;
-  renderPeople();
-
-  /* ---------- 03 Đăng ký ---------- */
+  /* ---------- 02 Đăng ký ---------- */
   $("fees").innerHTML = C.fees.map(function (f) {
     return "<li><span>" + esc(f.type) + "</span><i></i><b>" + esc(f.price) + "</b></li>";
   }).join("");
@@ -217,7 +185,7 @@
     }).join("") + "</div></div>";
   }).join("");
 
-  /* ---------- 05 Địa điểm & liên hệ ---------- */
+  /* ---------- 04 Địa điểm & liên hệ ---------- */
   $("map").src = "https://www.google.com/maps?q=" + encodeURIComponent(C.mapQuery) + "&output=embed";
   var ct = C.contact;
   var rooms = C.program.filter(function (p) { return p.room; }).map(function (p) { return p.label + ": " + p.room; });

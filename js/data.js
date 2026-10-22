@@ -172,60 +172,6 @@ window.CONF = {
     }
   ],
 
-  /* ---------- Chủ tọa & báo cáo viên (theo nhóm) ---------- */
-  speakers: [
-    {
-      group: "Chủ tọa đoàn",
-      items: [
-        { name: "BS.CKII. Huỳnh Ngọc Hớn", title: "Giám đốc, BV Trưng Vương", photo: "" },
-        { name: "BS.CKII. Nguyễn Trí Dũng", title: "Phó Giám đốc, BV Trưng Vương", photo: "" },
-        { name: "TS.BS. Lê Nguyễn Quyền", title: "Phó Giám đốc, BV Trưng Vương", photo: "" },
-        { name: "TS.BS. Phạm Ngọc Huy Tuấn", title: "Trưởng khoa Tiêu hóa – Tiết niệu, BV Trưng Vương", photo: "" },
-        { name: "TS.BS. Lê Cao Phương Duy", title: "Phó Giám đốc, BV Nguyễn Tri Phương", photo: "" },
-        { name: "GS.TS.BS. Nguyễn Công Minh", title: "Trường ĐH Y khoa Phạm Ngọc Thạch", photo: "" },
-        { name: "PGS.TS.BS. Phạm Trịnh Quốc Khanh", title: "Trường ĐH Y Dược Cần Thơ", photo: "" },
-        { name: "TS.BS. Lê Nguyên Khôi", title: "Trường ĐH Y khoa Phạm Ngọc Thạch", photo: "" },
-        { name: "ĐD.CKI. Đào Thị Bích Trâm", title: "Trưởng phòng Điều dưỡng, BV Trưng Vương", photo: "" },
-        { name: "TS.ĐD. Lữ Mộng Thùy Linh", title: "Phó Trưởng phòng Nghiệp vụ Y, Sở Y tế TP.HCM", photo: "" }
-      ]
-    },
-    {
-      group: "Báo cáo viên",
-      items: [
-        { name: "BS.CKII. Phan Thanh Hằng", title: "Trưởng phòng Kế hoạch tổng hợp", photo: "" },
-        { name: "ThS. Đặng Thanh Hùng", title: "Trưởng phòng CNTT, Bệnh viện Nhi đồng 1", photo: "" },
-        { name: "BS.CKII. Huỳnh Đặng Bảo Cương", title: "Trưởng khoa Điều trị đau – VLTL – YHCT", photo: "" },
-        { name: "BS.CKII. Võ Ngọc Tình", title: "Phụ trách khoa Thận – Thận nhân tạo", photo: "" },
-        { name: "BS.CKI. Trần Thị Anh Thư", title: "Khoa Thận – Thận nhân tạo", photo: "" },
-        { name: "BS.CKII. Lê Như Thụy Khanh", title: "Phụ trách khoa Hô hấp", photo: "" },
-        { name: "ThS.BS. Nguyễn Trường Duy", title: "Bộ môn Nội – ĐH Y Dược TP.HCM; BV Chợ Rẫy", photo: "" },
-        { name: "BS.CKII. Nguyễn Thiên Hào", title: "Trưởng khoa Tim mạch", photo: "" },
-        { name: "TS.BS. Bùi Thị Thanh Hiền", title: "Trưởng khoa Nội tiết – Tổng hợp", photo: "" },
-        { name: "BS.CKII. Nguyễn Thiên Bình", title: "Trưởng khoa Hồi sức tích cực – Chống độc", photo: "" },
-        { name: "BS.CKII. Nguyễn Hoàng Huy", title: "Khoa Hồi sức tích cực – Chống độc", photo: "" },
-        { name: "BS.CKII. Trần Thanh Tuấn", title: "Phó Trưởng khoa Tim mạch", photo: "" },
-        { name: "BS.CKII. Trần Phạm Phương Thư", title: "Trường ĐHYK Phạm Ngọc Thạch", photo: "" },
-        { name: "BS.CKII. Huỳnh Thị Thanh Trang", title: "Phó Trưởng khoa KSNK – BV Đa khoa Tâm Anh TP.HCM", photo: "" },
-        { name: "ThS.BS. Nguyễn Xuân Thiện", title: "Khoa Bỏng – Tạo hình thẩm mỹ", photo: "" },
-        { name: "BS.CKI. Võ Kế Đạt", title: "Khoa Bỏng – Tạo hình thẩm mỹ", photo: "" },
-        { name: "ThS.BS.CKI. Lê Văn Minh Tuệ", title: "Khoa Bỏng – Tạo hình thẩm mỹ", photo: "" },
-        { name: "BS. Nguyễn Hoàng Vĩ", title: "Khoa Ngoại thận – Tiết niệu", photo: "" },
-        { name: "ThS.BS. Nguyễn Tuấn Ngọc", title: "Khoa Ngoại Tổng hợp", photo: "" },
-        { name: "BS. Đỗ Khôi Nguyên", title: "Khoa Ngoại Tổng hợp", photo: "" },
-        { name: "BS.CKII. Hồ Nhựt Tâm", title: "Đơn vị Cột sống – Khoa CTCH", photo: "" },
-        { name: "BS. Nguyễn Thành Đạt", title: "Đơn vị Cột sống – Khoa CTCH", photo: "" },
-        { name: "BS.CKI. Phan Thanh Trọng", title: "Đơn vị Cột sống – Khoa CTCH", photo: "" },
-        { name: "BS. Huỳnh Minh Tâm", title: "Đơn vị Cột sống – Khoa CTCH", photo: "" },
-        { name: "ThS. Nguyễn Mạnh Tuân", title: "Trưởng phòng Quản lý chất lượng", photo: "" },
-        { name: "ThS.ĐD. Nguyễn Thị Kim Huệ", title: "Điều dưỡng trưởng khoa Thần kinh", photo: "" },
-        { name: "ĐD.CKI. Hứa Thị Trinh", title: "Phó Trưởng phòng Điều dưỡng", photo: "" },
-        { name: "BS.CKII. Đinh Phương Đông", title: "Trưởng khoa Bỏng – Tạo hình thẩm mỹ", photo: "" },
-        { name: "CN.ĐD. Võ Thị Cẩm Loan", title: "Phụ trách điều dưỡng khoa Nội tiết – Tổng hợp", photo: "" },
-        { name: "CN. Ngô Phương Trinh", title: "Khoa Kiểm soát nhiễm khuẩn", photo: "" }
-      ]
-    }
-  ],
-
   /* ---------- Phí tham dự ---------- */
   fees: [
     { type: "Nhân viên y tế Bệnh viện Trưng Vương và đại biểu theo thư mời", price: "Miễn phí, có cấp CME" },
