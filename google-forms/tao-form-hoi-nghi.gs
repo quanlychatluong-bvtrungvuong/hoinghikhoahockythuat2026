@@ -57,7 +57,11 @@ function taoTatCaForm() {
 
   links.checkoutCME = taoForm_(ss, "Check-out – Đăng ký nhận CME", "Điền khi kết thúc buổi. Chứng nhận CME cấp cho đại biểu tham dự từ 80% thời lượng chương trình.", function (f) {
     hoTen_(f);
-    f.addDateItem().setTitle("Ngày sinh").setRequired(true);
+    f.addTextItem().setTitle("Năm sinh").setHelpText("VD: 1985").setRequired(true)
+      .setValidation(FormApp.createTextValidation().requireNumberBetween(1930, 2010)
+        .setHelpText("Nhập năm sinh gồm 4 chữ số, VD: 1985").build());
+    f.addMultipleChoiceItem().setTitle("Chức danh").setChoiceValues(["BS", "ĐD", "KTV"]).showOtherOption(true).setRequired(true);
+    f.addMultipleChoiceItem().setTitle("Trình độ").setChoiceValues(["TS", "ThS", "CK2", "CK1", "Đại học", "Cao đẳng"]).showOtherOption(true).setRequired(true);
     f.addTextItem().setTitle("Đơn vị công tác").setRequired(true);
     f.addTextItem().setTitle("Số chứng chỉ hành nghề").setRequired(true);
     email_(f);
