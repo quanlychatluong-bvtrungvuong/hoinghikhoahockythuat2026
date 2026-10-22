@@ -5,7 +5,7 @@
  *   "Check-out CME", "Đặt câu hỏi" (form vẫn ghi vào đúng trang sau khi đổi tên).
  * - Tạo trang "Tổng hợp" đứng đầu, toàn bộ là công thức nên số liệu tự cập nhật
  *   ngay khi có người điểm danh. Đếm theo NGƯỜI (không trùng): nội viện theo mã nhân viên,
- *   ngoại viện theo số điện thoại, CME theo số chứng chỉ hành nghề.
+ *   ngoại viện theo số điện thoại, CME theo email.
  * Chạy lại được: trang "Tổng hợp" cũ sẽ được tạo lại.
  */
 
@@ -58,7 +58,7 @@ function taoTongHop() {
   }
   var nvMa = cot(NV, "Mã nhân viên"), nvBuoi = cot(NV, "Buổi / Phiên tham dự");
   var ngSdt = cot(NGV, "Số điện thoại"), ngBuoi = cot(NGV, "Buổi / Phiên tham dự"), ngHt = cot(NGV, "Hình thức tham dự");
-  var cmeCc = cot(CME, "Số chứng chỉ hành nghề"), cmeBuoi = cot(CME, "Buổi / Phiên đã tham dự");
+  var cmeCc = cot(CME, "Email"), cmeBuoi = cot(CME, "Buổi / Phiên đã tham dự");
   var chPhien = cot(CH, "Phiên");
 
   // 2. Tạo lại trang "Tổng hợp"
@@ -97,7 +97,7 @@ function taoTongHop() {
   th.getRange(rQT, 1).setValue("Tổng số câu hỏi");
   th.getRange(rQT, 2).setFormula("=SUM(B" + (rQ + 1) + ":B" + (rQT - 1) + ")");
 
-  th.getRange(rQT + 2, 1).setValue("Ghi chú: đếm theo người không trùng (nội viện: mã nhân viên; ngoại viện: số điện thoại; CME: số CCHN). Một người dự nhiều phiên được tính ở từng phiên.");
+  th.getRange(rQT + 2, 1).setValue("Ghi chú: đếm theo người không trùng (nội viện: mã nhân viên; ngoại viện: số điện thoại; CME: email). Một người dự nhiều phiên được tính ở từng phiên.");
 
   // Bảng tính định dạng Việt Nam dùng dấu ";" ngăn cách đối số công thức thay cho ","
   if (ss.getSpreadsheetLocale().indexOf("en") !== 0) {

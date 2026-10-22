@@ -2,7 +2,7 @@
  * SỬA FORM "CHECK-OUT – ĐĂNG KÝ NHẬN CME" (chạy 1 lần, khi form CHƯA có câu trả lời)
  * ---------------------------------------------------------------
  * Câu hỏi mới: Họ và tên · Năm sinh · Chức danh (BS, ĐD, KTV, Khác) ·
- * Trình độ (TS, ThS, CK2, CK1, Đại học, Cao đẳng, Khác) · Đơn vị · Số CCHN · Email ·
+ * Trình độ (TS, ThS, CK2, CK1, Đại học, Cao đẳng, Khác) · Đơn vị · Email ·
  * Buổi/Phiên đã tham dự · Mức độ hài lòng · Góp ý.  Mục "Khác" cho người điền tự ghi.
  *
  * Link form (forms.gle/…) giữ nguyên. Trang câu trả lời được tạo lại cho cột đúng thứ tự,
@@ -31,7 +31,6 @@ function suaFormCME() {
   form.addMultipleChoiceItem().setTitle("Trình độ")
     .setChoiceValues(["TS", "ThS", "CK2", "CK1", "Đại học", "Cao đẳng"]).showOtherOption(true).setRequired(true);
   form.addTextItem().setTitle("Đơn vị công tác").setRequired(true);
-  form.addTextItem().setTitle("Số chứng chỉ hành nghề").setRequired(true);
   form.addTextItem().setTitle("Email").setRequired(true)
     .setValidation(FormApp.createTextValidation().requireTextIsEmail().build());
   form.addCheckboxItem().setTitle("Buổi / Phiên đã tham dự").setChoiceValues(DS_BUOI).setRequired(true);

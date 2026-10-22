@@ -63,7 +63,6 @@ function taoTatCaForm() {
     f.addMultipleChoiceItem().setTitle("Chức danh").setChoiceValues(["BS", "ĐD", "KTV"]).showOtherOption(true).setRequired(true);
     f.addMultipleChoiceItem().setTitle("Trình độ").setChoiceValues(["TS", "ThS", "CK2", "CK1", "Đại học", "Cao đẳng"]).showOtherOption(true).setRequired(true);
     f.addTextItem().setTitle("Đơn vị công tác").setRequired(true);
-    f.addTextItem().setTitle("Số chứng chỉ hành nghề").setRequired(true);
     email_(f);
     f.addCheckboxItem().setTitle("Buổi / Phiên đã tham dự").setChoiceValues(DS_BUOI).setRequired(true);
     f.addScaleItem().setTitle("Mức độ hài lòng với Hội nghị").setBounds(1, 5).setLabels("Không hài lòng", "Rất hài lòng");
