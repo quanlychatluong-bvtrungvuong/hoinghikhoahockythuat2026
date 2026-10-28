@@ -71,7 +71,7 @@ main{padding:12px 14px 80px;max-width:720px;margin:auto}
   <div id="kq"></div>
   <div class="card new" id="moi" style="display:none">
     <div class="name">Không có trong danh sách mời</div>
-    <div class="meta">Chỉ điểm danh, KHÔNG phát quà.</div>
+    <div class="meta">Chỉ điểm danh, KHÔNG phát quà (kể cả quà dư).</div>
     <input id="nTen" placeholder="Họ và tên"><input id="nDv" placeholder="Đơn vị công tác">
     <div class="row"><button class="btn sub" onclick="ngoaiDS()">Điểm danh người không có thư mời</button></div>
   </div>
@@ -79,7 +79,7 @@ main{padding:12px 14px 80px;max-width:720px;margin:auto}
 </div>
 <div id="toast"></div>
 <script>
-var PIN="", NV="", DS=[], LOG=[], TONG=350, BUOI=[], CHON="", dang=false;
+var PIN="", NV="", DS=[], LOG=[], TONG={}, GIO={}, BUOI=[], CHON="", dang=false;
 function bo(s){return String(s||"").normalize("NFD").replace(/[̀-ͯ]/g,"").replace(/đ/g,"d").replace(/Đ/g,"D").toLowerCase();}
 function e(s){return String(s==null?"":s).replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c];});}
 function toast(m,ok){var t=document.getElementById("toast");t.textContent=m;t.style.background=ok?"#2b8a3e":"#c92a2a";t.style.display="block";clearTimeout(t._h);t._h=setTimeout(function(){t.style.display="none";},ok?2500:5000);}
@@ -89,7 +89,7 @@ function dangNhap(){
   if(!NV){document.getElementById("err").textContent="Nhập tên lễ tân";return;}
   google.script.run.withSuccessHandler(function(d){
     try{localStorage.setItem("ltNV",NV);}catch(x){}
-    DS=d.ds;LOG=d.log;TONG=d.tong;BUOI=d.buoi;
+    DS=d.ds;LOG=d.log;TONG=d.tong;GIO=d.gio||{};BUOI=d.buoi;
     DS.forEach(function(x){x.s=bo(x.t+" "+x.d+" "+x.v+" "+x.g);});
     var h=new Date().getHours(); CHON=h<12?BUOI[0]:BUOI[2];
     document.getElementById("login").style.display="none";document.getElementById("app").style.display="block";
@@ -104,13 +104,17 @@ function veBuoi(){
 }
 function loai(b){return String(b).indexOf("Buổi sáng")===0?"sáng":"chiều";}
 var TEN_P={N:"Nội khoa",G:"Ngoại khoa",D:"Điều dưỡng"};
+function bayGio(){return new Date().toLocaleTimeString("en-GB",{timeZone:"Asia/Ho_Chi_Minh",hour12:false}).slice(0,5);}
+function ngoaiGio(){var g=GIO[loai(CHON)],h=bayGio();return !!g&&(h<g[0]||h>=g[1]);}
 function maP(){return ["N","G","D"][BUOI.indexOf(CHON)]||"";}
 function tenP(p){return p.split("").map(function(c){return TEN_P[c];}).join(" / ");}
 function ve(){
-  var daPhat=LOG.filter(function(l){return l.q;}).length, nhan={}, dd={};
+  var lb=loai(CHON), daPhat=LOG.filter(function(l){return l.q&&loai(l.b)===lb;}).length, nhan={}, dd={};
   LOG.forEach(function(l){if(l.q)nhan[l.k]=l; dd[l.k+"|"+loai(l.b)]=l;});
-  var chua=DS.filter(function(x){return x.q&&!nhan[x.k];}).length, con=TONG-daPhat;
-  document.getElementById("stats").innerHTML='<span class="stat">Đã phát <b>'+daPhat+"</b>/"+TONG+'</span><span class="stat">Còn <b>'+con+'</b></span><span class="stat'+(chua>con?" bad":"")+'">Khách mời chưa nhận <b>'+chua+"</b>"+(chua>con?" · THIẾU "+(chua-con):"")+"</span>";
+  var bm=lb==="sáng"?"NG":"D", tong=TONG[lb]||0, con=tong-daPhat, g=GIO[lb];
+  var chua=DS.filter(function(x){return x.q&&!nhan[x.k]&&x.p.split("").some(function(c){return bm.indexOf(c)>-1;});}).length;
+  document.getElementById("stats").innerHTML='<span class="stat">Quà '+lb+(lb==="sáng"?" (bác sĩ)":" (điều dưỡng)")+': đã phát <b>'+daPhat+"</b>/"+tong+'</span><span class="stat'+(con<=0?" bad":"")+'">Còn <b>'+con+'</b></span><span class="stat'+(chua>con?" bad":"")+'">Đăng ký buổi này chưa nhận <b>'+chua+"</b>"+(chua>con?" · THIẾU "+(chua-con):"")+"</span>"+
+    (g?'<span class="stat'+(ngoaiGio()?" bad":"")+'">Giờ phát quà '+g[0]+"–"+g[1]+(ngoaiGio()?" · NGOÀI GIỜ":"")+"</span>":"");
   var q=bo(document.getElementById("q").value.trim()), kq=document.getElementById("kq");
   document.getElementById("moi").style.display=q.length>=2?"block":"none";
   if(q.length<2){kq.innerHTML='<p class="muted">Gõ ít nhất 2 chữ. Buổi đang chọn: <b>'+e(CHON)+"</b></p>";return;}
@@ -149,7 +153,9 @@ function gui(req){
   .withFailureHandler(function(er){dang=false;toast(er.message,false);}).apiXacNhan(PIN,req);
 }
 function xacNhan(i,kieu){
-  var x=window["_r"+i], req={k:x.k}, mp=maP();
+  var x=window["_r"+i], req={k:x.k}, mp=maP(), g=GIO[loai(CHON)];
+  if(x.q&&!LOG.some(function(l){return l.k===x.k&&l.q;})&&ngoaiGio()&&
+    !confirm("⚠ Ngoài giờ phát quà buổi "+loai(CHON)+" ("+g[0]+"–"+g[1]+").\n\nVẫn điểm danh và PHÁT QUÀ cho "+x.t+"?"))return;
   if(x.p.indexOf(mp)<0){
     if(!confirm("⚠ "+x.t+" đăng ký phiên "+tenP(x.p)+",\nnhưng đang điểm danh: "+CHON+".\n\nĐã kiểm tra lại với đại biểu và vẫn xác nhận?"))return;
     req.lech=tenP(x.p);
@@ -164,4 +170,5 @@ function ngoaiDS(){
   gui({k:"",ten:t,dv:d,nguoi:t});
 }
 document.getElementById("pin").addEventListener("keydown",function(ev){if(ev.key==="Enter")dangNhap();});
+setInterval(function(){if(PIN&&DS.length)ve();},60000);   // cập nhật trạng thái giờ phát quà
 </script></body></html>

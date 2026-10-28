@@ -163,22 +163,27 @@ function taoTongHop() {
   }
 
   // Quà tặng (nếu đã có tab Phát quà)
-  if (ss.getSheetByName("Phát quà") && typeof QUA_TONG !== "undefined") {
+  if (ss.getSheetByName("Phát quà") && typeof QUA_BUOI !== "undefined") {
     var Q = "'Phát quà'!";
     var coQuyen = danhSachQua_().filter(function (x) { return x.q; }).length;
+    var daPhatBuoi = function (b) { return "=COUNTIFS(" + Q + "H2:H,\"Có\"," + Q + "B2:B,\"Buổi " + b + "*\")"; };
     th.getRange(rNext, 1, 1, 2).setValues([["Quà tặng khách mời", "Số suất"]]);
     headRows.push(rNext);
-    [["Dự trù", "=" + QUA_TONG],
-     ["Khách mời / đơn vị có quyền nhận", "=" + coQuyen],
-     ["Đã phát", "=COUNTIF(" + Q + "H2:H,\"Có\")"],
-     ["Còn lại", "=B" + (rNext + 1) + "-B" + (rNext + 3)],
-     ["Khách mời chưa nhận", "=B" + (rNext + 2) + "-B" + (rNext + 3)],
+    [["Dự trù buổi sáng (bác sĩ)", "=" + QUA_BUOI["sáng"]],
+     ["  – Đã phát buổi sáng", daPhatBuoi("sáng")],
+     ["  – Còn lại buổi sáng", "=B" + (rNext + 1) + "-B" + (rNext + 2)],
+     ["Dự trù buổi chiều (điều dưỡng)", "=" + QUA_BUOI["chiều"]],
+     ["  – Đã phát buổi chiều", daPhatBuoi("chiều")],
+     ["  – Còn lại buổi chiều", "=B" + (rNext + 4) + "-B" + (rNext + 5)],
+     ["Người / đơn vị trong danh sách mời (có quyền nhận)", "=" + coQuyen],
+     ["Trong danh sách mời chưa nhận", "=B" + (rNext + 7) + "-B" + (rNext + 2) + "-B" + (rNext + 5)],
+     ["Phát ngoài giờ (lễ tân đã xác nhận)", "=COUNTIFS(" + Q + "H2:H,\"Có\"," + Q + "K2:K,\"*Phát ngoài giờ*\")"],
      ["Điểm danh tại bàn lễ tân (lượt hợp lệ)", "=COUNTIFS(" + Q + "A2:A,\"<>\"," + Q + "H2:H,\"<>Đã hủy\")"],
      ["Lượt đã hoàn tác (bấm nhầm)", "=COUNTIF(" + Q + "H2:H,\"Đã hủy\")"]].forEach(function (x, k) {
       th.getRange(rNext + 1 + k, 1).setValue(x[0]);
       th.getRange(rNext + 1 + k, 2).setFormula(x[1]);
     });
-    rNext = rNext + 9;
+    rNext = rNext + 13;
   }
 
   // Xét CME (nếu đã có tab)

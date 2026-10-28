@@ -4,17 +4,21 @@
  * - Lễ tân gõ vài chữ của tên (không dấu cũng được) → thấy ngay: có thư mời không, đã nhận quà chưa.
  * - Một chạm "Xác nhận + phát quà": ghi điểm danh + phát quà vào tab "Phát quà" (giờ, người phát).
  * - Mỗi suất quà chỉ phát 1 lần (khóa LockService chống trùng khi 2–3 máy bấm cùng lúc).
- * - Đơn vị: 1 đại diện; dự thay: nhận đúng suất của người được mời; không có thư mời: chỉ điểm danh.
+ * - Ai có tên trong danh sách mời đều nhận 1 suất (cùng một loại quà); đơn vị: 1 suất cho người đại diện;
+ *   dự thay: nhận đúng suất của người được mời; không có thư mời: chỉ điểm danh, không nhận quà dư.
+ * - Suất quà theo buổi: sáng (bác sĩ) 200, chiều (điều dưỡng) 200. Giờ phát 07:00–08:00 và 13:00–14:00;
+ *   ngoài giờ lễ tân phải xác nhận lại, dòng ghi chú ghi "Phát ngoài giờ".
  * - Vào trang phải nhập mã PIN (lưu trong Thuộc tính tập lệnh, không ghi trong code GitHub).
  *
  * Cần trong cùng dự án: MOI_DATA, PIN_LE_TAN (dữ liệu riêng), SHEET_ID, DS_BUOI, khoa_() .
  * Cài đặt: chạy caiDatPhatQua() 1 lần, rồi Triển khai → Ứng dụng web (Thực thi: Tôi; Truy cập: Bất kỳ ai).
  */
 
-var QUA_TONG = 350;   // số suất quà dự trù
-// Nhóm trong danh sách mời được nhận quà (2 nhóm "ĐD – Đăng ký dự …" là đăng ký, không phải thư mời)
-var QUA_NHOM = ["Khách mời", "Chủ tọa – Báo cáo viên", "Đại biểu BV Trưng Vương", "Công ty tài trợ",
-  "Bệnh viện – Trường – Trạm y tế", "ĐD – Khách mời ngoại viện", "ĐD – Chủ tọa, thư ký, báo cáo viên"];
+// Số suất quà theo buổi phát (sáng = bác sĩ, chiều = điều dưỡng); mọi người trong danh sách mời đều được nhận
+var QUA_BUOI = { "sáng": 200, "chiều": 200 };
+var QUA_TONG = QUA_BUOI["sáng"] + QUA_BUOI["chiều"];
+// Giờ phát quà [mở, đóng) theo giờ Việt Nam
+var QUA_GIO = { "sáng": ["07:00", "08:00"], "chiều": ["13:00", "14:00"] };
 var PQ_TAB = "Phát quà";
 var PQ_HDR = ["Thời gian", "Buổi / Phiên tham dự", "Mã", "Họ tên (theo danh sách)", "Đơn vị / Chức vụ", "Nhóm",
   "Người đến thực tế", "Phát quà", "Trường hợp", "Người phát", "Ghi chú"];
@@ -29,8 +33,8 @@ function caiDatPhatQua() {
     sh.setFrozenRows(1);
     sh.getRange("A:A").setNumberFormat("HH:mm:ss dd/MM/yyyy");
   }
-  var ds = danhSachQua_(), co = ds.filter(function (x) { return x.q; }).length;
-  Logger.log("Phát quà: " + co + " suất có quyền nhận / dự trù " + QUA_TONG + ". PIN đã lưu: " + (props.getProperty("PIN_LE_TAN") ? "có" : "CHƯA"));
+  var co = danhSachQua_().length;
+  Logger.log("Phát quà: " + co + " người/đơn vị trong danh sách mời; dự trù sáng " + QUA_BUOI["sáng"] + ", chiều " + QUA_BUOI["chiều"] + ". PIN đã lưu: " + (props.getProperty("PIN_LE_TAN") ? "có" : "CHƯA"));
 }
 
 function doGet() {
@@ -58,6 +62,7 @@ function kiemPin_(pin) {
   var p = PropertiesService.getScriptProperties().getProperty("PIN_LE_TAN");
   if (!p || String(pin).trim() !== p) throw new Error("Sai mã PIN");
 }
+function buoiLoai_(b) { return String(b).indexOf("Buổi sáng") === 0 ? "sáng" : "chiều"; }
 function maMoi_(r) { return r[4] ? khoa_(r[1]) : "dv:" + String(r[1]).toLowerCase().trim(); }
 // Phiên đăng ký: N = Nội khoa, G = Ngoại khoa, D = Điều dưỡng (chiều). Khách buổi sáng không ghi phiên = "NG".
 function phienDK_(r) {
@@ -78,7 +83,7 @@ function danhSachQua_() {
   var seen = {};
   return MOI_DATA.map(function (r) {
     var k = maMoi_(r); if (seen[k]) return null; seen[k] = 1;
-    return { k: k, t: r[1], d: r[2], g: r[0], v: r[3], u: r[4] ? 0 : 1, q: QUA_NHOM.indexOf(r[0]) > -1 ? 1 : 0, p: phienDK_(r) };
+    return { k: k, t: r[1], d: r[2], g: r[0], v: r[3], u: r[4] ? 0 : 1, q: 1, p: phienDK_(r) };
   }).filter(Boolean);
 }
 function nhatKy_() {
@@ -94,7 +99,7 @@ function nhatKy_() {
 /* ---------- API cho trang ---------- */
 function apiTaiDuLieu(pin) {
   kiemPin_(pin);
-  return { ds: danhSachQua_(), log: nhatKy_(), tong: QUA_TONG, buoi: DS_BUOI };
+  return { ds: danhSachQua_(), log: nhatKy_(), tong: QUA_BUOI, gio: QUA_GIO, buoi: DS_BUOI };
 }
 function apiNhatKy(pin) { kiemPin_(pin); return nhatKy_(); }
 
@@ -109,22 +114,25 @@ function apiXacNhan(pin, req) {
     if (req.k) { x = ds.filter(function (d) { return d.k === req.k; })[0]; if (!x) throw new Error("Không tìm thấy người trong danh sách"); }
     var nguoi = String(req.nguoi || (x ? x.t : req.ten) || "").trim();
     if (!nguoi) throw new Error("Chưa nhập họ tên người đến");
-    var buoiLoai = function (b) { return String(b).indexOf("Buổi sáng") === 0 ? "sáng" : "chiều"; };
-    var maDD = x ? x.k : "ngoai:" + khoa_(nguoi);
-    if (log.some(function (l) { return l.k === maDD && buoiLoai(l.b) === buoiLoai(req.buoi); }))
-      return { ok: false, msg: nguoi + " đã được điểm danh " + buoiLoai(req.buoi) + " nay rồi.", log: log };
+    var lb = buoiLoai_(req.buoi), maDD = x ? x.k : "ngoai:" + khoa_(nguoi);
+    if (log.some(function (l) { return l.k === maDD && buoiLoai_(l.b) === lb; }))
+      return { ok: false, msg: nguoi + " đã được điểm danh " + lb + " nay rồi.", log: log };
     var daNhan = x && log.some(function (l) { return l.k === x.k && l.q; });
-    var daPhat = log.filter(function (l) { return l.q; }).length;
+    var daPhat = log.filter(function (l) { return l.q && buoiLoai_(l.b) === lb; }).length;
+    var gio = Utilities.formatDate(new Date(), "Asia/Ho_Chi_Minh", "HH:mm");
+    var ngoaiGio = gio < QUA_GIO[lb][0] || gio >= QUA_GIO[lb][1];
     var qua = "Không", th;
     if (!x) th = "Không có thư mời – không phát quà";
     else if (!x.q) th = "Có trong danh sách đăng ký – không thuộc nhóm nhận quà";
     else if (daNhan) th = "Điểm danh thêm buổi – đã nhận quà trước đó";
-    else if (daPhat >= QUA_TONG) th = "HẾT QUÀ – chưa phát";
+    else if (daPhat >= QUA_BUOI[lb]) th = "HẾT QUÀ buổi " + lb + " – chưa phát";
     else { qua = "Có"; th = x.u ? "Đại diện đơn vị" : (req.thay ? "Dự thay" : "Có thư mời"); }
     SpreadsheetApp.openById(SHEET_ID).getSheetByName(PQ_TAB).appendRow([
       new Date(), req.buoi, maDD, x ? x.t : nguoi, x ? (x.d || x.v) : String(req.dv || ""), x ? x.g : "Không có thư mời",
       nguoi, qua, th, String(req.nv).trim(),
-      [req.lech ? "Khác phiên đăng ký (" + req.lech + ") – lễ tân đã xác nhận" : "", String(req.ghiChu || "")].filter(String).join(" | ")]);
+      [req.lech ? "Khác phiên đăng ký (" + req.lech + ") – lễ tân đã xác nhận" : "",
+       qua === "Có" && ngoaiGio ? "Phát ngoài giờ (" + QUA_GIO[lb].join("–") + ") – lễ tân đã xác nhận" : "",
+       String(req.ghiChu || "")].filter(String).join(" | ")]);
     SpreadsheetApp.flush();
     var id = SpreadsheetApp.openById(SHEET_ID).getSheetByName(PQ_TAB).getLastRow();
     return { ok: true, id: id, qua: qua === "Có", msg: (qua === "Có" ? "✔ Đã điểm danh + PHÁT QUÀ: " : "✔ Đã điểm danh (không phát quà): ") + nguoi + " – " + th, log: nhatKy_() };
@@ -199,7 +207,7 @@ main{padding:12px 14px 80px;max-width:720px;margin:auto}
   <div id="kq"></div>
   <div class="card new" id="moi" style="display:none">
     <div class="name">Không có trong danh sách mời</div>
-    <div class="meta">Chỉ điểm danh, KHÔNG phát quà.</div>
+    <div class="meta">Chỉ điểm danh, KHÔNG phát quà (kể cả quà dư).</div>
     <input id="nTen" placeholder="Họ và tên"><input id="nDv" placeholder="Đơn vị công tác">
     <div class="row"><button class="btn sub" onclick="ngoaiDS()">Điểm danh người không có thư mời</button></div>
   </div>
@@ -207,7 +215,7 @@ main{padding:12px 14px 80px;max-width:720px;margin:auto}
 </div>
 <div id="toast"></div>
 <script>
-var PIN="", NV="", DS=[], LOG=[], TONG=350, BUOI=[], CHON="", dang=false;
+var PIN="", NV="", DS=[], LOG=[], TONG={}, GIO={}, BUOI=[], CHON="", dang=false;
 function bo(s){return String(s||"").normalize("NFD").replace(/[̀-ͯ]/g,"").replace(/đ/g,"d").replace(/Đ/g,"D").toLowerCase();}
 function e(s){return String(s==null?"":s).replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c];});}
 function toast(m,ok){var t=document.getElementById("toast");t.textContent=m;t.style.background=ok?"#2b8a3e":"#c92a2a";t.style.display="block";clearTimeout(t._h);t._h=setTimeout(function(){t.style.display="none";},ok?2500:5000);}
@@ -217,7 +225,7 @@ function dangNhap(){
   if(!NV){document.getElementById("err").textContent="Nhập tên lễ tân";return;}
   google.script.run.withSuccessHandler(function(d){
     try{localStorage.setItem("ltNV",NV);}catch(x){}
-    DS=d.ds;LOG=d.log;TONG=d.tong;BUOI=d.buoi;
+    DS=d.ds;LOG=d.log;TONG=d.tong;GIO=d.gio||{};BUOI=d.buoi;
     DS.forEach(function(x){x.s=bo(x.t+" "+x.d+" "+x.v+" "+x.g);});
     var h=new Date().getHours(); CHON=h<12?BUOI[0]:BUOI[2];
     document.getElementById("login").style.display="none";document.getElementById("app").style.display="block";
@@ -232,13 +240,17 @@ function veBuoi(){
 }
 function loai(b){return String(b).indexOf("Buổi sáng")===0?"sáng":"chiều";}
 var TEN_P={N:"Nội khoa",G:"Ngoại khoa",D:"Điều dưỡng"};
+function bayGio(){return new Date().toLocaleTimeString("en-GB",{timeZone:"Asia/Ho_Chi_Minh",hour12:false}).slice(0,5);}
+function ngoaiGio(){var g=GIO[loai(CHON)],h=bayGio();return !!g&&(h<g[0]||h>=g[1]);}
 function maP(){return ["N","G","D"][BUOI.indexOf(CHON)]||"";}
 function tenP(p){return p.split("").map(function(c){return TEN_P[c];}).join(" / ");}
 function ve(){
-  var daPhat=LOG.filter(function(l){return l.q;}).length, nhan={}, dd={};
+  var lb=loai(CHON), daPhat=LOG.filter(function(l){return l.q&&loai(l.b)===lb;}).length, nhan={}, dd={};
   LOG.forEach(function(l){if(l.q)nhan[l.k]=l; dd[l.k+"|"+loai(l.b)]=l;});
-  var chua=DS.filter(function(x){return x.q&&!nhan[x.k];}).length, con=TONG-daPhat;
-  document.getElementById("stats").innerHTML='<span class="stat">Đã phát <b>'+daPhat+"</b>/"+TONG+'</span><span class="stat">Còn <b>'+con+'</b></span><span class="stat'+(chua>con?" bad":"")+'">Khách mời chưa nhận <b>'+chua+"</b>"+(chua>con?" · THIẾU "+(chua-con):"")+"</span>";
+  var bm=lb==="sáng"?"NG":"D", tong=TONG[lb]||0, con=tong-daPhat, g=GIO[lb];
+  var chua=DS.filter(function(x){return x.q&&!nhan[x.k]&&x.p.split("").some(function(c){return bm.indexOf(c)>-1;});}).length;
+  document.getElementById("stats").innerHTML='<span class="stat">Quà '+lb+(lb==="sáng"?" (bác sĩ)":" (điều dưỡng)")+': đã phát <b>'+daPhat+"</b>/"+tong+'</span><span class="stat'+(con<=0?" bad":"")+'">Còn <b>'+con+'</b></span><span class="stat'+(chua>con?" bad":"")+'">Đăng ký buổi này chưa nhận <b>'+chua+"</b>"+(chua>con?" · THIẾU "+(chua-con):"")+"</span>"+
+    (g?'<span class="stat'+(ngoaiGio()?" bad":"")+'">Giờ phát quà '+g[0]+"–"+g[1]+(ngoaiGio()?" · NGOÀI GIỜ":"")+"</span>":"");
   var q=bo(document.getElementById("q").value.trim()), kq=document.getElementById("kq");
   document.getElementById("moi").style.display=q.length>=2?"block":"none";
   if(q.length<2){kq.innerHTML='<p class="muted">Gõ ít nhất 2 chữ. Buổi đang chọn: <b>'+e(CHON)+"</b></p>";return;}
@@ -277,7 +289,9 @@ function gui(req){
   .withFailureHandler(function(er){dang=false;toast(er.message,false);}).apiXacNhan(PIN,req);
 }
 function xacNhan(i,kieu){
-  var x=window["_r"+i], req={k:x.k}, mp=maP();
+  var x=window["_r"+i], req={k:x.k}, mp=maP(), g=GIO[loai(CHON)];
+  if(x.q&&!LOG.some(function(l){return l.k===x.k&&l.q;})&&ngoaiGio()&&
+    !confirm("⚠ Ngoài giờ phát quà buổi "+loai(CHON)+" ("+g[0]+"–"+g[1]+").\n\nVẫn điểm danh và PHÁT QUÀ cho "+x.t+"?"))return;
   if(x.p.indexOf(mp)<0){
     if(!confirm("⚠ "+x.t+" đăng ký phiên "+tenP(x.p)+",\nnhưng đang điểm danh: "+CHON+".\n\nĐã kiểm tra lại với đại biểu và vẫn xác nhận?"))return;
     req.lech=tenP(x.p);
@@ -292,4 +306,5 @@ function ngoaiDS(){
   gui({k:"",ten:t,dv:d,nguoi:t});
 }
 document.getElementById("pin").addEventListener("keydown",function(ev){if(ev.key==="Enter")dangNhap();});
+setInterval(function(){if(PIN&&DS.length)ve();},60000);   // cập nhật trạng thái giờ phát quà
 </script></body></html>`;
