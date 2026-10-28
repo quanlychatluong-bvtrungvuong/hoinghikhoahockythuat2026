@@ -173,11 +173,12 @@ function taoTongHop() {
      ["Đã phát", "=COUNTIF(" + Q + "H2:H,\"Có\")"],
      ["Còn lại", "=B" + (rNext + 1) + "-B" + (rNext + 3)],
      ["Khách mời chưa nhận", "=B" + (rNext + 2) + "-B" + (rNext + 3)],
-     ["Điểm danh tại bàn lễ tân (mọi lượt)", "=COUNTA(" + Q + "A2:A)"]].forEach(function (x, k) {
+     ["Điểm danh tại bàn lễ tân (lượt hợp lệ)", "=COUNTIFS(" + Q + "A2:A,\"<>\"," + Q + "H2:H,\"<>Đã hủy\")"],
+     ["Lượt đã hoàn tác (bấm nhầm)", "=COUNTIF(" + Q + "H2:H,\"Đã hủy\")"]].forEach(function (x, k) {
       th.getRange(rNext + 1 + k, 1).setValue(x[0]);
       th.getRange(rNext + 1 + k, 2).setFormula(x[1]);
     });
-    rNext = rNext + 8;
+    rNext = rNext + 9;
   }
 
   // Xét CME (nếu đã có tab)

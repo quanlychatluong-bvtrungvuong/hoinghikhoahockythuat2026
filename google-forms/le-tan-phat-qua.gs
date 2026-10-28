@@ -44,7 +44,7 @@ function doPost(e) {
   var out;
   try {
     var b = JSON.parse(e.postData.contents || "{}");
-    var fn = { apiTaiDuLieu: apiTaiDuLieu, apiNhatKy: apiNhatKy, apiXacNhan: apiXacNhan }[b.fn];
+    var fn = { apiTaiDuLieu: apiTaiDuLieu, apiNhatKy: apiNhatKy, apiXacNhan: apiXacNhan, apiHoanTac: apiHoanTac }[b.fn];
     if (!fn) throw new Error("Yêu cầu không hợp lệ");
     out = { ok: true, data: fn(b.pin, b.req) };
   } catch (err) {
@@ -59,20 +59,36 @@ function kiemPin_(pin) {
   if (!p || String(pin).trim() !== p) throw new Error("Sai mã PIN");
 }
 function maMoi_(r) { return r[4] ? khoa_(r[1]) : "dv:" + String(r[1]).toLowerCase().trim(); }
+// Phiên đăng ký: N = Nội khoa, G = Ngoại khoa, D = Điều dưỡng (chiều). Khách buổi sáng không ghi phiên = "NG".
+function phienDK_(r) {
+  var g = String(r[0]), v = String(r[3] || ""), p = "";
+  if (g.indexOf("ĐD") === 0) p = "D";
+  else if (g === "Chủ tọa – Báo cáo viên") {
+    var b = v.split(";")[0].toLowerCase();
+    if (/nội\s*-\s*ngoại/.test(b)) p = "NG";
+    else if (/nội khoa/.test(b)) p = "N";
+    else if (/ngoại khoa/.test(b)) p = "G";
+    else if (/điều\s+dưỡng/.test(b)) p = "D";
+    else p = "NG";
+  } else p = "NG";
+  if (v.indexOf("ĐD:") > -1 && p.indexOf("D") < 0) p += "D";   // có cả trong danh sách Điều dưỡng
+  return p;
+}
 function danhSachQua_() {
   var seen = {};
   return MOI_DATA.map(function (r) {
     var k = maMoi_(r); if (seen[k]) return null; seen[k] = 1;
-    return { k: k, t: r[1], d: r[2], g: r[0], v: r[3], u: r[4] ? 0 : 1, q: QUA_NHOM.indexOf(r[0]) > -1 ? 1 : 0 };
+    return { k: k, t: r[1], d: r[2], g: r[0], v: r[3], u: r[4] ? 0 : 1, q: QUA_NHOM.indexOf(r[0]) > -1 ? 1 : 0, p: phienDK_(r) };
   }).filter(Boolean);
 }
 function nhatKy_() {
   var sh = SpreadsheetApp.openById(SHEET_ID).getSheetByName(PQ_TAB);
   if (!sh || sh.getLastRow() < 2) return [];
-  return sh.getRange(2, 1, sh.getLastRow() - 1, PQ_HDR.length).getValues().map(function (r) {
-    return { tg: Utilities.formatDate(new Date(r[0]), "Asia/Ho_Chi_Minh", "HH:mm"), b: r[1], k: r[2], n: r[6],
+  return sh.getRange(2, 1, sh.getLastRow() - 1, PQ_HDR.length).getValues().map(function (r, i) {
+    if (r[7] === "Đã hủy") return null;   // lượt đã hoàn tác: không tính điểm danh, không tính quà
+    return { id: i + 2, tg: Utilities.formatDate(new Date(r[0]), "Asia/Ho_Chi_Minh", "HH:mm"), b: r[1], k: r[2], n: r[6],
              q: r[7] === "Có" ? 1 : 0, th: r[8], nv: r[9] };
-  });
+  }).filter(Boolean);
 }
 
 /* ---------- API cho trang ---------- */
@@ -107,9 +123,29 @@ function apiXacNhan(pin, req) {
     else { qua = "Có"; th = x.u ? "Đại diện đơn vị" : (req.thay ? "Dự thay" : "Có thư mời"); }
     SpreadsheetApp.openById(SHEET_ID).getSheetByName(PQ_TAB).appendRow([
       new Date(), req.buoi, maDD, x ? x.t : nguoi, x ? (x.d || x.v) : String(req.dv || ""), x ? x.g : "Không có thư mời",
-      nguoi, qua, th, String(req.nv).trim(), String(req.ghiChu || "")]);
+      nguoi, qua, th, String(req.nv).trim(),
+      [req.lech ? "Khác phiên đăng ký (" + req.lech + ") – lễ tân đã xác nhận" : "", String(req.ghiChu || "")].filter(String).join(" | ")]);
     SpreadsheetApp.flush();
-    return { ok: true, qua: qua === "Có", msg: (qua === "Có" ? "✔ Đã điểm danh + PHÁT QUÀ: " : "✔ Đã điểm danh (không phát quà): ") + nguoi + " – " + th, log: nhatKy_() };
+    var id = SpreadsheetApp.openById(SHEET_ID).getSheetByName(PQ_TAB).getLastRow();
+    return { ok: true, id: id, qua: qua === "Có", msg: (qua === "Có" ? "✔ Đã điểm danh + PHÁT QUÀ: " : "✔ Đã điểm danh (không phát quà): ") + nguoi + " – " + th, log: nhatKy_() };
+  } finally { lock.releaseLock(); }
+}
+
+// Hoàn tác một lượt vừa bấm (trong 10 phút): không xóa dòng, chỉ đánh dấu "Đã hủy" để còn dấu vết
+function apiHoanTac(pin, req) {
+  kiemPin_(pin);
+  var lock = LockService.getScriptLock(); lock.waitLock(15000);
+  try {
+    var sh = SpreadsheetApp.openById(SHEET_ID).getSheetByName(PQ_TAB), id = parseInt(req.id, 10);
+    if (!id || id < 2 || id > sh.getLastRow()) throw new Error("Không tìm thấy lượt cần hoàn tác");
+    var r = sh.getRange(id, 1, 1, PQ_HDR.length).getValues()[0];
+    if (r[7] === "Đã hủy") return { ok: true, msg: "Lượt này đã được hoàn tác trước đó.", log: nhatKy_() };
+    if (new Date() - new Date(r[0]) > 10 * 60 * 1000) throw new Error("Quá 10 phút – báo Ban Tổ chức sửa trong file Sheets");
+    var gio = Utilities.formatDate(new Date(), "Asia/Ho_Chi_Minh", "HH:mm");
+    sh.getRange(id, 8, 1, 4).setValues([["Đã hủy", "ĐÃ HỦY – " + r[8], r[9],
+      [r[10], "Hoàn tác bởi " + String(req.nv || "").trim() + " lúc " + gio].filter(String).join(" | ")]]);
+    SpreadsheetApp.flush();
+    return { ok: true, msg: "↩ Đã hoàn tác lượt của " + r[6] + (r[7] === "Có" ? " – suất quà được trả lại" : ""), log: nhatKy_() };
   } finally { lock.releaseLock(); }
 }
 
@@ -134,6 +170,10 @@ main{padding:12px 14px 80px;max-width:720px;margin:auto}
 .go{background:var(--ok);color:#fff;flex:1 1 100%;font-size:17px}.sub{background:#eef1f5;color:var(--ink);font-size:14px}
 .btn:disabled{opacity:.5}
 #toast{position:fixed;left:12px;right:12px;bottom:14px;padding:14px 16px;border-radius:12px;color:#fff;font-weight:700;display:none;z-index:9}
+#toast button{margin-top:8px;font:inherit;font-weight:700;border:2px solid #fff;background:transparent;color:#fff;border-radius:8px;padding:8px 14px}
+.card.lech{border:2px solid var(--warn);background:#fff9f0}.b-lech{background:#ffe8cc;color:#9c3d00}
+.warn{background:var(--warn);color:#fff;flex:1 1 100%;font-size:16px}
+.opt{display:flex;align-items:center;gap:8px;margin:10px 2px 0;font-size:14px;color:var(--muted)}.opt input{width:20px;height:20px}
 .pin{max-width:360px;margin:60px auto;background:#fff;padding:22px;border-radius:14px;border:1px solid var(--line)}
 .pin input{width:100%;font-size:18px;padding:12px;margin:6px 0 12px;border:1px solid #cbd5e1;border-radius:10px}
 .muted{color:var(--muted);font-size:13px}.new{border-style:dashed}
@@ -155,6 +195,7 @@ main{padding:12px 14px 80px;max-width:720px;margin:auto}
 </header>
 <main>
   <input id="q" placeholder="Gõ tên hoặc đơn vị… (không dấu cũng được)" autocomplete="off" oninput="ve()">
+  <label class="opt"><input type="checkbox" id="tatca" onchange="ve()"> Tìm cả người đăng ký buổi khác</label>
   <div id="kq"></div>
   <div class="card new" id="moi" style="display:none">
     <div class="name">Không có trong danh sách mời</div>
@@ -190,6 +231,9 @@ function veBuoi(){
   document.getElementById("buoi").innerHTML=BUOI.map(function(b,i){return '<button class="'+(b===CHON?"on":"")+'" onclick="CHON=BUOI['+i+'];veBuoi();ve()">'+nhan[i]+"</button>";}).join("");
 }
 function loai(b){return String(b).indexOf("Buổi sáng")===0?"sáng":"chiều";}
+var TEN_P={N:"Nội khoa",G:"Ngoại khoa",D:"Điều dưỡng"};
+function maP(){return ["N","G","D"][BUOI.indexOf(CHON)]||"";}
+function tenP(p){return p.split("").map(function(c){return TEN_P[c];}).join(" / ");}
 function ve(){
   var daPhat=LOG.filter(function(l){return l.q;}).length, nhan={}, dd={};
   LOG.forEach(function(l){if(l.q)nhan[l.k]=l; dd[l.k+"|"+loai(l.b)]=l;});
@@ -198,29 +242,46 @@ function ve(){
   var q=bo(document.getElementById("q").value.trim()), kq=document.getElementById("kq");
   document.getElementById("moi").style.display=q.length>=2?"block":"none";
   if(q.length<2){kq.innerHTML='<p class="muted">Gõ ít nhất 2 chữ. Buổi đang chọn: <b>'+e(CHON)+"</b></p>";return;}
-  var tu=q.split(/\s+/), ds=DS.filter(function(x){return tu.every(function(w){return x.s.indexOf(w)>-1;});}).slice(0,15);
+  var tu=q.split(/\s+/), mp=maP(), buoiMa=loai(CHON)==="sáng"?"NG":"D", tatca=document.getElementById("tatca").checked;
+  var ds=DS.filter(function(x){return tu.every(function(w){return x.s.indexOf(w)>-1;}) && (tatca || x.p.split("").some(function(c){return buoiMa.indexOf(c)>-1;}));});
+  ds.sort(function(a,b){return (b.p.indexOf(mp)>-1)-(a.p.indexOf(mp)>-1);}); ds=ds.slice(0,15);
   kq.innerHTML=ds.length?ds.map(function(x,i){
     var n=nhan[x.k], d=dd[x.k+"|"+loai(CHON)], h="";
-    h+='<div class="card"><div class="name">'+e(x.t)+'</div><div class="meta">'+e(x.g)+(x.d?" · "+e(x.d):"")+(x.v?" · "+e(x.v):"")+"</div>";
+    var lech=x.p.indexOf(mp)<0;
+    h+='<div class="card'+(lech&&!d?" lech":"")+'"><div class="name">'+e(x.t)+'</div><div class="meta">'+e(x.g)+(x.d?" · "+e(x.d):"")+(x.v?" · "+e(x.v):"")+"</div>";
     if(!x.q) h+='<span class="badge b-no">Đăng ký – không thuộc nhóm nhận quà</span>';
     else if(n) h+='<span class="badge b-done">Đã nhận quà '+e(n.tg)+" · "+e(n.nv)+(n.n&&bo(n.n)!==bo(x.t)?" · người nhận: "+e(n.n):"")+"</span>";
     else h+='<span class="badge b-ok">Có thư mời – chưa nhận quà</span>';
     if(d) h+='<span class="badge b-done">Đã điểm danh '+loai(CHON)+" "+e(d.tg)+"</span>";
+    if(lech&&!d) h+='<span class="badge b-lech">⚠ Đăng ký: '+e(tenP(x.p))+" – đang chọn "+e(TEN_P[mp])+"</span>";
     h+='<div class="row">';
     if(d){}
-    else if(x.q&&!n&&x.u) h+='<button class="btn go" onclick="xacNhan('+i+',2)">Phát cho người đại diện đơn vị…</button>';
-    else if(x.q&&!n) h+='<button class="btn go" onclick="xacNhan('+i+',0)">✔ Xác nhận + phát quà</button><button class="btn sub" onclick="xacNhan('+i+',1)">Người khác dự thay…</button>';
+    else if(x.q&&!n&&x.u) h+='<button class="btn '+(lech?"warn":"go")+'" onclick="xacNhan('+i+',2)">'+(lech?"⚠ ":"")+'Phát cho người đại diện đơn vị…</button>';
+    else if(x.q&&!n) h+='<button class="btn '+(lech?"warn":"go")+'" onclick="xacNhan('+i+',0)">'+(lech?"⚠ Khác phiên đăng ký – xác nhận…":"✔ Xác nhận + phát quà")+'</button><button class="btn sub" onclick="xacNhan('+i+',1)">Người khác dự thay…</button>';
     else h+='<button class="btn sub" onclick="xacNhan('+i+',0)">Điểm danh '+loai(CHON)+" (không phát quà)</button>";
     h+="</div></div>"; x._i=i; window["_r"+i]=x; return h;
-  }).join(""):'<p class="muted">Không tìm thấy trong danh sách mời.</p>';
+  }).join(""):'<p class="muted">Không tìm thấy trong danh sách mời'+(tatca?"":" ở buổi này – thử tick ô <b>Tìm cả người đăng ký buổi khác</b>")+'.</p>';
+}
+function toastHT(m,id){
+  var t=document.getElementById("toast");t.innerHTML=e(m)+'<br><button onclick="hoanTac('+id+')">↩ Hoàn tác (15 giây)</button>';
+  t.style.background="#2b8a3e";t.style.display="block";clearTimeout(t._h);t._h=setTimeout(function(){t.style.display="none";},15000);
+}
+function hoanTac(id){
+  var t=document.getElementById("toast");t.style.display="none";
+  google.script.run.withSuccessHandler(function(r){LOG=r.log||LOG;toast(r.msg,true);ve();})
+  .withFailureHandler(function(er){toast(er.message,false);}).apiHoanTac(PIN,{id:id,nv:NV});
 }
 function gui(req){
   if(dang)return; dang=true; req.buoi=CHON; req.nv=NV;
-  google.script.run.withSuccessHandler(function(r){dang=false;LOG=r.log||LOG;toast(r.msg,r.ok);if(r.ok){document.getElementById("q").value="";document.getElementById("nTen").value="";document.getElementById("nDv").value="";}ve();document.getElementById("q").focus();})
+  google.script.run.withSuccessHandler(function(r){dang=false;LOG=r.log||LOG;if(r.ok&&r.id){toastHT(r.msg,r.id);}else{toast(r.msg,r.ok);}if(r.ok){document.getElementById("q").value="";document.getElementById("nTen").value="";document.getElementById("nDv").value="";}ve();document.getElementById("q").focus();})
   .withFailureHandler(function(er){dang=false;toast(er.message,false);}).apiXacNhan(PIN,req);
 }
 function xacNhan(i,kieu){
-  var x=window["_r"+i], req={k:x.k};
+  var x=window["_r"+i], req={k:x.k}, mp=maP();
+  if(x.p.indexOf(mp)<0){
+    if(!confirm("⚠ "+x.t+" đăng ký phiên "+tenP(x.p)+",\nnhưng đang điểm danh: "+CHON+".\n\nĐã kiểm tra lại với đại biểu và vẫn xác nhận?"))return;
+    req.lech=tenP(x.p);
+  }
   if(kieu===1){var t=prompt("Họ tên người đến dự thay cho "+x.t+":");if(!t)return;req.nguoi=t;req.thay=1;req.ghiChu="Dự thay cho "+x.t;}
   if(kieu===2){var t2=prompt("Họ tên người đại diện "+x.t+":");if(!t2)return;req.nguoi=t2;}
   gui(req);

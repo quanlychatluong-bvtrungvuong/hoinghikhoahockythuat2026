@@ -109,7 +109,7 @@ function taoDanhSachMoi() {
   if (ss.getSheetByName("Phát quà")) {
     dd.getRange("J1:K1").setValues([["Khóa (bàn lễ tân)", "Giờ (bàn lễ tân)"]]);
     var pqTen = "'Phát quà'!D2:D";
-    dd.getRange("J2").setFormula(L_(ss, '=ARRAYFORMULA(IF(LEN(' + pqTen + ')=0,"",' + key(pqTen) + '))'));
+    dd.getRange("J2").setFormula(L_(ss, '=ARRAYFORMULA(IF((LEN(' + pqTen + ')=0)+(\'Phát quà\'!H2:H="Đã hủy"),"",' + key(pqTen) + '))'));
     dd.getRange("K2").setFormula(L_(ss, "=ARRAYFORMULA('Phát quà'!A2:A)"));
   }
   dd.hideSheet();

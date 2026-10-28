@@ -150,6 +150,7 @@ function lapXetCME() {
   function themDD(ten, nguon, cotTen, cotBuoi, cotHt, cotEmail) {
     var t = docTab_(ss, ten);
     t.rows.forEach(function (r) {
+      if (t.m["Phát quà"] !== undefined && r[t.m["Phát quà"]] === "Đã hủy") return;   // lượt đã hoàn tác
       var b = BUOI_INFO[r[t.m[cotBuoi]]]; if (!b || !r[0]) return;
       var keys = [khoa_(r[t.m[cotTen]])];
       if (cotEmail && r[t.m[cotEmail]]) keys.push(String(r[t.m[cotEmail]]).toLowerCase().trim());
