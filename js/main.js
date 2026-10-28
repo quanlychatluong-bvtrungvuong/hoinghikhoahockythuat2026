@@ -69,6 +69,8 @@
       var k = a.getAttribute("data-link"), w = C.schedule && C.schedule[k];
       if (!w || !C.links[k]) return;
       var mo = toDate(w[0]).getTime(), dong = toDate(w[1]).getTime(), badge = a.querySelector(".when");
+      var pass = a.querySelector(".pass");
+      if (pass) pass.hidden = !(now >= mo && now < dong);   // mật khẩu chỉ hiện trong giờ mở
       if (now >= mo && now < dong) {
         a.href = C.links[k]; a.classList.remove("disabled"); a.removeAttribute("aria-disabled");
         if (badge) badge.remove();
@@ -86,6 +88,7 @@
     document.querySelectorAll('[data-link="onlineLink"]').forEach(function (a) {
       a.insertAdjacentHTML("beforeend", ' <small class="pass">MK: ' + esc(C.onlinePass) + "</small>");
     });
+    applySchedule();
   }
 
   /* ---------- Thẻ "Một ngày hội nghị" ---------- */
@@ -129,8 +132,20 @@
     var t = n.link ? '<a href="' + esc(n.link) + '" target="_blank" rel="noopener">' + esc(n.title) + "</a>" : esc(n.title);
     return '<div class="notice-item"><time>Mới</time><span>' + t + "</span></div>";
   })).concat(C.links.onlineLink
-    ? ['<div class="notice-item"><time>Trực tuyến</time><span><a href="' + esc(C.links.onlineLink) + '" target="_blank" rel="noopener">' + esc(C.onlineName || "Phòng trực tuyến") + "</a>" + (C.onlinePass ? " · Mật khẩu: <b>" + esc(C.onlinePass) + "</b>" : "") + "</span></div>"]
+    ? ['<div class="notice-item" id="noticeOnline"></div>']
     : C.onlineNote ? ['<div class="notice-item"><time>Trực tuyến</time><span>' + esc(C.onlineNote) + "</span></div>"] : []).join("");
+
+  // Dòng thông báo phòng trực tuyến: chỉ hiện link + mật khẩu trong giờ mở
+  function renderOnlineNotice() {
+    var el = $("noticeOnline"); if (!el) return;
+    var w = C.schedule && C.schedule.onlineLink, now = Date.now();
+    var name = esc(C.onlineName || "Phòng trực tuyến");
+    var mo = w ? toDate(w[0]).getTime() : 0, dong = w ? toDate(w[1]).getTime() : Infinity;
+    el.innerHTML = "<time>Trực tuyến</time><span>" + (now < mo ? name + " mở lúc " + hhmm(mo)
+      : now >= dong ? name + " đã đóng"
+      : '<a href="' + esc(C.links.onlineLink) + '" target="_blank" rel="noopener">' + name + "</a>" + (C.onlinePass ? " · Mật khẩu: <b>" + esc(C.onlinePass) + "</b>" : "")) + "</span>";
+  }
+  renderOnlineNotice(); setInterval(renderOnlineNotice, 30000);
 
   /* ---------- Lời ngỏ ---------- */
   $("welcome").innerHTML = C.welcome.paragraphs.map(function (p) { return "<p>" + esc(p) + "</p>"; }).join("") +
