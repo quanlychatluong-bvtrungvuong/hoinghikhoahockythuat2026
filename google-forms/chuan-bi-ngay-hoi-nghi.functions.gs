@@ -97,6 +97,14 @@ function taoDanhSachMoi() {
   dd.getRange("B2").setFormula(L_(ss, "=ARRAYFORMULA('Điểm danh nội viện'!A2:A)"));
   dd.getRange("D2").setFormula(L_(ss, '=ARRAYFORMULA(IF(LEN(' + ngTen + ')=0,"",' + key(ngTen) + '))'));
   dd.getRange("E2").setFormula(L_(ss, "=ARRAYFORMULA('Điểm danh ngoại viện'!A2:A)"));
+  // Nguồn thứ 3: lễ tân điểm danh hộ (nếu đã tạo form lễ tân)
+  var LT = ss.getSheetByName("Điểm danh lễ tân");
+  if (LT) {
+    var ltTen = col(LT, "Họ và tên");
+    dd.getRange("G1:H1").setValues([["Khóa (lễ tân)", "Giờ (lễ tân)"]]);
+    dd.getRange("G2").setFormula(L_(ss, '=ARRAYFORMULA(IF(LEN(' + ltTen + ')=0,"",' + key(ltTen) + '))'));
+    dd.getRange("H2").setFormula(L_(ss, "=ARRAYFORMULA('Điểm danh lễ tân'!A2:A)"));
+  }
   dd.hideSheet();
 
   SpreadsheetApp.flush();
@@ -109,9 +117,9 @@ function taoDanhSachMoi() {
     var n = i + 2, h = "$H" + n, e = "$E" + n;
     if (!r[4]) return ['="Theo đơn vị – kiểm tra thủ công"', '=""', '=""', '=""'];
     return [
-      L_(ss, '=IF(' + h + '="","",IF(COUNTIF(' + D + 'A:A,' + h + ')+COUNTIF(' + D + 'D:D,' + h + ')>0,"Đã đến","Chưa đến"))'),
-      L_(ss, '=IF(' + e + '<>"Đã đến","",MIN(IF(COUNTIF(' + D + 'A:A,' + h + '),MINIFS(' + D + 'B:B,' + D + 'A:A,' + h + '),9E9),IF(COUNTIF(' + D + 'D:D,' + h + '),MINIFS(' + D + 'E:E,' + D + 'D:D,' + h + '),9E9)))'),
-      L_(ss, '=IF(' + e + '<>"Đã đến","",IF(COUNTIF(' + D + 'A:A,' + h + '),"Nội viện","Ngoại viện"))'),
+      L_(ss, '=IF(' + h + '="","",IF(COUNTIF(' + D + 'A:A,' + h + ')+COUNTIF(' + D + 'D:D,' + h + ')+COUNTIF(' + D + 'G:G,' + h + ')>0,"Đã đến","Chưa đến"))'),
+      L_(ss, '=IF(' + e + '<>"Đã đến","",MIN(IF(COUNTIF(' + D + 'A:A,' + h + '),MINIFS(' + D + 'B:B,' + D + 'A:A,' + h + '),9E9),IF(COUNTIF(' + D + 'D:D,' + h + '),MINIFS(' + D + 'E:E,' + D + 'D:D,' + h + '),9E9),IF(COUNTIF(' + D + 'G:G,' + h + '),MINIFS(' + D + 'H:H,' + D + 'G:G,' + h + '),9E9)))'),
+      L_(ss, '=IF(' + e + '<>"Đã đến","",IF(COUNTIF(' + D + 'A:A,' + h + '),"Nội viện",IF(COUNTIF(' + D + 'D:D,' + h + '),"Ngoại viện","Lễ tân")))'),
       L_(ss, '=' + key("$B" + n))
     ];
   });

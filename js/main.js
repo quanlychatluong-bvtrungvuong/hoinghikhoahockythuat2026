@@ -58,6 +58,29 @@
     }
   });
 
+  // Nút theo giờ mở/đóng: trước giờ mở hiện "Mở 07:00 30/10", sau giờ đóng hiện "Đã đóng"
+  var hhmm = function (t) {
+    var d = new Date(t);
+    return d.toLocaleTimeString("vi-VN", { hour: "2-digit", minute: "2-digit", hour12: false, timeZone: TZ }) + " " + d.toLocaleDateString("vi-VN", { day: "2-digit", month: "2-digit", timeZone: TZ }).replace(/-/g, "/");
+  };
+  function applySchedule() {
+    var now = Date.now();
+    document.querySelectorAll("[data-link]").forEach(function (a) {
+      var k = a.getAttribute("data-link"), w = C.schedule && C.schedule[k];
+      if (!w || !C.links[k]) return;
+      var mo = toDate(w[0]).getTime(), dong = toDate(w[1]).getTime(), badge = a.querySelector(".when");
+      if (now >= mo && now < dong) {
+        a.href = C.links[k]; a.classList.remove("disabled"); a.removeAttribute("aria-disabled");
+        if (badge) badge.remove();
+      } else {
+        a.removeAttribute("href"); a.classList.add("disabled"); a.setAttribute("aria-disabled", "true");
+        if (!badge) { a.insertAdjacentHTML("beforeend", '<em class="soon when"></em>'); badge = a.querySelector(".when"); }
+        badge.textContent = now < mo ? "Mở " + hhmm(mo) : "Đã đóng";
+      }
+    });
+  }
+  applySchedule(); setInterval(applySchedule, 30000);
+
   // Kèm mật khẩu phòng trực tuyến trên các nút vào phòng
   if (C.links.onlineLink && C.onlinePass) {
     document.querySelectorAll('[data-link="onlineLink"]').forEach(function (a) {

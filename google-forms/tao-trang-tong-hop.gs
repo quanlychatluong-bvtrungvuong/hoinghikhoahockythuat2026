@@ -31,6 +31,11 @@ var TEN_TRANG = {
   "Đặt câu hỏi cho báo cáo viên": "Đặt câu hỏi"
 };
 
+function TEN_TRANG_DA_CO_(n) {
+  return ["Điểm danh nội viện", "Điểm danh ngoại viện", "Check-out CME", "Đặt câu hỏi", "Điểm danh lễ tân",
+    "Post-test Nội khoa", "Post-test Ngoại khoa", "Post-test Điều dưỡng"].indexOf(n) > -1;
+}
+
 function taoTongHop() {
   var ss = SpreadsheetApp.openById(SHEET_ID);
 
@@ -38,7 +43,8 @@ function taoTongHop() {
   ss.getSheets().forEach(function (sh) {
     var url = sh.getFormUrl();
     if (!url) return;
-    var ten = TEN_TRANG[FormApp.openByUrl(url).getTitle()];
+    if (TEN_TRANG_DA_CO_(sh.getName())) return;           // tab đã đúng tên thì không cần mở form
+    var ten; try { ten = TEN_TRANG[FormApp.openByUrl(url).getTitle()]; } catch (e) { return; }
     if (ten && sh.getName() !== ten) sh.setName(ten);
   });
 
@@ -131,7 +137,8 @@ function taoTongHop() {
       ["Khách mời có tên trong danh sách", "=COUNTIF(" + M + "E:E,\"Đã đến\")+COUNTIF(" + M + "E:E,\"Chưa đến\")"],
       ["  – Đã đến", "=COUNTIF(" + M + "E:E,\"Đã đến\")"],
       ["  – Chưa đến", "=COUNTIF(" + M + "E:E,\"Chưa đến\")"],
-      ["Lượt điểm danh không có tên trong danh sách mời", "=SUMPRODUCT((" + D + "A2:A<>\"\")*(COUNTIF(" + M + "H:H," + D + "A2:A)=0))+SUMPRODUCT((" + D + "D2:D<>\"\")*(COUNTIF(" + M + "H:H," + D + "D2:D)=0))"]
+      ["Lượt điểm danh không có tên trong danh sách mời", "=SUMPRODUCT((" + D + "A2:A<>\"\")*(COUNTIF(" + M + "H:H," + D + "A2:A)=0))+SUMPRODUCT((" + D + "D2:D<>\"\")*(COUNTIF(" + M + "H:H," + D + "D2:D)=0))+SUMPRODUCT((" + D + "G2:G<>\"\")*(COUNTIF(" + M + "H:H," + D + "G2:G)=0))"],
+      ["  – trong đó lễ tân điểm danh hộ", "=COUNTIF(" + D + "G2:G,\"?*\")"]
     ];
     rows.forEach(function (x, k) {
       th.getRange(rNext + 1 + k, 1).setValue(x[0]);
@@ -153,6 +160,21 @@ function taoTongHop() {
       th.getRange(r, 4).setNumberFormat("0%");
     });
     rNext = rNext + nhom.length + 2;
+  }
+
+  // Xét CME (nếu đã có tab)
+  if (ss.getSheetByName("Xét CME")) {
+    var X = "'Xét CME'!";
+    th.getRange(rNext, 1, 1, 2).setValues([["Xét cấp CME (người × buổi)", "Số lượt"]]);
+    headRows.push(rNext);
+    [["Đã check-out đăng ký nhận CME", "=COUNTA(" + X + "G2:G)"],
+     ["  – Đủ điều kiện (tự động)", "=COUNTIF(" + X + "L2:L,\"Đủ điều kiện\")"],
+     ["  – Chưa đủ điều kiện", "=COUNTIF(" + X + "L2:L,\"Chưa đủ*\")"],
+     ["  – Đã duyệt cấp CME", "=COUNTIF(" + X + "N2:N,TRUE)"]].forEach(function (x, k) {
+      th.getRange(rNext + 1 + k, 1).setValue(x[0]);
+      th.getRange(rNext + 1 + k, 2).setFormula(x[1]);
+    });
+    rNext = rNext + 6;
   }
 
   th.getRange(rNext, 1).setValue("Ghi chú: đếm theo người không trùng (nội viện: mã nhân viên; ngoại viện: số điện thoại; CME, post-test: email). Một người dự nhiều phiên được tính ở từng phiên. Khách mời đối chiếu theo họ tên (bỏ học hàm, không phân biệt hoa thường).");
