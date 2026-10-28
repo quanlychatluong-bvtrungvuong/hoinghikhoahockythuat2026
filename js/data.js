@@ -24,8 +24,11 @@ window.CONF = {
   venueAddress: "266 Lý Thường Kiệt, Phường Diên Hồng, TP. Hồ Chí Minh",
   mapQuery: "Bệnh viện Trưng Vương, 266 Lý Thường Kiệt, TP. Hồ Chí Minh",
   onlineNote: "Link tham dự trực tuyến sẽ được cập nhật trước ngày Hội nghị.", // hiện khi onlineLink còn trống
-  onlineName: "Phòng trực tuyến OneZoom",
-  onlinePass: "1111",             // mật khẩu phòng trực tuyến (để "" nếu không có)
+  // Phòng trực tuyến theo phiên: key = tên link trong mục links, pass = mật khẩu (để "" nếu không có)
+  onlineRooms: [
+    { key: "onlineNoi",  name: "Phòng Nội khoa – Google Meet",           pass: "" },
+    { key: "onlineLink", name: "Phòng Ngoại khoa & Điều dưỡng – OneZoom", pass: "1111" }
+  ],
   audience: "Bác sĩ, điều dưỡng và nhân viên y tế. Tham dự trực tiếp hoặc trực tuyến.",
   cme: "Cấp chứng nhận CME khi tham dự từ 80% thời lượng của chương trình và hoàn tất chính xác từ đủ 70% bài kiểm tra cuối chương trình.",
 
@@ -40,7 +43,8 @@ window.CONF = {
     postTestDD: "https://forms.gle/Hi1QiLRfinwEDEfJ7",    // Post-test phiên Điều dưỡng
     checkoutCME: "https://forms.gle/vo9gY3qZYCkUaPyL6",     // Check-out & đăng ký nhận CME
     question: "https://forms.gle/oVgCAYYbm66811K1A",        // Đặt câu hỏi cho báo cáo viên
-    onlineLink: "https://onezoom.vn/meet/92410142951", // Link tham dự trực tuyến
+    onlineLink: "https://onezoom.vn/meet/92410142951",  // Trực tuyến phiên Ngoại khoa và Điều dưỡng (OneZoom)
+    onlineNoi: "https://meet.google.com/wsv-gmju-ijf",    // Trực tuyến phiên Nội khoa (Google Meet)
     invitation: "",      // Thư mời (PDF)
     programPdf: "https://drive.google.com/file/d/11DHsOp2zAq5QatKaUzIZDLgZx3Xc3zGg/view", // Chương trình in (PDF) – lưu trên Google Drive của quanlychatluong
     documents: ""        // Thư mục tài liệu tham khảo
@@ -55,7 +59,8 @@ window.CONF = {
     postTestNgoai:   ["2026-10-30T11:00:00+07:00", "2026-11-04T23:59:00+07:00"],
     postTestDD:      ["2026-10-30T16:00:00+07:00", "2026-11-04T23:59:00+07:00"],
     checkoutCME:     ["2026-10-30T11:00:00+07:00", "2026-11-04T23:59:00+07:00"],
-    onlineLink:      ["2026-10-30T07:00:00+07:00", "2026-10-30T17:00:00+07:00"]  // phòng trực tuyến
+    onlineLink:      ["2026-10-30T07:00:00+07:00", "2026-10-30T17:00:00+07:00"], // OneZoom: Ngoại khoa + Điều dưỡng
+    onlineNoi:       ["2026-10-30T07:00:00+07:00", "2026-10-30T12:00:00+07:00"]  // Google Meet: Nội khoa
   },
 
   /* ---------- Thư chào mừng ---------- */
@@ -104,6 +109,7 @@ window.CONF = {
     },
     {
       label: "Phiên Nội khoa",
+      online: "onlineNoi",
       time: "08:15 – 11:30 · Song song với Phiên Ngoại khoa",
       room: "Hội trường số 3",                     // Hội trường / phòng (VD: "Hội trường A, lầu 5")
       chairs: [
@@ -130,6 +136,7 @@ window.CONF = {
     },
     {
       label: "Phiên Ngoại khoa",
+      online: "onlineLink",
       time: "08:15 – 11:30 · Song song với Phiên Nội khoa",
       room: "Hội trường Bệnh viện",                     // Hội trường / phòng (VD: "Hội trường A, lầu 5")
       chairs: [
@@ -155,6 +162,7 @@ window.CONF = {
     },
     {
       label: "Phiên chiều – Điều dưỡng",
+      online: "onlineLink",
       time: "13:15 – 16:30 · Hội nghị Khoa học Điều dưỡng",
       room: "Hội trường Bệnh viện",                     // Hội trường / phòng (VD: "Hội trường A, lầu 5")
       chairs: [

@@ -83,12 +83,19 @@
   }
   applySchedule(); setInterval(applySchedule, 30000);
 
-  // Kèm mật khẩu phòng trực tuyến trên các nút vào phòng
-  if (C.links.onlineLink && C.onlinePass) {
-    document.querySelectorAll('[data-link="onlineLink"]').forEach(function (a) {
-      a.insertAdjacentHTML("beforeend", ' <small class="pass">MK: ' + esc(C.onlinePass) + "</small>");
+  // Kèm mật khẩu phòng trực tuyến trên các nút vào phòng (phòng nào có mật khẩu)
+  var ROOMS = (C.onlineRooms || []).filter(function (r) { return C.links[r.key]; });
+  ROOMS.forEach(function (room) {
+    if (!room.pass) return;
+    document.querySelectorAll('[data-link="' + room.key + '"]').forEach(function (a) {
+      a.insertAdjacentHTML("beforeend", ' <small class="pass">MK: ' + esc(room.pass) + "</small>");
     });
-    applySchedule();
+  });
+  applySchedule();
+  // Phòng có đang trong giờ mở không
+  function trongGio(k) {
+    var w = C.schedule && C.schedule[k], now = Date.now();
+    return !w || (now >= toDate(w[0]).getTime() && now < toDate(w[1]).getTime());
   }
 
   /* ---------- Thẻ "Một ngày hội nghị" ---------- */
@@ -131,19 +138,21 @@
   }).concat(C.news.slice(-1).map(function (n) {
     var t = n.link ? '<a href="' + esc(n.link) + '" target="_blank" rel="noopener">' + esc(n.title) + "</a>" : esc(n.title);
     return '<div class="notice-item"><time>Mới</time><span>' + t + "</span></div>";
-  })).concat(C.links.onlineLink
-    ? ['<div class="notice-item" id="noticeOnline"></div>']
+  })).concat(ROOMS.length
+    ? ROOMS.map(function (r) { return '<div class="notice-item" id="notice-' + r.key + '"></div>'; })
     : C.onlineNote ? ['<div class="notice-item"><time>Trực tuyến</time><span>' + esc(C.onlineNote) + "</span></div>"] : []).join("");
 
-  // Dòng thông báo phòng trực tuyến: chỉ hiện link + mật khẩu trong giờ mở
+  // Dòng thông báo từng phòng trực tuyến: chỉ hiện link + mật khẩu trong giờ mở
   function renderOnlineNotice() {
-    var el = $("noticeOnline"); if (!el) return;
-    var w = C.schedule && C.schedule.onlineLink, now = Date.now();
-    var name = esc(C.onlineName || "Phòng trực tuyến");
-    var mo = w ? toDate(w[0]).getTime() : 0, dong = w ? toDate(w[1]).getTime() : Infinity;
-    el.innerHTML = "<time>Trực tuyến</time><span>" + (now < mo ? name + " mở lúc " + hhmm(mo)
-      : now >= dong ? name + " đã đóng"
-      : '<a href="' + esc(C.links.onlineLink) + '" target="_blank" rel="noopener">' + name + "</a>" + (C.onlinePass ? " · Mật khẩu: <b>" + esc(C.onlinePass) + "</b>" : "")) + "</span>";
+    var now = Date.now();
+    ROOMS.forEach(function (room) {
+      var el = $("notice-" + room.key); if (!el) return;
+      var w = C.schedule && C.schedule[room.key], name = esc(room.name);
+      var mo = w ? toDate(w[0]).getTime() : 0, dong = w ? toDate(w[1]).getTime() : Infinity;
+      el.innerHTML = "<time>Trực tuyến</time><span>" + (now < mo ? name + " mở lúc " + hhmm(mo)
+        : now >= dong ? name + " đã đóng"
+        : '<a href="' + esc(C.links[room.key]) + '" target="_blank" rel="noopener">' + name + "</a>" + (room.pass ? " · Mật khẩu: <b>" + esc(room.pass) + "</b>" : "")) + "</span>";
+    });
   }
   renderOnlineNotice(); setInterval(renderOnlineNotice, 30000);
 
@@ -162,7 +171,11 @@
       b.setAttribute("aria-selected", i === j);
       b.tabIndex = i === j ? 0 : -1;
     });
+    var room = p.online && (C.onlineRooms || []).filter(function (r) { return r.key === p.online; })[0];
     $("sessionMeta").innerHTML = (p.time ? "<span><b>Thời gian:</b> " + esc(p.time) + "</span>" : "") +
+      (room && C.links[room.key] ? "<span><b>Trực tuyến:</b> " + (trongGio(room.key)
+        ? '<a href="' + esc(C.links[room.key]) + '" target="_blank" rel="noopener">' + esc(room.name) + "</a>" + (room.pass ? " (MK: " + esc(room.pass) + ")" : "")
+        : esc(room.name) + " – mở " + hhmm(toDate(C.schedule[room.key][0]).getTime())) + "</span>" : "") +
       (p.room ? "<span><b>Hội trường:</b> " + esc(p.room) + "</span>" : "");
     $("chairs").innerHTML = p.chairs && p.chairs.length
       ? "<b>Chủ tọa đoàn</b><ul>" + p.chairs.map(function (c) {
