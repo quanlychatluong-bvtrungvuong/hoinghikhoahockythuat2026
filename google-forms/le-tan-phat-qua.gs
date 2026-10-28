@@ -39,6 +39,20 @@ function doGet() {
     .addMetaTag("viewport", "width=device-width, initial-scale=1, maximum-scale=1");
 }
 
+// Cổng dữ liệu cho trang /le-tan.html trên website (không cần đăng nhập Google; PIN gửi trong nội dung POST)
+function doPost(e) {
+  var out;
+  try {
+    var b = JSON.parse(e.postData.contents || "{}");
+    var fn = { apiTaiDuLieu: apiTaiDuLieu, apiNhatKy: apiNhatKy, apiXacNhan: apiXacNhan }[b.fn];
+    if (!fn) throw new Error("Yêu cầu không hợp lệ");
+    out = { ok: true, data: fn(b.pin, b.req) };
+  } catch (err) {
+    out = { ok: false, error: String(err && err.message || err) };
+  }
+  return ContentService.createTextOutput(JSON.stringify(out)).setMimeType(ContentService.MimeType.JSON);
+}
+
 /* ---------- dữ liệu ---------- */
 function kiemPin_(pin) {
   var p = PropertiesService.getScriptProperties().getProperty("PIN_LE_TAN");
