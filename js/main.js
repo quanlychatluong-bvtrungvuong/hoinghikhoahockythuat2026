@@ -58,6 +58,13 @@
     }
   });
 
+  // Kèm mật khẩu phòng trực tuyến trên các nút vào phòng
+  if (C.links.onlineLink && C.onlinePass) {
+    document.querySelectorAll('[data-link="onlineLink"]').forEach(function (a) {
+      a.insertAdjacentHTML("beforeend", ' <small class="pass">MK: ' + esc(C.onlinePass) + "</small>");
+    });
+  }
+
   /* ---------- Thẻ "Một ngày hội nghị" ---------- */
   var times = function (s) {
     var m = String(s || "").match(/(\d{1,2}):(\d{2})\s*[–-]\s*(\d{1,2}):(\d{2})/);
@@ -98,7 +105,9 @@
   }).concat(C.news.slice(-1).map(function (n) {
     var t = n.link ? '<a href="' + esc(n.link) + '" target="_blank" rel="noopener">' + esc(n.title) + "</a>" : esc(n.title);
     return '<div class="notice-item"><time>Mới</time><span>' + t + "</span></div>";
-  })).concat(!C.links.onlineLink && C.onlineNote ? ['<div class="notice-item"><time>Trực tuyến</time><span>' + esc(C.onlineNote) + "</span></div>"] : []).join("");
+  })).concat(C.links.onlineLink
+    ? ['<div class="notice-item"><time>Trực tuyến</time><span><a href="' + esc(C.links.onlineLink) + '" target="_blank" rel="noopener">' + esc(C.onlineName || "Phòng trực tuyến") + "</a>" + (C.onlinePass ? " · Mật khẩu: <b>" + esc(C.onlinePass) + "</b>" : "") + "</span></div>"]
+    : C.onlineNote ? ['<div class="notice-item"><time>Trực tuyến</time><span>' + esc(C.onlineNote) + "</span></div>"] : []).join("");
 
   /* ---------- Lời ngỏ ---------- */
   $("welcome").innerHTML = C.welcome.paragraphs.map(function (p) { return "<p>" + esc(p) + "</p>"; }).join("") +

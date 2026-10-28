@@ -97,7 +97,50 @@ function taoTongHop() {
   th.getRange(rQT, 1).setValue("Tổng số câu hỏi");
   th.getRange(rQT, 2).setFormula("=SUM(B" + (rQ + 1) + ":B" + (rQT - 1) + ")");
 
-  th.getRange(rQT + 2, 1).setValue("Ghi chú: đếm theo người không trùng (nội viện: mã nhân viên; ngoại viện: số điện thoại; CME: email). Một người dự nhiều phiên được tính ở từng phiên.");
+  var rNext = rQT + 2, headRows = [rQ], totalRows = [rQT];
+
+  // Kết quả post-test (nếu đã tạo form): số người làm bài và số người đạt từ 70%, đếm theo email
+  var PT = ["Post-test Nội khoa", "Post-test Ngoại khoa", "Post-test Điều dưỡng"].filter(function (n) { return ss.getSheetByName(n); });
+  if (PT.length) {
+    th.getRange(rNext, 1, 1, 4).setValues([["Post-test", "Số người làm bài", "Đạt từ 70%", "Tỷ lệ đạt"]]);
+    headRows.push(rNext);
+    PT.forEach(function (n, k) {
+      var s = ss.getSheetByName(n), r = rNext + 1 + k;
+      var head = s.getRange(1, 1, 1, s.getLastColumn()).getValues()[0];
+      var iDiem = -1;
+      ["Điểm số", "Điểm", "Score"].some(function (t) { iDiem = head.indexOf(t); return iDiem > -1; });
+      var em = cot(s, "Email");
+      var diem = iDiem > -1 ? "'" + n + "'!" + s.getRange(1, iDiem + 1).getA1Notation().replace(/\d+/g, "") + "2:" + s.getRange(1, iDiem + 1).getA1Notation().replace(/\d+/g, "") : null;
+      var nCau = head.filter(function (h) { return /^Câu \d+\./.test(h); }).length || 10;
+      var can = Math.ceil(nCau * 0.7);
+      th.getRange(r, 1).setValue(n.replace("Post-test ", "Phiên ") + " (đạt: từ " + can + "/" + nCau + " câu)");
+      th.getRange(r, 2).setFormula("=IFERROR(ROWS(UNIQUE(FILTER(" + em + "," + em + "<>\"\"))),0)");
+      if (diem) th.getRange(r, 3).setFormula("=IFERROR(ROWS(UNIQUE(FILTER(" + em + ",ARRAYFORMULA(IFERROR(VALUE(REGEXEXTRACT(" + diem + "&\"\",\"^\\d+\")),0))>=" + can + "))),0)");
+      th.getRange(r, 4).setFormula("=IF(B" + r + "=0,\"\",C" + r + "/B" + r + ")");
+      th.getRange(r, 4).setNumberFormat("0%");
+    });
+    rNext = rNext + PT.length + 2;
+  }
+
+  // Khách mời theo danh sách (nếu đã tạo tab "Danh sách mời")
+  if (ss.getSheetByName("Danh sách mời") && ss.getSheetByName("_DiemDanh")) {
+    var M = "'Danh sách mời'!", D = "'_DiemDanh'!";
+    th.getRange(rNext, 1, 1, 2).setValues([["Khách mời theo danh sách", "Số người"]]);
+    headRows.push(rNext);
+    var rows = [
+      ["Khách mời có tên trong danh sách", "=COUNTIF(" + M + "E:E,\"Đã đến\")+COUNTIF(" + M + "E:E,\"Chưa đến\")"],
+      ["  – Đã đến", "=COUNTIF(" + M + "E:E,\"Đã đến\")"],
+      ["  – Chưa đến", "=COUNTIF(" + M + "E:E,\"Chưa đến\")"],
+      ["Lượt điểm danh không có tên trong danh sách mời", "=SUMPRODUCT((" + D + "A2:A<>\"\")*(COUNTIF(" + M + "H:H," + D + "A2:A)=0))+SUMPRODUCT((" + D + "D2:D<>\"\")*(COUNTIF(" + M + "H:H," + D + "D2:D)=0))"]
+    ];
+    rows.forEach(function (x, k) {
+      th.getRange(rNext + 1 + k, 1).setValue(x[0]);
+      th.getRange(rNext + 1 + k, 2).setFormula(x[1]);
+    });
+    rNext = rNext + rows.length + 2;
+  }
+
+  th.getRange(rNext, 1).setValue("Ghi chú: đếm theo người không trùng (nội viện: mã nhân viên; ngoại viện: số điện thoại; CME, post-test: email). Một người dự nhiều phiên được tính ở từng phiên. Khách mời đối chiếu theo họ tên (bỏ học hàm, không phân biệt hoa thường).");
 
   // Bảng tính định dạng Việt Nam dùng dấu ";" ngăn cách đối số công thức thay cho ","
   if (ss.getSpreadsheetLocale().indexOf("en") !== 0) {
@@ -112,15 +155,17 @@ function taoTongHop() {
   // 3. Định dạng
   th.getRange("A1").setFontSize(14).setFontWeight("bold").setFontColor("#13233a");
   th.getRange("A2").setFontColor("#637083").setFontStyle("italic");
-  [th.getRange(4, 1, 1, hdr.length), th.getRange(rQ, 1, 1, 2)].forEach(function (g) {
-    g.setFontWeight("bold").setBackground("#13233a").setFontColor("#ffffff").setWrap(true).setVerticalAlignment("middle");
+  th.getRange(4, 1, 1, hdr.length).setFontWeight("bold").setBackground("#13233a").setFontColor("#ffffff").setWrap(true).setVerticalAlignment("middle");
+  headRows.forEach(function (r) {
+    th.getRange(r, 1, 1, r === rQ ? 2 : th.getRange(r, 1, 1, 6).getValues()[0].filter(String).length)
+      .setFontWeight("bold").setBackground("#13233a").setFontColor("#ffffff").setWrap(true).setVerticalAlignment("middle");
   });
-  [th.getRange(rT, 1, 1, hdr.length), th.getRange(rQT, 1, 1, 2)].forEach(function (g) {
+  [th.getRange(rT, 1, 1, hdr.length)].concat(totalRows.map(function (r) { return th.getRange(r, 1, 1, 2); })).forEach(function (g) {
     g.setFontWeight("bold").setBackground("#f3ece1");
   });
   th.getRange(5, 5, DS_BUOI.length, 1).setFontWeight("bold").setFontColor("#d9480f");
-  th.getRange(4, 2, rQT - 3, 5).setHorizontalAlignment("center");
-  th.getRange(rQT + 2, 1).setFontColor("#637083").setFontStyle("italic");
+  th.getRange(4, 2, rNext - 4, 5).setHorizontalAlignment("center");
+  th.getRange(rNext, 1).setFontColor("#637083").setFontStyle("italic");
   th.setColumnWidth(1, 330);
   th.setColumnWidths(2, 5, 140);
   th.setRowHeight(4, 42);

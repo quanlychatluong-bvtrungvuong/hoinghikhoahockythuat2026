@@ -24,6 +24,8 @@ window.CONF = {
   venueAddress: "266 Lý Thường Kiệt, Phường Diên Hồng, TP. Hồ Chí Minh",
   mapQuery: "Bệnh viện Trưng Vương, 266 Lý Thường Kiệt, TP. Hồ Chí Minh",
   onlineNote: "Link tham dự trực tuyến sẽ được cập nhật trước ngày Hội nghị.", // hiện khi onlineLink còn trống
+  onlineName: "Phòng trực tuyến OneZoom",
+  onlinePass: "1111",             // mật khẩu phòng trực tuyến (để "" nếu không có)
   audience: "Bác sĩ, điều dưỡng và nhân viên y tế. Tham dự trực tiếp hoặc trực tuyến.",
   cme: "Cấp chứng nhận CME khi tham dự từ 80% thời lượng của chương trình và hoàn tất chính xác từ đủ 70% bài kiểm tra cuối chương trình.",
 
@@ -33,10 +35,12 @@ window.CONF = {
     abstract: "",        // Form nộp bài tóm tắt (để trống: nút được ẩn)
     checkinInternal: "https://forms.gle/BrBJobRjttwwrqU27", // Điểm danh nội viện
     checkinExternal: "https://forms.gle/3kgsHSp24hAN1Vx66", // Điểm danh ngoại viện
-    postTest: "",        // Link bài post-test (để trống: nút hiện "Sắp mở")
+    postTestNoi: "https://forms.gle/LAu2sLrXGaj5YPQ89",   // Post-test phiên Nội khoa
+    postTestNgoai: "https://forms.gle/U3i5uB8EaRgYtDgMA", // Post-test phiên Ngoại khoa
+    postTestDD: "https://forms.gle/Hi1QiLRfinwEDEfJ7",    // Post-test phiên Điều dưỡng
     checkoutCME: "https://forms.gle/vo9gY3qZYCkUaPyL6",     // Check-out & đăng ký nhận CME
     question: "https://forms.gle/oVgCAYYbm66811K1A",        // Đặt câu hỏi cho báo cáo viên
-    onlineLink: "",      // Link tham dự trực tuyến (Zoom / Google Meet)
+    onlineLink: "https://onezoom.vn/meet/92410142951", // Link tham dự trực tuyến
     invitation: "",      // Thư mời (PDF)
     programPdf: "https://drive.google.com/file/d/11DHsOp2zAq5QatKaUzIZDLgZx3Xc3zGg/view", // Chương trình in (PDF) – lưu trên Google Drive của quanlychatluong
     documents: ""        // Thư mục tài liệu tham khảo
