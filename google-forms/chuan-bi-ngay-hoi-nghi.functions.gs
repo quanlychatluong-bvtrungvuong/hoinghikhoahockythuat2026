@@ -105,6 +105,13 @@ function taoDanhSachMoi() {
     dd.getRange("G2").setFormula(L_(ss, '=ARRAYFORMULA(IF(LEN(' + ltTen + ')=0,"",' + key(ltTen) + '))'));
     dd.getRange("H2").setFormula(L_(ss, "=ARRAYFORMULA('Điểm danh lễ tân'!A2:A)"));
   }
+  // Nguồn thứ 4: Trang lễ tân – điểm danh + phát quà (cột D = họ tên theo danh sách mời)
+  if (ss.getSheetByName("Phát quà")) {
+    dd.getRange("J1:K1").setValues([["Khóa (bàn lễ tân)", "Giờ (bàn lễ tân)"]]);
+    var pqTen = "'Phát quà'!D2:D";
+    dd.getRange("J2").setFormula(L_(ss, '=ARRAYFORMULA(IF(LEN(' + pqTen + ')=0,"",' + key(pqTen) + '))'));
+    dd.getRange("K2").setFormula(L_(ss, "=ARRAYFORMULA('Phát quà'!A2:A)"));
+  }
   dd.hideSheet();
 
   SpreadsheetApp.flush();
@@ -117,9 +124,9 @@ function taoDanhSachMoi() {
     var n = i + 2, h = "$H" + n, e = "$E" + n;
     if (!r[4]) return ['="Theo đơn vị – kiểm tra thủ công"', '=""', '=""', '=""'];
     return [
-      L_(ss, '=IF(' + h + '="","",IF(COUNTIF(' + D + 'A:A,' + h + ')+COUNTIF(' + D + 'D:D,' + h + ')+COUNTIF(' + D + 'G:G,' + h + ')>0,"Đã đến","Chưa đến"))'),
-      L_(ss, '=IF(' + e + '<>"Đã đến","",MIN(IF(COUNTIF(' + D + 'A:A,' + h + '),MINIFS(' + D + 'B:B,' + D + 'A:A,' + h + '),9E9),IF(COUNTIF(' + D + 'D:D,' + h + '),MINIFS(' + D + 'E:E,' + D + 'D:D,' + h + '),9E9),IF(COUNTIF(' + D + 'G:G,' + h + '),MINIFS(' + D + 'H:H,' + D + 'G:G,' + h + '),9E9)))'),
-      L_(ss, '=IF(' + e + '<>"Đã đến","",IF(COUNTIF(' + D + 'A:A,' + h + '),"Nội viện",IF(COUNTIF(' + D + 'D:D,' + h + '),"Ngoại viện","Lễ tân")))'),
+      L_(ss, '=IF(' + h + '="","",IF(COUNTIF(' + D + 'A:A,' + h + ')+COUNTIF(' + D + 'D:D,' + h + ')+COUNTIF(' + D + 'G:G,' + h + ')+COUNTIF(' + D + 'J:J,' + h + ')>0,"Đã đến","Chưa đến"))'),
+      L_(ss, '=IF(' + e + '<>"Đã đến","",MIN(IF(COUNTIF(' + D + 'A:A,' + h + '),MINIFS(' + D + 'B:B,' + D + 'A:A,' + h + '),9E9),IF(COUNTIF(' + D + 'D:D,' + h + '),MINIFS(' + D + 'E:E,' + D + 'D:D,' + h + '),9E9),IF(COUNTIF(' + D + 'G:G,' + h + '),MINIFS(' + D + 'H:H,' + D + 'G:G,' + h + '),9E9),IF(COUNTIF(' + D + 'J:J,' + h + '),MINIFS(' + D + 'K:K,' + D + 'J:J,' + h + '),9E9)))'),
+      L_(ss, '=IF(' + e + '<>"Đã đến","",IF(COUNTIF(' + D + 'A:A,' + h + '),"Nội viện",IF(COUNTIF(' + D + 'D:D,' + h + '),"Ngoại viện",IF(COUNTIF(' + D + 'J:J,' + h + '),"Bàn lễ tân","Lễ tân (form)"))))'),
       L_(ss, '=' + key("$B" + n))
     ];
   });

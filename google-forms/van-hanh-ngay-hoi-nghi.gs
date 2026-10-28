@@ -40,6 +40,7 @@ var HANDLERS = ["capNhatTrangThaiForm", "lapXetCME", "donTriggerVanHanh"];
 
 function caiDatVanHanh() {
   taoFormLeTan();
+  if (typeof caiDatPhatQua === "function") caiDatPhatQua();
   taoDanhSachMoi();
   lapXetCME();
   taoTongHop();
@@ -161,7 +162,8 @@ function lapXetCME() {
   }
   themDD("Điểm danh nội viện", "Nội viện", "Họ và tên", "Buổi / Phiên tham dự", null, null);
   themDD("Điểm danh ngoại viện", "Ngoại viện", "Họ và tên", "Buổi / Phiên tham dự", "Hình thức tham dự", null);
-  themDD("Điểm danh lễ tân", "Lễ tân", "Họ và tên", "Buổi / Phiên tham dự", "Hình thức tham dự", "Email");
+  themDD("Điểm danh lễ tân", "Lễ tân (form)", "Họ và tên", "Buổi / Phiên tham dự", "Hình thức tham dự", "Email");
+  themDD("Phát quà", "Bàn lễ tân", "Người đến thực tế", "Buổi / Phiên tham dự", null, null);
 
   // Điểm post-test cao nhất theo email
   var diem = {};

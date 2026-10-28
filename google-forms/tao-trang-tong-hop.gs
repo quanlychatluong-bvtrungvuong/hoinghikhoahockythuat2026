@@ -33,7 +33,7 @@ var TEN_TRANG = {
 
 function TEN_TRANG_DA_CO_(n) {
   return ["Điểm danh nội viện", "Điểm danh ngoại viện", "Check-out CME", "Đặt câu hỏi", "Điểm danh lễ tân",
-    "Post-test Nội khoa", "Post-test Ngoại khoa", "Post-test Điều dưỡng"].indexOf(n) > -1;
+    "Post-test Nội khoa", "Post-test Ngoại khoa", "Post-test Điều dưỡng", "Phát quà"].indexOf(n) > -1;
 }
 
 function taoTongHop() {
@@ -160,6 +160,24 @@ function taoTongHop() {
       th.getRange(r, 4).setNumberFormat("0%");
     });
     rNext = rNext + nhom.length + 2;
+  }
+
+  // Quà tặng (nếu đã có tab Phát quà)
+  if (ss.getSheetByName("Phát quà") && typeof QUA_TONG !== "undefined") {
+    var Q = "'Phát quà'!";
+    var coQuyen = danhSachQua_().filter(function (x) { return x.q; }).length;
+    th.getRange(rNext, 1, 1, 2).setValues([["Quà tặng khách mời", "Số suất"]]);
+    headRows.push(rNext);
+    [["Dự trù", "=" + QUA_TONG],
+     ["Khách mời / đơn vị có quyền nhận", "=" + coQuyen],
+     ["Đã phát", "=COUNTIF(" + Q + "H2:H,\"Có\")"],
+     ["Còn lại", "=B" + (rNext + 1) + "-B" + (rNext + 3)],
+     ["Khách mời chưa nhận", "=B" + (rNext + 2) + "-B" + (rNext + 3)],
+     ["Điểm danh tại bàn lễ tân (mọi lượt)", "=COUNTA(" + Q + "A2:A)"]].forEach(function (x, k) {
+      th.getRange(rNext + 1 + k, 1).setValue(x[0]);
+      th.getRange(rNext + 1 + k, 2).setFormula(x[1]);
+    });
+    rNext = rNext + 8;
   }
 
   // Xét CME (nếu đã có tab)
