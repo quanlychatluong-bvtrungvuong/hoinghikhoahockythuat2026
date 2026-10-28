@@ -138,6 +138,21 @@ function taoTongHop() {
       th.getRange(rNext + 1 + k, 2).setFormula(x[1]);
     });
     rNext = rNext + rows.length + 2;
+
+    // Theo từng nhóm trong danh sách mời
+    var nhom = ss.getSheetByName("Danh sách mời").getRange("A2:A").getValues().map(function (r) { return r[0]; })
+      .filter(function (g, i, a) { return g && a.indexOf(g) === i; });
+    th.getRange(rNext, 1, 1, 4).setValues([["Khách mời theo nhóm", "Có tên trong danh sách", "Đã đến", "Tỷ lệ"]]);
+    headRows.push(rNext);
+    nhom.forEach(function (g, k) {
+      var r = rNext + 1 + k, a = "$A" + r;
+      th.getRange(r, 1).setValue(g);
+      th.getRange(r, 2).setFormula("=COUNTIFS(" + M + "A:A," + a + "," + M + "E:E,\"Đã đến\")+COUNTIFS(" + M + "A:A," + a + "," + M + "E:E,\"Chưa đến\")");
+      th.getRange(r, 3).setFormula("=COUNTIFS(" + M + "A:A," + a + "," + M + "E:E,\"Đã đến\")");
+      th.getRange(r, 4).setFormula("=IF(B" + r + "=0,\"\",C" + r + "/B" + r + ")");
+      th.getRange(r, 4).setNumberFormat("0%");
+    });
+    rNext = rNext + nhom.length + 2;
   }
 
   th.getRange(rNext, 1).setValue("Ghi chú: đếm theo người không trùng (nội viện: mã nhân viên; ngoại viện: số điện thoại; CME, post-test: email). Một người dự nhiều phiên được tính ở từng phiên. Khách mời đối chiếu theo họ tên (bỏ học hàm, không phân biệt hoa thường).");

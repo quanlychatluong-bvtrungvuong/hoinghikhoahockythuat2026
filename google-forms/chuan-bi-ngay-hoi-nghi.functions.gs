@@ -13,7 +13,7 @@
  * 3. taoTongHop(): dựng lại trang Tổng hợp.
  */
 
-var TITLE_RE = "^(?:(?:pgs|gs|ts|ths|bs|ds|dscđ|cn|đd|ktv|nhs|ckii|cki|ck2|ck1|ck|bà|ông|nhà báo)[\\s.]+)+";
+var TITLE_RE = "^(?:(?:ttưt|pgs|gs|ts|ths|bs|ds|dscđ|cn|đd|ytcc|ktv|nhs|ckii|cki|ck2|ck1|ck|bà|ông|nhà báo)[\\s.]+)+";
 
 function chayChuanBi() {
   taoPostTest();
@@ -78,10 +78,19 @@ function taoDanhSachMoi() {
   // Chuẩn hóa họ tên: chữ thường, bỏ học hàm/học vị ở đầu, gộp khoảng trắng
   var key = function (rng) { return 'TRIM(REGEXREPLACE(REGEXREPLACE(LOWER(' + rng + '),"' + TITLE_RE + '",""),"\\s+"," "))'; };
 
-  ["_DiemDanh", "Danh sách mời"].forEach(function (n) { var o = ss.getSheetByName(n); if (o) ss.deleteSheet(o); });
+  // Dùng lại tab cũ (chỉ xóa nội dung) thay vì xóa rồi tạo lại cùng tên — tránh lỗi "Dịch vụ Bảng tính"
+  function tabSach(ten, viTri) {
+    var t = ss.getSheetByName(ten);
+    if (!t) return ss.insertSheet(ten, viTri);
+    var loc = t.getFilter(); if (loc) loc.remove();
+    t.setConditionalFormatRules([]);
+    t.showColumns(1, t.getMaxColumns());
+    t.clear();
+    return t;
+  }
 
   // Tab phụ (ẩn): họ tên chuẩn hóa + giờ điểm danh của 2 form
-  var dd = ss.insertSheet("_DiemDanh");
+  var dd = tabSach("_DiemDanh");
   dd.getRange("A1:E1").setValues([["Khóa (nội viện)", "Giờ (nội viện)", "", "Khóa (ngoại viện)", "Giờ (ngoại viện)"]]);
   var nvTen = col(NV, "Họ và tên"), ngTen = col(NGV, "Họ và tên");
   dd.getRange("A2").setFormula(L_(ss, '=ARRAYFORMULA(IF(LEN(' + nvTen + ')=0,"",' + key(nvTen) + '))'));
@@ -90,7 +99,8 @@ function taoDanhSachMoi() {
   dd.getRange("E2").setFormula(L_(ss, "=ARRAYFORMULA('Điểm danh ngoại viện'!A2:A)"));
   dd.hideSheet();
 
-  var sh = ss.insertSheet("Danh sách mời", 1);
+  SpreadsheetApp.flush();
+  var sh = tabSach("Danh sách mời", 1);
   var hdr = ["Nhóm", "Họ tên / Đơn vị", "Chức vụ – Đơn vị", "Vai trò", "Trạng thái", "Giờ đến", "Điểm danh qua", "Khóa"];
   sh.getRange(1, 1, 1, hdr.length).setValues([hdr]);
   sh.getRange(2, 1, MOI.length, 4).setValues(MOI.map(function (r) { return [r[0], r[1], r[2], r[3]]; }));
