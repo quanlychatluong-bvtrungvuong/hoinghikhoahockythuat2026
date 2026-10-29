@@ -13,7 +13,7 @@
  * 3. taoTongHop(): dựng lại trang Tổng hợp.
  */
 
-var TITLE_RE = "^(?:(?:ttưt|pgs|gs|ts|ths|bs|ds|dscđ|cn|đd|ytcc|ktv|nhs|ckii|cki|ck2|ck1|ck|bà|ông|nhà báo)[\\s.]+)+";
+var TITLE_RE = "^(?:(?:ttưt|pgs|gs|ts|ths|bs|ds|dscđ|cnđd|cn|đd|đ d|ks|pv|ytcc|ktv|nhs|ckii|cki|ck2|ck1|ck|bà|ông|nhà báo)[\\s.]+)+";
 
 function chayChuanBi() {
   taoPostTest();
