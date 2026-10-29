@@ -113,12 +113,14 @@ function ve(){
   LOG.forEach(function(l){if(l.q)nhan[l.k]=l; dd[l.k+"|"+loai(l.b)]=l;});
   var bm=lb==="sáng"?"NG":"D", tong=TONG[lb]||0, con=tong-daPhat, g=GIO[lb];
   var chua=DS.filter(function(x){return x.q&&!nhan[x.k]&&x.p.split("").some(function(c){return bm.indexOf(c)>-1;});}).length;
+  // Chỉ báo thiếu khi đã hết quà: đếm người có thư mời đến dự nhưng không còn quà (không đoán theo số đăng ký)
+  var thieu=LOG.filter(function(l){return loai(l.b)===lb&&/^HẾT QUÀ/.test(l.th);}).length;
   // Đếm quà riêng từng buổi và cả ngày; buổi đang chọn được tô đậm
   var phat=function(b){return LOG.filter(function(l){return l.q&&loai(l.b)===b;}).length;};
   var o=function(b,ten){var t=TONG[b]||0,p=phat(b);return '<span class="stat'+(b===lb?" on":"")+(t-p<=0?" bad":"")+'">'+ten+': <b>'+p+"</b>/"+t+" · còn "+(t-p)+"</span>";};
   var tc=(TONG["sáng"]||0)+(TONG["chiều"]||0), pc=phat("sáng")+phat("chiều");
   document.getElementById("stats").innerHTML=o("sáng","Quà sáng (bác sĩ)")+o("chiều","Quà chiều (điều dưỡng)")+
-    '<span class="stat">Cả ngày: <b>'+pc+"</b>/"+tc+" · còn "+(tc-pc)+'</span><span class="stat'+(chua>con?" bad":"")+'">Đăng ký buổi '+lb+" chưa nhận <b>"+chua+"</b>"+(chua>con?" · THIẾU "+(chua-con):"")+"</span>"+
+    '<span class="stat">Cả ngày: <b>'+pc+"</b>/"+tc+" · còn "+(tc-pc)+'</span>'+(con<=0||thieu?'<span class="stat bad">HẾT QUÀ buổi '+lb+" · thiếu <b>"+thieu+"</b> người</span>":'<span class="stat">Đăng ký buổi '+lb+" chưa nhận <b>"+chua+"</b></span>")+
     (g?'<span class="stat'+(ngoaiGio()?" bad":"")+'">Giờ phát quà '+g[0]+"–"+g[1]+(ngoaiGio()?" · NGOÀI GIỜ":"")+"</span>":"");
   var q=bo(document.getElementById("q").value.trim()), kq=document.getElementById("kq");
   document.getElementById("moi").style.display=q.length>=2?"block":"none";
