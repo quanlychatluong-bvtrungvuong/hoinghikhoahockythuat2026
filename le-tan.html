@@ -28,7 +28,7 @@ window.google = { script: { run: (function () {
 *{box-sizing:border-box}body{margin:0;font:16px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;color:#1f2a37;background:#f6f7f9}
 header{position:sticky;top:0;z-index:5;background:var(--ink);color:#fff;padding:10px 14px}
 h1{font-size:16px;margin:0 0 6px}.stats{display:flex;gap:6px;flex-wrap:wrap;font-size:13px}
-.stat{background:rgba(255,255,255,.12);border-radius:8px;padding:4px 9px}.stat b{font-size:15px}.stat.bad{background:#c92a2a}
+.stat{background:rgba(255,255,255,.12);border-radius:8px;padding:4px 9px}.stat b{font-size:15px}.stat.bad{background:#c92a2a}.stat.on{background:#fff;color:var(--ink)}.stat.on.bad{background:#c92a2a;color:#fff}
 .buoi{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap}.buoi button{flex:1 1 30%;font:inherit;font-size:13px;padding:8px 6px;border:1px solid rgba(255,255,255,.4);background:transparent;color:#fff;border-radius:8px}
 .buoi button.on{background:#fff;color:var(--ink);font-weight:700}
 main{padding:12px 14px 80px;max-width:720px;margin:auto}
@@ -113,7 +113,12 @@ function ve(){
   LOG.forEach(function(l){if(l.q)nhan[l.k]=l; dd[l.k+"|"+loai(l.b)]=l;});
   var bm=lb==="sáng"?"NG":"D", tong=TONG[lb]||0, con=tong-daPhat, g=GIO[lb];
   var chua=DS.filter(function(x){return x.q&&!nhan[x.k]&&x.p.split("").some(function(c){return bm.indexOf(c)>-1;});}).length;
-  document.getElementById("stats").innerHTML='<span class="stat">Quà '+lb+(lb==="sáng"?" (bác sĩ)":" (điều dưỡng)")+': đã phát <b>'+daPhat+"</b>/"+tong+'</span><span class="stat'+(con<=0?" bad":"")+'">Còn <b>'+con+'</b></span><span class="stat'+(chua>con?" bad":"")+'">Đăng ký buổi này chưa nhận <b>'+chua+"</b>"+(chua>con?" · THIẾU "+(chua-con):"")+"</span>"+
+  // Đếm quà riêng từng buổi và cả ngày; buổi đang chọn được tô đậm
+  var phat=function(b){return LOG.filter(function(l){return l.q&&loai(l.b)===b;}).length;};
+  var o=function(b,ten){var t=TONG[b]||0,p=phat(b);return '<span class="stat'+(b===lb?" on":"")+(t-p<=0?" bad":"")+'">'+ten+': <b>'+p+"</b>/"+t+" · còn "+(t-p)+"</span>";};
+  var tc=(TONG["sáng"]||0)+(TONG["chiều"]||0), pc=phat("sáng")+phat("chiều");
+  document.getElementById("stats").innerHTML=o("sáng","Quà sáng (bác sĩ)")+o("chiều","Quà chiều (điều dưỡng)")+
+    '<span class="stat">Cả ngày: <b>'+pc+"</b>/"+tc+" · còn "+(tc-pc)+'</span><span class="stat'+(chua>con?" bad":"")+'">Đăng ký buổi '+lb+" chưa nhận <b>"+chua+"</b>"+(chua>con?" · THIẾU "+(chua-con):"")+"</span>"+
     (g?'<span class="stat'+(ngoaiGio()?" bad":"")+'">Giờ phát quà '+g[0]+"–"+g[1]+(ngoaiGio()?" · NGOÀI GIỜ":"")+"</span>":"");
   var q=bo(document.getElementById("q").value.trim()), kq=document.getElementById("kq");
   document.getElementById("moi").style.display=q.length>=2?"block":"none";

@@ -47,7 +47,7 @@ window.CONF = {
     onlineNoi: "https://meet.google.com/wsv-gmju-ijf",    // Trực tuyến phiên Nội khoa (Google Meet)
     invitation: "",      // Thư mời (PDF)
     programPdf: "https://drive.google.com/file/d/11DHsOp2zAq5QatKaUzIZDLgZx3Xc3zGg/view", // Chương trình in (PDF) – lưu trên Google Drive của quanlychatluong
-    documents: ""        // Thư mục tài liệu tham khảo
+    documents: "https://drive.google.com/drive/folders/1OImIRfJSm-kJKq9HzuDBff2nvzjVSGbR" // Thư mục tài liệu hội nghị (Google Drive, cùng link mã QR)
   },
 
   /* ---------- Giờ mở / đóng các form (khớp lịch tự động trong Google Forms) ---------- */
@@ -60,7 +60,8 @@ window.CONF = {
     postTestDD:      ["2026-10-30T16:00:00+07:00", "2026-11-04T23:59:00+07:00"],
     checkoutCME:     ["2026-10-30T11:00:00+07:00", "2026-11-04T23:59:00+07:00"],
     onlineLink:      ["2026-10-30T07:00:00+07:00", "2026-10-30T17:00:00+07:00"], // OneZoom: Ngoại khoa + Điều dưỡng
-    onlineNoi:       ["2026-10-30T07:00:00+07:00", "2026-10-30T12:00:00+07:00"]  // Google Meet: Nội khoa
+    onlineNoi:       ["2026-10-30T07:00:00+07:00", "2026-10-30T12:00:00+07:00"], // Google Meet: Nội khoa
+    documents:       ["2026-10-30T07:00:00+07:00", "2027-12-31T23:59:00+07:00"]  // tài liệu: mở từ 07:00, không đóng
   },
 
   /* ---------- Thư chào mừng ---------- */
