@@ -3,7 +3,7 @@
  * ---------------------------------------------------------------
  * Cần thêm trong cùng dự án Apps Script (KHÔNG đưa lên GitHub vì là dữ liệu riêng):
  *   - POST_TESTS: câu hỏi 3 bài post-test (Nội khoa, Ngoại khoa, Điều dưỡng) kèm đáp án
- *   - MOI_DATA: danh sách mời [nhóm, họ tên/đơn vị, chức vụ–đơn vị, vai trò, 1=người/0=đơn vị]
+ *   - MOI_DATA: danh sách mời [nhóm, họ tên/đơn vị, chức vụ–đơn vị, vai trò, 1=người/0=đơn vị, mã phân biệt người trùng tên (tùy chọn)]
  *   - tao-trang-tong-hop.gs (SHEET_ID, taoTongHop)
  *
  * 1. taoPostTest(): 3 form bài kiểm tra tự chấm, mỗi câu 1 điểm, đạt khi đúng từ 70%.
@@ -118,7 +118,10 @@ function taoDanhSachMoi() {
   var sh = tabSach("Danh sách mời", 1);
   var hdr = ["Nhóm", "Họ tên / Đơn vị", "Chức vụ – Đơn vị", "Vai trò", "Trạng thái", "Giờ đến", "Điểm danh qua", "Khóa"];
   sh.getRange(1, 1, 1, hdr.length).setValues([hdr]);
-  sh.getRange(2, 1, MOI.length, 4).setValues(MOI.map(function (r) { return [r[0], r[1], r[2], r[3]]; }));
+  // Người trùng họ tên người khác: trạng thái đối chiếu theo tên sẽ giống nhau → ghi chú để kiểm tra theo đơn vị
+  sh.getRange(2, 1, MOI.length, 4).setValues(MOI.map(function (r) {
+    return [r[0], r[1], r[2], r[5] ? [r[3], "⚠ Trùng họ tên người khác – kiểm tra theo đơn vị"].filter(String).join(" · ") : r[3]];
+  }));
   var D = "'_DiemDanh'!";
   var fx = MOI.map(function (r, i) {
     var n = i + 2, h = "$H" + n, e = "$E" + n;

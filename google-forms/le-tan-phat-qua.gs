@@ -63,7 +63,8 @@ function kiemPin_(pin) {
   if (!p || String(pin).trim() !== p) throw new Error("Sai mã PIN");
 }
 function buoiLoai_(b) { return String(b).indexOf("Buổi sáng") === 0 ? "sáng" : "chiều"; }
-function maMoi_(r) { return r[4] ? khoa_(r[1]) : "dv:" + String(r[1]).toLowerCase().trim(); }
+// r[5] (nếu có) phân biệt hai người khác nhau trùng họ tên (VD khách ngoại viện và điều dưỡng nội viện)
+function maMoi_(r) { return r[4] ? khoa_(r[1]) + (r[5] ? "|" + r[5] : "") : "dv:" + String(r[1]).toLowerCase().trim(); }
 // Phiên đăng ký: N = Nội khoa, G = Ngoại khoa, D = Điều dưỡng (chiều). Khách buổi sáng không ghi phiên = "NG".
 function phienDK_(r) {
   var g = String(r[0]), v = String(r[3] || ""), p = "";
