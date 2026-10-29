@@ -19,6 +19,9 @@ var QUA_BUOI = { "sáng": 200, "chiều": 200 };
 var QUA_TONG = QUA_BUOI["sáng"] + QUA_BUOI["chiều"];
 // Giờ phát quà [mở, đóng) theo giờ Việt Nam
 var QUA_GIO = { "sáng": ["07:00", "08:00"], "chiều": ["13:00", "14:00"] };
+// Nhóm không có trên trang lễ tân: dự trực tuyến thì không điểm danh tại bàn, không nhận quà
+// (nếu đến trực tiếp, lễ tân điểm danh ở khung "Không có trong danh sách mời" – không phát quà)
+var LE_TAN_BO_NHOM = ["ĐD – Đăng ký dự trực tuyến"];
 var PQ_TAB = "Phát quà";
 var PQ_HDR = ["Thời gian", "Buổi / Phiên tham dự", "Mã", "Họ tên (theo danh sách)", "Đơn vị / Chức vụ", "Nhóm",
   "Người đến thực tế", "Phát quà", "Trường hợp", "Người phát", "Ghi chú"];
@@ -77,12 +80,13 @@ function phienDK_(r) {
     else if (/điều\s+dưỡng/.test(b)) p = "D";
     else p = "NG";
   } else p = "NG";
-  if (v.indexOf("ĐD:") > -1 && p.indexOf("D") < 0) p += "D";   // có cả trong danh sách Điều dưỡng
+  if (/ĐD: (?!Đăng ký dự trực tuyến)/.test(v) && p.indexOf("D") < 0) p += "D";   // có cả trong danh sách Điều dưỡng (dự trực tiếp)
   return p;
 }
 function danhSachQua_() {
   var seen = {};
   return MOI_DATA.map(function (r) {
+    if (LE_TAN_BO_NHOM.indexOf(r[0]) > -1) return null;
     var k = maMoi_(r); if (seen[k]) return null; seen[k] = 1;
     return { k: k, t: r[1], d: r[2], g: r[0], v: r[3], u: r[4] ? 0 : 1, q: 1, p: phienDK_(r) };
   }).filter(Boolean);

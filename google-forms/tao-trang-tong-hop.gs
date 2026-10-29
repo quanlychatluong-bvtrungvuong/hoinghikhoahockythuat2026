@@ -175,7 +175,7 @@ function taoTongHop() {
      ["Dự trù buổi chiều (điều dưỡng)", "=" + QUA_BUOI["chiều"]],
      ["  – Đã phát buổi chiều", daPhatBuoi("chiều")],
      ["  – Còn lại buổi chiều", "=B" + (rNext + 4) + "-B" + (rNext + 5)],
-     ["Người / đơn vị trong danh sách mời (có quyền nhận)", "=" + coQuyen],
+     ["Người / đơn vị có quyền nhận quà (không tính đăng ký trực tuyến)", "=" + coQuyen],
      ["Trong danh sách mời chưa nhận", "=B" + (rNext + 7) + "-B" + (rNext + 2) + "-B" + (rNext + 5)],
      ["Phát ngoài giờ (lễ tân đã xác nhận)", "=COUNTIFS(" + Q + "H2:H,\"Có\"," + Q + "K2:K,\"*Phát ngoài giờ*\")"],
      ["Điểm danh tại bàn lễ tân (lượt hợp lệ)", "=COUNTIFS(" + Q + "A2:A,\"<>\"," + Q + "H2:H,\"<>Đã hủy\")"],
