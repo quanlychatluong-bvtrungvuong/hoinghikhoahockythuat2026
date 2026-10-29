@@ -123,6 +123,8 @@ function apiXacNhan(pin, req) {
     if (log.some(function (l) { return l.k === maDD && buoiLoai_(l.b) === lb; }))
       return { ok: false, msg: nguoi + " đã được điểm danh " + lb + " nay rồi.", log: log };
     var daNhan = x && log.some(function (l) { return l.k === x.k && l.q; });
+    // Đã điểm danh lúc hết quà ở buổi kia → không lấy quà của buổi này (quà sáng cho bác sĩ, chiều cho điều dưỡng)
+    var hetTruoc = x && log.some(function (l) { return l.k === x.k && buoiLoai_(l.b) !== lb && /^HẾT QUÀ/.test(l.th); });
     var daPhat = log.filter(function (l) { return l.q && buoiLoai_(l.b) === lb; }).length;
     var gio = Utilities.formatDate(new Date(), "Asia/Ho_Chi_Minh", "HH:mm");
     var ngoaiGio = gio < QUA_GIO[lb][0] || gio >= QUA_GIO[lb][1];
@@ -130,6 +132,7 @@ function apiXacNhan(pin, req) {
     if (!x) th = "Không có thư mời – không phát quà";
     else if (!x.q) th = "Có trong danh sách đăng ký – không thuộc nhóm nhận quà";
     else if (daNhan) th = "Điểm danh thêm buổi – đã nhận quà trước đó";
+    else if (hetTruoc) th = "Đã hết quà ở buổi trước – không nhận quà buổi " + lb;
     else if (daPhat >= QUA_BUOI[lb]) th = "HẾT QUÀ buổi " + lb + " – chưa phát";
     else { qua = "Có"; th = x.u ? "Đại diện đơn vị" : (req.thay ? "Dự thay" : "Có thư mời"); }
     SpreadsheetApp.openById(SHEET_ID).getSheetByName(PQ_TAB).appendRow([
@@ -140,7 +143,10 @@ function apiXacNhan(pin, req) {
        String(req.ghiChu || "")].filter(String).join(" | ")]);
     SpreadsheetApp.flush();
     var id = SpreadsheetApp.openById(SHEET_ID).getSheetByName(PQ_TAB).getLastRow();
-    return { ok: true, id: id, qua: qua === "Có", msg: (qua === "Có" ? "✔ Đã điểm danh + PHÁT QUÀ: " : "✔ Đã điểm danh (không phát quà): ") + nguoi + " – " + th, log: nhatKy_() };
+    var msg = qua === "Có" ? "✔ Đã điểm danh + PHÁT QUÀ: " + nguoi + " – " + th
+      : /^HẾT QUÀ/.test(th) ? "⚠ HẾT QUÀ buổi " + lb + " – KHÔNG trao quà. Đã điểm danh: " + nguoi
+      : "Đã điểm danh – KHÔNG trao quà: " + nguoi + " – " + th;
+    return { ok: true, id: id, qua: qua === "Có", msg: msg, log: nhatKy_() };
   } finally { lock.releaseLock(); }
 }
 
@@ -184,7 +190,7 @@ main{padding:12px 14px 80px;max-width:720px;margin:auto}
 .btn:disabled{opacity:.5}
 #toast{position:fixed;left:12px;right:12px;bottom:14px;padding:14px 16px;border-radius:12px;color:#fff;font-weight:700;display:none;z-index:9}
 #toast button{margin-top:8px;font:inherit;font-weight:700;border:2px solid #fff;background:transparent;color:#fff;border-radius:8px;padding:8px 14px}
-.card.lech{border:2px solid var(--warn);background:#fff9f0}.b-lech{background:#ffe8cc;color:#9c3d00}
+.card.lech{border:2px solid var(--warn);background:#fff9f0}.b-het{background:#c92a2a;color:#fff}.b-lech{background:#ffe8cc;color:#9c3d00}
 .warn{background:var(--warn);color:#fff;flex:1 1 100%;font-size:16px}
 .opt{display:flex;align-items:center;gap:8px;margin:10px 2px 0;font-size:14px;color:var(--muted)}.opt input{width:20px;height:20px}
 .pin{max-width:360px;margin:60px auto;background:#fff;padding:22px;border-radius:14px;border:1px solid var(--line)}
@@ -269,24 +275,29 @@ function ve(){
   ds.sort(function(a,b){return (b.p.indexOf(mp)>-1)-(a.p.indexOf(mp)>-1);}); ds=ds.slice(0,15);
   kq.innerHTML=ds.length?ds.map(function(x,i){
     var n=nhan[x.k], d=dd[x.k+"|"+loai(CHON)], h="";
-    var lech=x.p.indexOf(mp)<0;
+    var lech=x.p.indexOf(mp)<0, hetTruoc=LOG.some(function(l){return l.k===x.k&&loai(l.b)!==lb&&/^HẾT QUÀ/.test(l.th);});
+    var choQua=x.q&&!n&&!hetTruoc&&!d, het=choQua&&con<=0;
     h+='<div class="card'+(lech&&!d?" lech":"")+'"><div class="name">'+e(x.t)+'</div><div class="meta">'+e(x.g)+(x.d?" · "+e(x.d):"")+(x.v?" · "+e(x.v):"")+"</div>";
     if(!x.q) h+='<span class="badge b-no">Đăng ký – không thuộc nhóm nhận quà</span>';
     else if(n) h+='<span class="badge b-done">Đã nhận quà '+e(n.tg)+" · "+e(n.nv)+(n.n&&bo(n.n)!==bo(x.t)?" · người nhận: "+e(n.n):"")+"</span>";
+    else if(d&&/^HẾT QUÀ/.test(d.th)) h+='<span class="badge b-het">Điểm danh lúc HẾT QUÀ – chưa nhận quà</span>';
+    else if(hetTruoc) h+='<span class="badge b-no">Đã hết quà ở buổi trước – không nhận quà buổi '+lb+'</span>';
+    else if(het) h+='<span class="badge b-het">HẾT QUÀ buổi '+lb+' – chỉ điểm danh, KHÔNG trao quà</span>';
     else h+='<span class="badge b-ok">Có thư mời – chưa nhận quà</span>';
     if(d) h+='<span class="badge b-done">Đã điểm danh '+loai(CHON)+" "+e(d.tg)+"</span>";
     if(lech&&!d) h+='<span class="badge b-lech">⚠ Đăng ký: '+e(tenP(x.p))+" – đang chọn "+e(TEN_P[mp])+"</span>";
     h+='<div class="row">';
     if(d){}
-    else if(x.q&&!n&&x.u) h+='<button class="btn '+(lech?"warn":"go")+'" onclick="xacNhan('+i+',2)">'+(lech?"⚠ ":"")+'Phát cho người đại diện đơn vị…</button>';
-    else if(x.q&&!n) h+='<button class="btn '+(lech?"warn":"go")+'" onclick="xacNhan('+i+',0)">'+(lech?"⚠ Khác phiên đăng ký – xác nhận…":"✔ Xác nhận + phát quà")+'</button><button class="btn sub" onclick="xacNhan('+i+',1)">Người khác dự thay…</button>';
+    else if(het) h+='<button class="btn warn" onclick="xacNhan('+i+','+(x.u?2:0)+')">'+(lech?"⚠ Khác phiên – ":"")+'Điểm danh – HẾT QUÀ, không trao quà</button>';
+    else if(choQua&&x.u) h+='<button class="btn '+(lech?"warn":"go")+'" onclick="xacNhan('+i+',2)">'+(lech?"⚠ ":"")+'Phát cho người đại diện đơn vị…</button>';
+    else if(choQua) h+='<button class="btn '+(lech?"warn":"go")+'" onclick="xacNhan('+i+',0)">'+(lech?"⚠ Khác phiên đăng ký – xác nhận…":"✔ Xác nhận + phát quà")+'</button><button class="btn sub" onclick="xacNhan('+i+',1)">Người khác dự thay…</button>';
     else h+='<button class="btn sub" onclick="xacNhan('+i+',0)">Điểm danh '+loai(CHON)+" (không phát quà)</button>";
     h+="</div></div>"; x._i=i; window["_r"+i]=x; return h;
   }).join(""):'<p class="muted">Không tìm thấy trong danh sách mời'+(tatca?"":" ở buổi này – thử tick ô <b>Tìm cả người đăng ký buổi khác</b>")+'.</p>';
 }
-function toastHT(m,id){
+function toastHT(m,id,qua){
   var t=document.getElementById("toast");t.innerHTML=e(m)+'<br><button onclick="hoanTac('+id+')">↩ Hoàn tác (15 giây)</button>';
-  t.style.background="#2b8a3e";t.style.display="block";clearTimeout(t._h);t._h=setTimeout(function(){t.style.display="none";},15000);
+  t.style.background=qua?"#2b8a3e":"#e67700";   // cam = đã điểm danh nhưng KHÔNG trao quàt.style.display="block";clearTimeout(t._h);t._h=setTimeout(function(){t.style.display="none";},15000);
 }
 function hoanTac(id){
   var t=document.getElementById("toast");t.style.display="none";
@@ -295,12 +306,14 @@ function hoanTac(id){
 }
 function gui(req){
   if(dang)return; dang=true; req.buoi=CHON; req.nv=NV;
-  google.script.run.withSuccessHandler(function(r){dang=false;LOG=r.log||LOG;if(r.ok&&r.id){toastHT(r.msg,r.id);}else{toast(r.msg,r.ok);}if(r.ok){document.getElementById("q").value="";document.getElementById("nTen").value="";document.getElementById("nDv").value="";}ve();document.getElementById("q").focus();})
+  google.script.run.withSuccessHandler(function(r){dang=false;LOG=r.log||LOG;if(r.ok&&r.id){toastHT(r.msg,r.id,r.qua);}else{toast(r.msg,r.ok);}if(r.ok){document.getElementById("q").value="";document.getElementById("nTen").value="";document.getElementById("nDv").value="";}ve();document.getElementById("q").focus();})
   .withFailureHandler(function(er){dang=false;toast(er.message,false);}).apiXacNhan(PIN,req);
 }
 function xacNhan(i,kieu){
   var x=window["_r"+i], req={k:x.k}, mp=maP(), g=GIO[loai(CHON)];
-  if(x.q&&!LOG.some(function(l){return l.k===x.k&&l.q;})&&ngoaiGio()&&
+  var lb=loai(CHON), daPhat=LOG.filter(function(l){return l.q&&loai(l.b)===lb;}).length;
+  var coQua=x.q&&!LOG.some(function(l){return l.k===x.k&&(l.q||(loai(l.b)!==lb&&/^HẾT QUÀ/.test(l.th)));})&&daPhat<(TONG[lb]||0);
+  if(coQua&&ngoaiGio()&&
     !confirm("⚠ Ngoài giờ phát quà buổi "+loai(CHON)+" ("+g[0]+"–"+g[1]+").\n\nVẫn điểm danh và PHÁT QUÀ cho "+x.t+"?"))return;
   if(x.p.indexOf(mp)<0){
     if(!confirm("⚠ "+x.t+" đăng ký phiên "+tenP(x.p)+",\nnhưng đang điểm danh: "+CHON+".\n\nĐã kiểm tra lại với đại biểu và vẫn xác nhận?"))return;

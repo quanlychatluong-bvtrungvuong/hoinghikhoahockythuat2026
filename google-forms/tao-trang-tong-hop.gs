@@ -177,13 +177,14 @@ function taoTongHop() {
      ["  – Còn lại buổi chiều", "=B" + (rNext + 4) + "-B" + (rNext + 5)],
      ["Người / đơn vị có quyền nhận quà (không tính đăng ký trực tuyến)", "=" + coQuyen],
      ["Trong danh sách mời chưa nhận", "=B" + (rNext + 7) + "-B" + (rNext + 2) + "-B" + (rNext + 5)],
+     ["Có thư mời nhưng HẾT QUÀ (chưa nhận – gửi bù sau)", "=COUNTIFS(" + Q + "I2:I,\"HẾT QUÀ*\"," + Q + "H2:H,\"Không\")"],
      ["Phát ngoài giờ (lễ tân đã xác nhận)", "=COUNTIFS(" + Q + "H2:H,\"Có\"," + Q + "K2:K,\"*Phát ngoài giờ*\")"],
      ["Điểm danh tại bàn lễ tân (lượt hợp lệ)", "=COUNTIFS(" + Q + "A2:A,\"<>\"," + Q + "H2:H,\"<>Đã hủy\")"],
      ["Lượt đã hoàn tác (bấm nhầm)", "=COUNTIF(" + Q + "H2:H,\"Đã hủy\")"]].forEach(function (x, k) {
       th.getRange(rNext + 1 + k, 1).setValue(x[0]);
       th.getRange(rNext + 1 + k, 2).setFormula(x[1]);
     });
-    rNext = rNext + 13;
+    rNext = rNext + 14;
   }
 
   // Xét CME (nếu đã có tab)
